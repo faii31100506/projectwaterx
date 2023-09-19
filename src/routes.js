@@ -1,6 +1,5 @@
 import React from 'react'
 
-const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const WaterRegister = React.lazy(() => import('./views/waterx/WaterRegister.js'))
 const WaterMeterData = React.lazy(() => import('./views/waterx/WaterMeterData.js'))
 const WaterMap = React.lazy(() => import('./views/waterx/WaterMap.js'))
@@ -22,7 +21,6 @@ const WaterPipeData = React.lazy(() => import('./views/waterx/WaterPipeData.js')
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
-  { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/water-register', name: 'WaterReg', element: WaterRegister },
   { path: '/water-map', name: 'WaterMap', element: WaterMap },
   { path: '/water-meter', name: 'WaterMeterData', element: WaterMeterData },
