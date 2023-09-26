@@ -59,7 +59,7 @@ const WaterRegister = () => {
   const [paymentvisible, setPaymentvisible] = useState(false)
   const [registerform, setRegisterform] = useState(0)
   const [dialogpage, setDialogpage] = useState('0')
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0);
   const alertBro = () => {
     alert("ทดสอบว่าปุ่มกดได้จริงๆไม่ได้โม้ไม่ได้หลอก")
   }
@@ -491,18 +491,23 @@ const WaterRegister = () => {
         </div>
 
         <div>
-          <div className="p-input-icon-left ms-5 mt-3">
-            <CIcon icon={cilSearch}></CIcon>
-            <InputText className="rounded-pill" placeholder='ค้นหา'
-              onInput={(e) =>
-                setFilters({
-                  global: { value: e.target.value, matchMode: FilterMatchMode.CONTAINS },
-                })
-              }
-            />
+        <div className="d-flex mt-4 mx-3">
+                        <Dropdown
+                            placeholder="รอบบิลที่ 360/38" className="ms-2 rounded-pill" />
+                        <div className="p-input-icon-left ms-2">
+                            <CIcon icon={cilSearch}></CIcon>
+                            <InputText className="input-search rounded-pill" placeholder='ค้นหา'
+                                onInput={(e) =>
+                                    setFilters({
+                                        global: { value: e.target.value, matchMode: FilterMatchMode.CONTAINS },
+                                    })
+                                }
+                            />
 
-          </div>
-
+                        </div>
+                        <Dropdown
+                            placeholder="เงื่อนไขการค้นหา" className="ms-2 rounded-pill" />
+                    </div>
 
           <DataTable value={data} header="รายชื่อ" filters={filters}
             paginator

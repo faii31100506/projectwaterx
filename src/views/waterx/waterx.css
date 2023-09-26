@@ -321,6 +321,11 @@ font-family: 'Inter', sans-serif !important;
   background-color: #315EFB0D;
 }
 
+.fee-topsection
+{
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 3%;
+}
 
 .textwithbg
 {
@@ -460,6 +465,10 @@ margin-left: 5%;
 .mr-5
 {
 margin-right: 5%;
+}
+.mr-10
+{
+margin-right: 10%;
 }
 .h-49
 {
