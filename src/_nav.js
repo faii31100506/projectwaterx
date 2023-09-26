@@ -38,6 +38,12 @@ const _nav = [
   },
   {
     component: CNavItem,
+    name: 'ข้อมูลมิเตอร์ค่าน้ำ',
+    to: '/water-meter-ft',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
     name: 'ข้อมูลท่อน้ำ',
     to: '/water-pipe',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,

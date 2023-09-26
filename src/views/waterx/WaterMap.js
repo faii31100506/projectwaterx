@@ -6,7 +6,9 @@ const WaterMap = () => {
   // const {} = useLoadScript({googleMapsApiKey: ""});
 
     return (
-    <>need GoogleAPI</>
+   <>
+   need map api
+   </>
   )
 }
 

@@ -30,7 +30,6 @@ font-family: 'Inter', sans-serif !important;
     background: white;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 10%;
 
 }
 
@@ -160,6 +159,22 @@ font-family: 'Inter', sans-serif !important;
     background-color: var(--backgroundblue);
     color: white;
   }
+  .wblue-button-unrounded-nocenter
+  {
+    all: unset;
+    border-radius: 0.5rem;
+    border: 1px solid #ced4da;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+  }
+
+.wblue-button-unrounded-nocenter:hover
+{
+  background-color: var(--backgroundblue);
+  color: white;
+}
 
 .customcontainer4 .wblue-button-unrounded
 {
@@ -227,7 +242,6 @@ font-family: 'Inter', sans-serif !important;
     background: white;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 3rem;
     margin-bottom: 3rem;
     padding-left: 3%;
     padding-right: 3%;
@@ -292,8 +306,9 @@ font-family: 'Inter', sans-serif !important;
   border: 1px solid #315EFB80;
   background: white;
   text-align: left;
-  width: 25rem;
-  padding-right: 3rem;
+  width: 33%;
+  padding-right: 1.5rem;
+  font-size: 1rem;
 
 }
 .minicontainer:hover
@@ -317,6 +332,38 @@ font-family: 'Inter', sans-serif !important;
   text-align: right;
   border-radius: 10px;
 }
+
+.formstep .p-steps .p-steps-item .p-menuitem-link {
+  background: unset;
+}
+
+.formstep .p-steps .p-steps-item .p-menuitem-link .p-steps-number:not(p.disabled) {
+  color: #495057;
+  border: 1px solid #e9ecef;
+  min-width: 3.5rem;
+  height: 3.5rem;
+  line-height: 2rem;
+  font-size: 1.143rem;
+  z-index: 1;
+  border-radius: 50%;
+}
+
+.formstep .p-steps .p-steps-item.p-highlight .p-steps-number {
+background: var(--leftTopText);
+color: #FFFFFF !important;
+}
+
+.break-word {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+
+.formstep .p-steps .p-steps-item .p-menuitem-link:not(.p-disabled):focus 
+{
+  box-shadow: none;
+}
+
 .w-10
 {
   width: 10%;
@@ -425,3 +472,28 @@ h3 { font-size: 1.67em; }
 h4 { font-size: 1.62em; }
 h5 { font-size: 1.33em; }
 h6 { font-size: 1.25em; }
+
+.ml-12
+{
+  margin-left: 12%;
+}
+
+.mr-auto
+{
+  margin-left: auto;
+}
+
+.ml-auto
+{
+  margin-right: auto;
+}
+
+.decoline
+{
+  border-top: 2px solid #e9ecef;
+}
+
+.btn-outline-primary:hover
+{
+  background: var(--backgroundred);
+}

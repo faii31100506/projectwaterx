@@ -134,23 +134,23 @@ const WaterPumpData = () => {
                 </div>
                 <div className="d-flex mt-3 ml-5 mr-5">
                   <CForm className="w-50">
-                    <CFormInput className="w-90" label="บ้านเลขที่ติดตั้ง" />
+                    <CFormInput className="cloud w-90" label="บ้านเลขที่ติดตั้ง" />
                   </CForm>
                   <CForm className="w-50">
-                    <CFormInput className="w-90" label="หมู่" />
-                  </CForm>
-                </div>
-                <div className="d-flex mt-3 ml-5 mr-5">
-                  <CForm className="w-50">
-                    <CFormInput className="w-90" label="ตำบล" />
-                  </CForm>
-                  <CForm className="w-50">
-                    <CFormInput className="w-90" label="อำเภอ" />
+                    <CFormInput className="cloud w-90" label="หมู่" />
                   </CForm>
                 </div>
                 <div className="d-flex mt-3 ml-5 mr-5">
                   <CForm className="w-50">
-                    <CFormInput className="w-90" label="จังหวัด" />
+                    <CFormInput className="cloud w-90" label="ตำบล" />
+                  </CForm>
+                  <CForm className="w-50">
+                    <CFormInput className="cloud w-90" label="อำเภอ" />
+                  </CForm>
+                </div>
+                <div className="d-flex mt-3 ml-5 mr-5">
+                  <CForm className="w-50">
+                    <CFormInput className="cloud w-90" label="จังหวัด" />
                   </CForm>
                 </div>
 

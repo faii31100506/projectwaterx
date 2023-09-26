@@ -15,6 +15,7 @@ const WaterSettingDocs = React.lazy(() => import('./views/waterx/WaterSettingDoc
 const WaterSettingFee = React.lazy(() => import('./views/waterx/WaterSettingFee.js'))
 const WaterStoredData = React.lazy(() => import('./views/waterx/WaterStoredData.js'))
 const WaterPipeData = React.lazy(() => import('./views/waterx/WaterPipeData.js'))
+const WaterMeterFt = React.lazy(() => import('./views/waterx/WaterMeterFt.js'))
 
 // Base
 
@@ -36,6 +37,7 @@ const routes = [
   { path: '/water-setting-fee', name: 'WaterSettingFee', element: WaterSettingFee },
   { path: '/water-stored', name: 'WaterStoredData', element: WaterStoredData },
   { path: '/water-pipe', name: 'WaterPipeData', element: WaterPipeData },
+  { path: '/water-meter-ft', name: 'WaterMeterFt', element: WaterMeterFt },
 ]
 
 export default routes
