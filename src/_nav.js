@@ -60,55 +60,55 @@ const _nav = [
     to: '/water-pump',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
-  {
-    component: CNavGroup,
-    name: 'ข้อมูลทะเบียน',
-    icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'ป.17',
-        to: '/water-reg-data-17',
-      },
-      {
-        component: CNavItem,
-        name: 'ป.31',
-        to: '/water-reg-data-31',
-      },
-      {
-        component: CNavItem,
-        name: 'ป.32',
-        to: '/water-reg-data-32',
-      },
-      {
-        component: CNavItem,
-        name: 'คุมใบเสร็จรับเงิน',
-        to: '/water-reg-data-receipt',
-      },
-    ],
-  },
-  {
-    component: CNavGroup,
-    name: 'รายงาน',
-    icon: <CIcon icon={cilBarChart} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'รายงานการใช้น้ำ',
-        to: '/water-report-usage',
-      },
-      {
-        component: CNavItem,
-        name: 'ภาษีมูลค่าเพิ่ม',
-        to: '/water-report-taxes',
-      },
-      {
-        component: CNavItem,
-        name: 'ผู้จดมาตรน้ำ',
-        to: '/water-report-agent',
-      },
-    ],
-  },
+  // {
+  //   component: CNavGroup,
+  //   name: 'ข้อมูลทะเบียน',
+  //   icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
+  //   items: [
+  //     {
+  //       component: CNavItem,
+  //       name: 'ป.17',
+  //       to: '/water-reg-data-17',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'ป.31',
+  //       to: '/water-reg-data-31',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'ป.32',
+  //       to: '/water-reg-data-32',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'คุมใบเสร็จรับเงิน',
+  //       to: '/water-reg-data-receipt',
+  //     },
+  //   ],
+  // },
+  // {
+  //   component: CNavGroup,
+  //   name: 'รายงาน',
+  //   icon: <CIcon icon={cilBarChart} customClassName="nav-icon" />,
+  //   items: [
+  //     {
+  //       component: CNavItem,
+  //       name: 'รายงานการใช้น้ำ',
+  //       to: '/water-report-usage',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'ภาษีมูลค่าเพิ่ม',
+  //       to: '/water-report-taxes',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'ผู้จดมาตรน้ำ',
+  //       to: '/water-report-agent',
+  //     },
+  //   ],
+  // },
   {
     component: CNavGroup,
     name: 'ตั้งค่า',
