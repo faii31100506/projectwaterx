@@ -61,7 +61,14 @@ const WaterUserRole = () => {
 
     return (
    <>
+        <div className="d-flex flex-column">
+        <div className="d-flex mt-4">
+            <h4 className="mx-5">รายการบทบาท</h4>
 
+          </div>
+          <div className="d-flex">
+            xxx
+            </div>
         <h4 className="mx-5 mt-5">ผู้ใช้ทั้งหมดที่มีบทบาท</h4>
         <DataTable value={data0} 
           paginator
@@ -77,6 +84,7 @@ const WaterUserRole = () => {
           <Column field="status" header="สถานะ"></Column>
           <Column field="agent" header=""></Column>
         </DataTable>
+        </div>
    </>
   )
 }

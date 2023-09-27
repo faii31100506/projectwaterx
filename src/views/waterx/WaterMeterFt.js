@@ -99,7 +99,7 @@ const WaterMeterFt = () => {
     if (meterFtpage === 0) {
         content = (
             <>
-                <h2 className="mt-4 ms-4">ข้อมูลมิเตอร์</h2>
+                <h2 className="mt-4 ms-4">รายการจดมิเตอร์ค่าน้ำ</h2>
                 <div className="d-flex justify-content-between mt-4 ms-4">
                     <div className="d-flex mt-2">
                         <Dropdown

@@ -13,11 +13,11 @@
     --moreinfocol:#F0F3FF;
 
 }
-@import url('https://fonts.googleapis.com/css2?family=Inter&family=Lato:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Lato:wght@400;700&family=Prompt:wght@200;400&display=swap');
 
 *
 {
-font-family: 'Inter', sans-serif !important;
+  font-family: 'Prompt', sans-serif !important;
 }
 
 .customcontainer1
