@@ -10,7 +10,9 @@ import "./waterx.css"
 import { Dropdown } from 'primereact/dropdown';
 import { Dialog } from 'primereact/dialog';
 import PropTypes from 'prop-types';
+import { InputSwitch } from 'primereact/inputswitch';
 import { Steps } from 'primereact/steps';
+import { CFormSwitch } from '@coreui/react'
 import {
     CAvatar,
     CButton,
@@ -49,6 +51,13 @@ const WaterUserRole = () => {
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       })
+    const [addrolevisible, setAddrolevisible] = useState(false)
+    const [checked1, setChecked1] = useState(false);
+    const [checked2, setChecked2] = useState(false);
+    const [checked3, setChecked3] = useState(false);
+    const [checked4, setChecked4] = useState(false);
+    const [checked5, setChecked5] = useState(false);
+    const [checked6, setChecked6] = useState(false);
     const data0=[
         {
             name:"นายทำดี สีสะอาด",
@@ -93,7 +102,52 @@ const WaterUserRole = () => {
             status:"suspend"
         }
     ]
+    let dialogcontent1;
+    dialogcontent1=(
+        <>
+        <h5 className="mx-4">เพิ่มบทบาท</h5>
+        <div className="mx-4 mt-3">
+        <CFormInput placeholder="พิมพ์ชื่อบทบาทภาษาอังกฤษ"/>
+        </div>
+        <div className="mx-4 mt-3">
+        <CFormInput placeholder="พิมพ์ชื่อบทบาทภาษาไทย"/>
+        </div>
+        <div className="mx-4 mt-3">
+        <CFormSelect>
+            <option>Prara - Adminstrator</option>
+        </CFormSelect>
 
+        </div>
+        <div className="role-modal-container mt-4 pt-1 d-flex flex-column">
+        
+        <div className="d-flex justify-content-center mt-3 mbg-white">
+            <div className="w-60 text-start">User Management</div>
+        <InputSwitch checked={checked1} onChange={(e) => setChecked1(e.value)} />
+        </div>
+        <div className="d-flex justify-content-center mt-3 mbg-white">
+        <div className="w-60 text-start">Rule Base Management</div>
+        <InputSwitch checked={checked2} onChange={(e) => setChecked2(e.value)} />
+        </div>
+        <div className="d-flex justify-content-center mt-3 mbg-white">
+        <div className="w-60 text-start">Configuration</div>
+        <InputSwitch checked={checked3} onChange={(e) => setChecked3(e.value)} />
+        </div>
+        <div className="d-flex justify-content-center mt-3 mbg-white">
+        <div className="w-60 text-start">Investigator Module</div>
+        <InputSwitch checked={checked4} onChange={(e) => setChecked4(e.value)} />
+        </div>
+        <div className="d-flex justify-content-center mt-3 mbg-white">
+        <div className="w-60 text-start">อนุมัติขอข้อมูลภายนอก</div>
+        <InputSwitch checked={checked5} onChange={(e) => setChecked5(e.value)} />
+        </div>
+        <div className="d-flex justify-content-center mt-3 mb-5 mbg-white">
+        <div className="w-60 text-start">จ่ายงาน</div>
+        <InputSwitch checked={checked6} onChange={(e) => setChecked6(e.value)} />
+        </div>
+        </div>
+        <button className="wblue-button-unrounded w-50 mt-4 text-center" onClick={()=> alert("go")}>เพิ่มบทบาท</button>
+        </>
+    )
     return (
    <>
         <div className="d-flex flex-column mb-5">
@@ -118,7 +172,7 @@ const WaterUserRole = () => {
             <button className="mx-4 buttonpicblue w-10 mb-2" onClick={()=>alert("go")}>แก้ไข</button>
             </div>
             </div>
-            <button className="wblue-button-unrounded-nocenter w-10 h-50 mt-4 mx-5 text-center" onClick={() => alert("go")}>เพิ่มบทบาท</button>
+            <button className="wblue-button-unrounded-nocenter w-10 h-50 mt-4 mx-5 text-center" onClick={() => setAddrolevisible(true)}>เพิ่มบทบาท</button>
         <div className="d-flex mt-5 justify-content-between">
         <h4 className="mx-5">ผู้ใช้ทั้งหมดที่มีบทบาท</h4>
         <div className="p-input-icon-left mx-5">
@@ -147,6 +201,17 @@ const WaterUserRole = () => {
           <Column field="agent" header=""></Column>
         </DataTable>
         </div>
+    
+      <Dialog visible={addrolevisible}
+        onHide={() => setAddrolevisible(false)}
+        draggable={false}
+        dismissableMask
+        position="right"
+        style={{ width: "28rem", height: "100rem" }}
+
+      >
+        {dialogcontent1}
+      </Dialog>
    </>
   )
 }

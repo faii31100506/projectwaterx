@@ -287,7 +287,16 @@
   margin-right: auto;
   
 }
-
+.role-modal-container
+{
+    border-radius: 30px;
+  border: 1px solid white;
+  background: var(--gray-50);
+  text-align: center;
+  margin-right: 1rem;
+  margin-left: 1rem;
+  font-size: 1rem;
+}
 .mapcontainer
 {
     width: 99%;
@@ -345,7 +354,15 @@
   display: flex;
   font-size: smaller;
 }
-
+.mbg-white
+{
+  border-radius: 30px;
+  background: white;
+  padding-top: 0.5rem;
+  padding-left: 0.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
 .fee-topsection
 {
   border-bottom: 2px solid #e9ecef;

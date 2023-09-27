@@ -102,7 +102,7 @@ const WaterRegister = () => {
     const handlePayClick = () => {
       // Use the 'data' prop here
       setPaymentvisible(true)
-      setDialogpage('1')
+ 
 
       // You can also call functions to handle the payment logic, etc.
       // For example: handlePayment(data);
@@ -128,7 +128,7 @@ const WaterRegister = () => {
     const handleSuspendClick = () => {
       // Use the 'data' prop here
       setSuspendvisible(true)
-      setDialogpage('2')
+
 
       // You can also call functions to handle the payment logic, etc.
       // For example: handlePayment(data);
@@ -1252,7 +1252,7 @@ const WaterRegister = () => {
         onHide={() => setSuspendvisible(false)}
         draggable={false}
         dismissableMask
-        style={{ width: "22vw", height: "auto" }}
+        style={{ width: "22rem", height: "auto" }}
         showHeader={false}
 
       >
@@ -1265,7 +1265,7 @@ const WaterRegister = () => {
         onHide={() => setPaymentvisible(false)}
         draggable={false}
         dismissableMask
-        style={{ width: "25vw", height: "auto" }}
+        style={{ width: "25rem", height: "auto" }}
         showHeader={false}
 
       >
