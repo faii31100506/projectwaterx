@@ -320,6 +320,16 @@ font-family: 'Inter', sans-serif !important;
 {
   background-color: #315EFB0D;
 }
+.under-nav-container
+{
+  margin-left: 2%;
+  margin-right: 2%;
+  height: 12vh;
+  color: var(--gray-500);
+  align-items: center;
+  display: flex;
+  font-size: smaller;
+}
 
 .fee-topsection
 {
@@ -363,7 +373,10 @@ color: #FFFFFF !important;
   word-wrap: break-word;
 }
 
-
+.blacktext
+{
+  color: var(--gray-900);
+}
 .formstep .p-steps .p-steps-item .p-menuitem-link:not(.p-disabled):focus 
 {
   box-shadow: none;

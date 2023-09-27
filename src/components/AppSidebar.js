@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useState } from 'react';
 import { CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-
+import "../views/waterx/waterx.css"
 import { AppSidebarNav } from './AppSidebarNav'
 
 import { logoNegative } from 'src/assets/brand/logo-negative'
@@ -57,11 +57,21 @@ const AppSidebar = () => {
           <AppSidebarNav items={navigation} />
         </SimpleBar>
       </CSidebarNav>
+    
+      
       {/* <CSidebarToggler
         className="d-none d-lg-flex"
         onClick={() => {dispatch({ type: 'set', sidebarUnfoldable: !unfoldable });SetDynamicLogo()}}
       /> */}
-    
+    <div className="under-nav-container">
+    <img className="mx-2 w-15" src={require("../assets/images/agentavatar.png")} width={40} height={40}/>
+    <div className="d-flex flex-column mx-2 w-70">
+      <b className="blacktext">เจ้าหน้าที่</b>
+      ประหยัด จันทร์อังคาร
+      </div>
+      <a href="#/water-map" className="mx-2 w-15" ><img src={require("../assets/images/exit.png")} width={40} height={40}/></a>
+
+    </div>
     </CSidebar>
   )
 }
