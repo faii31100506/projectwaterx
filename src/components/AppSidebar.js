@@ -67,9 +67,9 @@ const AppSidebar = () => {
     <img className="mx-2 w-15" src={require("../assets/images/agentavatar.png")} width={40} height={40}/>
     <div className="d-flex flex-column mx-2 w-70">
       <b className="blacktext">เจ้าหน้าที่</b>
-      ประหยัด จันทร์อังคาร
+      นายมานะ ขยันดี
       </div>
-      <a href="#/water-map" className="mx-2 w-15" ><img src={require("../assets/images/exit.png")} width={40} height={40}/></a>
+      <a href="#/water-user-role" className="mx-2 w-15" ><img src={require("../assets/images/exit.png")} width={40} height={40}/></a>
 
     </div>
     </CSidebar>

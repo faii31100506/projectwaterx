@@ -47,11 +47,67 @@ import { Row } from 'primereact/row';
 
 
 const WaterRegData17 = () => {
-    return (
-      <>
+  const Data0 = [
+    {
+      useId: "0001",
+      name: "นายทำดี สีสะอาด",
+      bill: "960/38",
+      curdept: "95",
+      stackdept: "50",
+      taxes: "5",
+      total: "150"
+    },
+    {
+      useId: "0002",
+      name: "นางศรีนวล มานะ",
+      bill: "960/39",
+      curdept: "0",
+      stackdept: "95",
+      taxes: "5",
+      total: "100"
+    },
+    {
+      useId: "0003",
+      name: "นายมีสุข ขยันดี",
+      bill: "960/40",
+      curdept: "50",
+      stackdept: "45",
+      taxes: "5",
+      total: "100"
+    },
+    {
+      useId: "0004",
+      name: "นางสาวฤทัย ใจดี",
+      bill: "960/41",
+      curdept: "50",
+      stackdept: "95",
+      taxes: "5",
+      total: "150"
+    },
+    {
+      useId: "0005",
+      name: "นายสะอาด บุญงาม",
+      bill: "960/42",
+      curdept: "45",
+      stackdept: "50",
+      taxes: "5",
+      total: "100"
+    },
+    {
+      useId: "0006",
+      name: "นายธนาคาร หลักแหล",
+      bill: "960/43",
+      curdept: "45",
+      stackdept: "150",
+      taxes: "5",
+      total: "200"
+    },
+  ]
+  return (
+    <>
       <h4 className="mt-4 mx-4">ทะเบียนคุมลูกหนี้รายตัว (รายบุคคล) (ป.17) </h4>
 
-      </>
+    </>
   )
 }
 
