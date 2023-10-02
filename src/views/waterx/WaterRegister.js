@@ -3,7 +3,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import "./waterx.css"
@@ -11,6 +11,8 @@ import { Dropdown } from 'primereact/dropdown';
 import { Dialog } from 'primereact/dialog';
 import PropTypes from 'prop-types';
 import { Steps } from 'primereact/steps';
+import axios from 'axios';
+
 
 import {
   CAvatar,
@@ -49,8 +51,15 @@ import { Row } from 'primereact/row';
 
 
 
-
 const WaterRegister = () => {
+
+  const [datax,setDatax] = useState([])
+  useEffect(()=> {
+   axios.get('http://localhost:4034/api/nahra/listowner')
+   .then(res => setDatax(res.data.data))
+   .catch(err => console.log(err));
+ }, [])
+
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   })
@@ -184,9 +193,9 @@ const WaterRegister = () => {
 
   const data = [
     {
-      agent: "นายทำดี สีสะอาด",
-      agentid: "0-112734-56",
-      guage: "56/1 หมู่ 3 ต.จรเข้เผือก",
+      fname: "นายทำดี สีสะอาด",
+      meterasset_id: "0-112734-56",
+      address: "56/1 หมู่ 3 ต.จรเข้เผือก",
       typeusage: "อุปโภค บริโภค",
       wstatus: "ปกติ",
       localelink: "2",
@@ -196,9 +205,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นางศรีนวล มานะ",
-      agentid: "0-112734-56",
-      guage: "32 หมู่ ต.จรเข้เผือก",
+      fname: "นางศรีนวล มานะ",
+      meterasset_id: "0-112734-56",
+      address: "32 หมู่ ต.จรเข้เผือก",
       typeusage: "อุปโภค บริโภค",
       wstatus: "ระงับใช้น้ำชั่วคราว",
       localelink: "1",
@@ -208,9 +217,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายมีสุข ขยันดี",
-      agentid: "0-112734-56",
-      guage: "56/2 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายมีสุข ขยันดี",
+      meterasset_id: "0-112734-56",
+      address: "56/2 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "การเกษตร",
       wstatus: "ปกติ",
       localelink: "2",
@@ -220,9 +229,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นางสาวฤทัย ใจดี",
-      agentid: "0-112734-56",
-      guage: "11/1 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นางสาวฤทัย ใจดี",
+      meterasset_id: "0-112734-56",
+      address: "11/1 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "ประปาชั่วคราว",
       wstatus: "ปกติ",
       localelink: "2",
@@ -232,9 +241,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "39/2 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "39/2 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "อุปโภค บริโภค",
       wstatus: "ปกติ",
       localelink: "2",
@@ -244,9 +253,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "อุปโภค บริโภค",
       wstatus: "ค้างชำระ",
       localelink: "2",
@@ -256,9 +265,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "อุปโภค บริโภค",
       wstatus: "ปกติ",
       localelink: "2",
@@ -268,9 +277,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "การเกษตร",
       wstatus: "ปกติ",
       localelink: "2",
@@ -280,9 +289,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "อุปโภค บริโภค",
       wstatus: "ค้างชำระ",
       localelink: "2",
@@ -292,9 +301,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "อุปโภค บริโภค",
       wstatus: "ปกติ",
       localelink: "2",
@@ -304,9 +313,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "การเกษตร",
       wstatus: "ปกติ",
       localelink: "2",
@@ -316,9 +325,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "อุปโภค บริโภค",
       wstatus: "ค้างชำระ",
       localelink: "2",
@@ -328,9 +337,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "อุปโภค บริโภค",
       wstatus: "ปกติ",
       localelink: "2",
@@ -340,9 +349,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "การเกษตร",
       wstatus: "ปกติ",
       localelink: "2",
@@ -351,9 +360,9 @@ const WaterRegister = () => {
       pepega: "2",
       debt: "0",
     }, {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "อุปโภค บริโภค",
       wstatus: "ค้างชำระ",
       localelink: "2",
@@ -363,9 +372,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "อุปโภค บริโภค",
       wstatus: "ปกติ",
       localelink: "2",
@@ -375,9 +384,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "การเกษตร",
       wstatus: "ปกติ",
       localelink: "2",
@@ -387,9 +396,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "อุปโภค บริโภค",
       wstatus: "ค้างชำระ",
       localelink: "2",
@@ -399,9 +408,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "อุปโภค บริโภค",
       wstatus: "ปกติ",
       localelink: "2",
@@ -411,9 +420,9 @@ const WaterRegister = () => {
       debt: "0",
     },
     {
-      agent: "นายสะอาด บุญงาม",
-      agentid: "0-112734-56",
-      guage: "88 หมู่ 4 ต.จรเข้เผือก",
+      fname: "นายสะอาด บุญงาม",
+      meterasset_id: "0-112734-56",
+      address: "88 หมู่ 4 ต.จรเข้เผือก",
       typeusage: "การเกษตร",
       wstatus: "ปกติ",
       localelink: "2",
@@ -462,15 +471,15 @@ const WaterRegister = () => {
 
 
 
-          <DataTable value={data} header="ตารางทะเบียนผู้ใช้น้ำ" filters={filters}
+          <DataTable value={datax} header="ตารางทะเบียนผู้ใช้น้ำ" filters={filters}
             paginator
             rows={8}
             paginatorTemplate="CurrentPageReport PageLinks PrevPageLink NextPageLink"
             currentPageReportTemplate="หน้า {currentPage} จาก {totalPages}"
           >
-            <Column field="agent" header="เจ้าของมาตรวัดน้ำ"></Column>
-            <Column field="agentid" header="เลขที่ประจำมาตรวัดน้ำ"></Column>
-            <Column field="guage" header="ที่ติดตั้งมาตร"></Column>
+            <Column field="fname" header="เจ้าของมาตรวัดน้ำ"></Column>
+            <Column field="meterasset_id" header="เลขที่ประจำมาตรวัดน้ำ"></Column>
+            <Column field="address" header="ที่ติดตั้งมาตร"></Column>
             <Column field="typeusage" header="ประเภทการใช้น้ำ"></Column>
             <Column field="wstatus" header="สถานะการใช้น้ำ"></Column>
             <Column field="localelink" body={MapIcon} header="ตำแหน่ง"></Column>
@@ -515,9 +524,9 @@ const WaterRegister = () => {
             paginatorTemplate="CurrentPageReport PageLinks PrevPageLink NextPageLink"
             currentPageReportTemplate="หน้า {currentPage} จาก {totalPages}"
           >
-            <Column field="agent" header="เจ้าของมาตรวัดน้ำ"></Column>
-            <Column field="agentid" header="เลขที่ประจำมาตรวัดน้ำ"></Column>
-            <Column field="guage" header="ที่ติดตั้งมาตร"></Column>
+            <Column field="fname" header="เจ้าของมาตรวัดน้ำ"></Column>
+            <Column field="meterasset_id" header="เลขที่ประจำมาตรวัดน้ำ"></Column>
+            <Column field="address" header="ที่ติดตั้งมาตร"></Column>
             <Column field="wstatus" header="สถานะการใช้น้ำ"></Column>
             <Column field="rem" body={(rowData) => <PaydeptButton data={rowData} />} header="ต้องการชำระเงิน"></Column>
             <Column field="editstat" body={SuspendButton} header=""></Column>

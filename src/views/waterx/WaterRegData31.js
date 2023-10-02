@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
@@ -11,7 +11,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { Dialog } from 'primereact/dialog';
 import PropTypes from 'prop-types';
 import { Steps } from 'primereact/steps';
-
+import  axios   from 'axios';
 import {
   CAvatar,
   CButton,
@@ -47,10 +47,25 @@ import { Row } from 'primereact/row';
 
 
 const WaterRegData31 = () => {
+ const [data,setData] = useState([])
+ useEffect(()=> {
+  axios.get('http://localhost:4034/api/nahra/listowner')
+  .then(res => setData(res.data.data))
+  .catch(err => console.log(err));
+}, [])
     return (
       <>
       <h4 className="mt-4 mx-4">รายงานทะเบียนคุมสมุดจดมาตรวัดน้ำ (ป.31)</h4>
-
+        {
+          data.map((user,index) => {
+            return <tr key={index}>
+              <td>{user.prapaowner_id}</td>
+              <td>{user.census_id}</td>
+              <td>{user.address}</td>
+              <td>{user.lname}</td>
+            </tr>
+          })
+        }
       </>
   )
 }
