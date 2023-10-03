@@ -53,13 +53,6 @@ import { Row } from 'primereact/row';
 
 const WaterRegister = () => {
 
-  const [datax,setDatax] = useState([])
-  useEffect(()=> {
-   axios.get('http://localhost:4034/api/nahra/listowner')
-   .then(res => setDatax(res.data.data))
-   .catch(err => console.log(err));
- }, [])
-
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   })
@@ -69,8 +62,17 @@ const WaterRegister = () => {
   const [registerform, setRegisterform] = useState(0)
   const [dialogpage, setDialogpage] = useState('0')
   const [activeIndex, setActiveIndex] = useState(0);
+  const [editData, setEditData] = useState([]);
+  const [datax, setDatax] = useState([])
+  useEffect(() => {
+    axios.get('http://localhost:4034/api/nahra/listowner')
+      .then(res => setDatax(res.data.data))
+      .catch(err => console.log(err));
+  }, [])
+
+
   const alertBro = () => {
-    alert("ทดสอบว่าปุ่มกดได้จริงๆไม่ได้โม้ไม่ได้หลอก")
+    alert("ทดสอบ")
   }
 
 
@@ -79,9 +81,48 @@ const WaterRegister = () => {
     setActiveIndex(activeIndex + 1)
   }
 
+  const [formData, setFormData] = useState({
+    address: '', // Initialize with an empty string or provide a default value if needed
+    moo: '', // Initialize with an empty string or provide a default value if needed
+    tambon_name: '',
+    amphoe_name: '',
+    province_name: '',
+    meternumber: '',
+    metermaterial: '',
+    metertypename: '',
+    international_size: '',
+  });
 
+  useEffect(() => {
+    setFormData({
+      address: editData.address || '', // Provide a default value if editData.name is undefined
+      moo: editData.moo || '', // Provide a default value if editData.work is undefined
+      tambon_name: editData.tambon_name || '',
+      amphoe_name: editData.amphoe_name || '',
+      province_name: editData.province_name || '',
+      meternumber: editData.meternumber || '',
+      metermaterial: editData.metermaterial|| '',
+      metertypename: editData.metertypename || '',
+      international_size: editData.international_size || '',
+    });
+  }, [editData]);
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    // Update the form data as the user types
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
+  const handleSelectChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const MapIcon = () => {
     return (
@@ -89,9 +130,9 @@ const WaterRegister = () => {
     )
 
   }
-  const EditIcon = () => {
+  const EditIcon = (data) => {
     return (
-      <button className="buttonpic"><img src={require("../../assets/images/edit.png")} width={30} height={30} onClick={() => setRegisterpage(3)} /></button>
+      <button className="buttonpic"><img src={require("../../assets/images/edit.png")} width={30} height={30} onClick={() => { setRegisterpage(3); handleEdit(data); }} /></button>
     )
 
   }
@@ -111,7 +152,7 @@ const WaterRegister = () => {
     const handlePayClick = () => {
       // Use the 'data' prop here
       setPaymentvisible(true)
- 
+
 
       // You can also call functions to handle the payment logic, etc.
       // For example: handlePayment(data);
@@ -477,14 +518,23 @@ const WaterRegister = () => {
             paginatorTemplate="CurrentPageReport PageLinks PrevPageLink NextPageLink"
             currentPageReportTemplate="หน้า {currentPage} จาก {totalPages}"
           >
-            <Column field="fname" header="เจ้าของมาตรวัดน้ำ"></Column>
-            <Column field="meterasset_id" header="เลขที่ประจำมาตรวัดน้ำ"></Column>
-            <Column field="address" header="ที่ติดตั้งมาตร"></Column>
-            <Column field="typeusage" header="ประเภทการใช้น้ำ"></Column>
-            <Column field="wstatus" header="สถานะการใช้น้ำ"></Column>
-            <Column field="localelink" body={MapIcon} header="ตำแหน่ง"></Column>
-            <Column field="editstat" body={EditIcon} header=""></Column>
-            <Column field="rem" body={RemoveIcon} header=""></Column>
+            <Column header="เจ้าของมาตรวัดน้ำ" body={(rowData) => (
+              <span>
+                {rowData.prefix} {rowData.fname} {rowData.lname}
+              </span>
+            )} />
+            <Column field="meternumber" header="เลขที่ประจำมาตรวัดน้ำ"></Column>
+            {/* <Column field="address" header="ที่ติดตั้งมาตร"></Column> */}
+            <Column header="ที่ติดตั้งมาตร" body={(rowData) => (
+              <span>
+                {rowData.address} หมู่ {rowData.moo} ตำบล {rowData.tambon_name} อำเภอ {rowData.amphoe_name} จังหวัด {rowData.province_name}
+              </span>
+            )} />
+            <Column field="" header="ประเภทการใช้น้ำ"></Column>
+            <Column field="status_name" header="สถานะการใช้น้ำ"></Column>
+            {/* <Column field="localelink" body={MapIcon} header="ตำแหน่ง"></Column> */}
+            <Column field="editstat" body={(rowData) => (EditIcon(rowData))} header=""></Column>
+            {/* <Column field="rem" body={RemoveIcon} header=""></Column> */}
           </DataTable>
         </div>
       </>
@@ -500,23 +550,23 @@ const WaterRegister = () => {
         </div>
 
         <div>
-        <div className="d-flex mt-4 mx-3">
-                        <Dropdown
-                            placeholder="รอบบิลที่ 360/38" className="ms-2 rounded-pill" />
-                        <div className="p-input-icon-left ms-2">
-                            <CIcon icon={cilSearch}></CIcon>
-                            <InputText className="input-search rounded-pill" placeholder='ค้นหา'
-                                onInput={(e) =>
-                                    setFilters({
-                                        global: { value: e.target.value, matchMode: FilterMatchMode.CONTAINS },
-                                    })
-                                }
-                            />
+          <div className="d-flex mt-4 mx-3">
+            <Dropdown
+              placeholder="รอบบิลที่ 360/38" className="ms-2 rounded-pill" />
+            <div className="p-input-icon-left ms-2">
+              <CIcon icon={cilSearch}></CIcon>
+              <InputText className="input-search rounded-pill" placeholder='ค้นหา'
+                onInput={(e) =>
+                  setFilters({
+                    global: { value: e.target.value, matchMode: FilterMatchMode.CONTAINS },
+                  })
+                }
+              />
 
-                        </div>
-                        <Dropdown
-                            placeholder="เงื่อนไขการค้นหา" className="ms-2 rounded-pill" />
-                    </div>
+            </div>
+            <Dropdown
+              placeholder="เงื่อนไขการค้นหา" className="ms-2 rounded-pill" />
+          </div>
 
           <DataTable value={data} header="รายชื่อ" filters={filters}
             paginator
@@ -544,7 +594,7 @@ const WaterRegister = () => {
         <div className="customcontainer1 d-flex flex-column">
           <div className="d-flex mx-5 mt-5">
             <h5 className="w-25">ข้อมูลผู้ใช้น้ำ</h5>
-            <CFormCheck className="w-30" type="radio" name="flexRadioDefault" id="flexRadioDefault1" label="ช่องค้นหาทำอย่างไร" />
+            <CFormCheck className="w-30" type="radio" name="flexRadioDefault" id="flexRadioDefault1" label="ช่องค้นหา" />
             <CFormCheck type="radio" name="flexRadioDefault" id="flexRadioDefault2" label="เสียบบัตรประชาชน" defaultChecked />
           </div>
           <div className='customcontainer3 h-20 w-40 d-flex'>
@@ -839,6 +889,7 @@ const WaterRegister = () => {
 
     )
   }
+
   if (registerform === 3) {
     formcontent = (
       <>
@@ -933,9 +984,14 @@ const WaterRegister = () => {
       </>
     );
   }
+  const handleEdit = (data) => {
+    setEditData(data)
+    console.log(editData)
 
+  }
   if (registerpage === 3) {
     content = (
+
       <>
         <div className="d-flex flex-column">
           <div className="d-flex mt-4">
@@ -969,23 +1025,53 @@ const WaterRegister = () => {
                   </div>
                   <div className="d-flex mt-3 ml-5 mr-5">
                     <CForm className="w-50">
-                      <CFormInput className="cloud w-90" label="บ้านเลขที่ติดตั้ง" />
+                      <CFormInput
+                        className="cloud w-90"
+                        label="บ้านเลขที่ติดตั้ง"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                      />
                     </CForm>
                     <CForm className="w-50">
-                      <CFormInput className="cloud w-90" label="หมู่" />
+                      <CFormInput
+                        className="cloud w-90"
+                        label="หมู่"
+                        name="moo"
+                        value={formData.moo}
+                        onChange={handleInputChange}
+                      />
                     </CForm>
                   </div>
                   <div className="d-flex mt-3 ml-5 mr-5">
                     <CForm className="w-50">
-                      <CFormInput className="cloud w-90" label="ตำบล" />
+                      <CFormInput
+                        className="cloud w-90"
+                        label="ตำบล"
+                        name="tambon_name"
+                        value={formData.tambon_name}
+                        onChange={handleInputChange}
+                      />
                     </CForm>
                     <CForm className="w-50">
-                      <CFormInput className="cloud w-90" label="อำเภอ" />
+                      <CFormInput
+                        className="cloud w-90"
+                        label="อำเภอ"
+                        name="amphoe_name"
+                        value={formData.amphoe_name}
+                        onChange={handleInputChange}
+                      />
                     </CForm>
                   </div>
                   <div className="d-flex mt-3 ml-5 mr-5">
                     <CForm className="w-50">
-                      <CFormInput className="cloud w-90" label="จังหวัด" />
+                      <CFormInput
+                        className="cloud w-90"
+                        label="จังหวัด"
+                        name="province_name"
+                        value={formData.province_name}
+                        onChange={handleInputChange}
+                      />
                     </CForm>
                   </div>
 
@@ -1001,7 +1087,7 @@ const WaterRegister = () => {
                 <h5 className="w-25">
                   สถานะผู้ใช้น้ำ
                 </h5>
-                <>คุณถูกระงับบลาๆๆ</>
+                <>คุณถูกระงับ ทดสอบ</>
               </div>
               <div className="d-flex mx-5 mt-5 ">
                 <h5 className="w-25">
@@ -1032,13 +1118,17 @@ const WaterRegister = () => {
                 </h5>
                 <div className="d-flex w-75 justify-content-between">
                   <CForm className="mx-5 w-33">
-                    <CFormSelect className="mt-2 mb-2" label="เลขที่ประจำมาตรวัดน้ำ">
-                      <option></option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3" disabled>Three</option>
-                    </CFormSelect>
-                    <CFormSelect className="mt-2 mb-2" label="วัสดุมาตรวัดน้ำ">
+                  <CFormInput
+                        className="mt-2 mb-2"
+                        label="เลขที่ประจำมาตรวัดน้ำ"
+                        name="meternumber"
+                        value={formData.meternumber}
+                        onChange={handleInputChange}
+                      />
+                    <CFormSelect className="mt-2 mb-2" label="วัสดุมาตรวัดน้ำ"
+                              name="metermaterial"
+                              value={formData.metermaterial}
+                              onChange={handleSelectChange}>
                       <option></option>
                       <option value="1">One</option>
                       <option value="2">Two</option>
