@@ -789,11 +789,11 @@ const WaterRegister = () => {
 
             <div className="d-flex w-75">
               <CForm className="mx-5 w-33">
-                <CFormSelect className="mt-2 mb-2" label="ขนาดท่อน้ำ">
+                <CFormSelect className="mt-2 mb-2" label="ขนาดท่อน้ำ"
+                name="international_size" value={addNewData.international_size}
+                onChange={handleNewInputChange}>
                   <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
+                  <option value="3.125">3.125</option>
                 </CFormSelect>
               </CForm>
               <div className="mx-5 w-33">
@@ -808,22 +808,24 @@ const WaterRegister = () => {
 
             <div className="d-flex w-75">
               <CForm className="mx-5 w-33">
-                <CFormSelect className="mt-2 mb-2" label="ขนาดมาตรวัดน้ำ">
+                <CFormSelect className="mt-2 mb-2" label="ขนาดมาตรวัดน้ำ"
+                name="international_size" value={addNewData.international_size}
+                onChange={handleNewInputChange}>
                   <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
+                  <option value="3.125">3.125</option>
                 </CFormSelect>
               </CForm>
               <CForm className="mx-5 w-33">
-                <CFormInput className="mt-2 mb-2" label="เลขที่ประจำมาตรวัดน้ำ" />
+                <CFormInput className="mt-2 mb-2" label="เลขที่ประจำมาตรวัดน้ำ" 
+                name="meternumber" value={addNewData.meternumber}
+                onChange={handleNewInputChange}/>
               </CForm>
               <CForm className="mx-5 w-33">
-                <CFormSelect className="mt-2 mb-2" label="ประเภทมาตรวัดน้ำ">
+                <CFormSelect className="mt-2 mb-2" label="ประเภทมาตรวัดน้ำ"
+                name="metertypename" value={addNewData.metertypename}
+                onChange={handleNewInputChange}>
                   <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
+                  <option value="Muti-jet Turbine water meter">Muti-jet Turbine water meter</option>
                 </CFormSelect>
               </CForm>
 
@@ -834,11 +836,13 @@ const WaterRegister = () => {
 
             <div className="d-flex w-75">
               <CForm className="mx-5 w-33">
-                <CFormSelect className="mt-2 mb-2" label="วัสดุมาตรวัดน้ำ">
+                <CFormSelect className="mt-2 mb-2" label="วัสดุมาตรวัดน้ำ"
+                name="metermaterial" value={addNewData.metermaterial}
+                onChange={handleNewInputChange}>
                   <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
+                  <option value="ทองเหลือง">ทองเหลือง</option>
+                  <option value="ทองแดง">ทองแดง</option>
+                  <option value="ทองดำ">ทองดำ</option>
                 </CFormSelect>
               </CForm>
               <div className="mx-5 w-33">
@@ -853,19 +857,20 @@ const WaterRegister = () => {
 
             <div className="d-flex w-75">
               <CForm className="mx-5 w-33">
-                <CFormSelect className="mt-2 mb-2" label="ประเภทการใช้">
+                <CFormSelect className="mt-2 mb-2" label="ประเภทการใช้"
+                name="typeuse" value={addNewData.typeuse}
+                onChange={handleNewInputChange}>
                   <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
+                  <option value="อุปโภค บริโภค">อุปโภค บริโภค</option>
+                  <option value="การเกษตร">การเกษตร</option>
                 </CFormSelect>
               </CForm>
               <CForm className="mx-5 w-33">
-                <CFormSelect className="mt-2 mb-2" label="ประเภทผู้ใช้">
+                <CFormSelect className="mt-2 mb-2" label="ประเภทผู้ใช้"
+                name="usertype" value={addNewData.usertype}
+                onChange={handleNewInputChange}>
                   <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
+                  <option value="71250">71250</option>
                 </CFormSelect>
               </CForm>
               <div className="mx-5 w-33">
@@ -878,19 +883,19 @@ const WaterRegister = () => {
 
             <div className="d-flex w-75 mb-5">
               <CForm className="mx-5 w-33">
-                <CFormSelect className="mt-2 mb-2" label="วันที่ของการใช้น้ำ">
+                <CFormSelect className="mt-2 mb-2" label="วันที่ของการใช้น้ำ"
+                name="dateused" value={addNewData.dateused}
+                onChange={handleNewInputChange}>
                   <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
+                  <option value="วันนี้">วันนี้</option>
                 </CFormSelect>
               </CForm>
               <CForm className="mx-5 w-33">
-                <CFormSelect className="mt-2 mb-2" label="วันที่เริ่มใช้น้ำ">
+                <CFormSelect className="mt-2 mb-2" label="วันที่เริ่มใช้น้ำ"
+                name="datestarted" value={addNewData.datestarted}
+                onChange={handleNewInputChange}>
                   <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
+                  <option value="เมื่อวาน">เมื่อวาน</option>
                 </CFormSelect>
               </CForm>
               <div className="mx-5 w-33">

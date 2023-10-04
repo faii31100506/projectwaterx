@@ -48,45 +48,45 @@ const _nav = [
     to: '/water-pipe',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
-  {
-    component: CNavItem,
-    name: 'ข้อมูลแหล่งกักเก็บน้ำ',
-    to: '/water-stored',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'ข้อมูลเครื่องปั้มน้ำ',
-    to: '/water-pump',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavGroup,
-    name: 'ข้อมูลทะเบียน',
-    icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'ป.17',
-        to: '/water-reg-data-17',
-      },
-      {
-        component: CNavItem,
-        name: 'ป.31',
-        to: '/water-reg-data-31',
-      },
-      {
-        component: CNavItem,
-        name: 'ป.32',
-        to: '/water-reg-data-32',
-      },
-      {
-        component: CNavItem,
-        name: 'คุมใบเสร็จรับเงิน',
-        to: '/water-reg-data-receipt',
-      },
-    ],
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'ข้อมูลแหล่งกักเก็บน้ำ',
+  //   to: '/water-stored',
+  //   icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'ข้อมูลเครื่องปั้มน้ำ',
+  //   to: '/water-pump',
+  //   icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  // },
+  // {
+  //   component: CNavGroup,
+  //   name: 'ข้อมูลทะเบียน',
+  //   icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
+  //   items: [
+  //     {
+  //       component: CNavItem,
+  //       name: 'ป.17',
+  //       to: '/water-reg-data-17',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'ป.31',
+  //       to: '/water-reg-data-31',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'ป.32',
+  //       to: '/water-reg-data-32',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'คุมใบเสร็จรับเงิน',
+  //       to: '/water-reg-data-receipt',
+  //     },
+  //   ],
+  // },
   {
     component: CNavGroup,
     name: 'รายงาน',
