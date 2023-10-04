@@ -64,8 +64,10 @@ const WaterRegister = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [editData, setEditData] = useState([]);
   const [datax, setDatax] = useState([])
+  const NHARA_API = process.env.REACT_APP_NHARA_API
+
   useEffect(() => {
-    axios.get('http://localhost:4034/api/nahra/listowner')
+    axios.get(NHARA_API)
       .then(res => setDatax(res.data.data))
       .catch(err => console.log(err));
   }, [])
@@ -76,10 +78,34 @@ const WaterRegister = () => {
   }
 
 
+
+
   const nextPage = () => {
     setRegisterform(registerform + 1)
     setActiveIndex(activeIndex + 1)
   }
+  const [addNewData, setAddNewData] = useState({
+    address: '',
+    moo: '',
+    road: '',
+    soi: '',
+    // community: '',
+    tambon_name: '',
+    amphoe_name: '',
+    province_name: '',
+    zipcode: '',
+
+    // pipesize:'',
+    international_size: '',
+    meternumber: '',
+    metertypename: '',
+    metermaterial: '',
+    // typeuse: '',
+    // usertype: '',
+    // dateused: '',
+    // datestarted: '',
+
+  })
 
   const [formData, setFormData] = useState({
     address: '', // Initialize with an empty string or provide a default value if needed
@@ -91,6 +117,12 @@ const WaterRegister = () => {
     metermaterial: '',
     metertypename: '',
     international_size: '',
+    // pipesize:'',
+    // typeuse: '',
+    // usertype: '',
+    // dateused: '',
+    // datestarted: '',
+  
   });
 
   useEffect(() => {
@@ -101,12 +133,33 @@ const WaterRegister = () => {
       amphoe_name: editData.amphoe_name || '',
       province_name: editData.province_name || '',
       meternumber: editData.meternumber || '',
-      metermaterial: editData.metermaterial|| '',
+      metermaterial: editData.metermaterial || '',
       metertypename: editData.metertypename || '',
       international_size: editData.international_size || '',
+    // pipesize: editData.pipsize || '',
+    // typeuse: editData.typeuse || '',
+    // usertype: editData.usertype || '',
+    // dateused: editData.dateused || '',
+    // datestarted: editData.datestarted || '',
     });
   }, [editData]);
 
+  const handleNewInputChange = (e) => {
+    const { name, value } = e.target;
+    // Update the form data as the user types
+    setAddNewData({
+      ...addNewData,
+      [name]: value,
+    });
+  };
+
+  const handleNewSelectChange = (e) => {
+    const { name, value } = e.target;
+    setAddNewData({
+      ...addNewData,
+      [name]: value,
+    });
+  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     // Update the form data as the user types
@@ -172,7 +225,9 @@ const WaterRegister = () => {
   PaydeptButton.propTypes = {
     data: PropTypes.object.isRequired, // Define the 'data' prop type
   };
-
+  const handleSuspendModalExit = () => {
+    setSuspendvisible(false)
+  }
 
   const SuspendButton = (data) => {
     const handleSuspendClick = () => {
@@ -475,7 +530,9 @@ const WaterRegister = () => {
   ];
 
 
-
+  const debugBro = () => {
+        console.log(addNewData)
+  }
 
   let content;
   let formcontent;
@@ -620,8 +677,13 @@ const WaterRegister = () => {
           </div>
           <div className="d-flex mx-5">
             <h5 className="w-25">ข้อมูลเพื่อส่งเสริมหรืออุดหนุน</h5>
-            <Dropdown
-              placeholder="ฉันก็ไม่รู้หรอกว่ามันคืออะไรแต่ฉันคิดว่าอันนี้มันต้องยาว ยาวมากๆแน่ๆ" className="w-25" />
+            <CFormSelect
+              placeholder="ช่องข้อมูลเพื่อส่งเสริมหรืออุดหนุน" className="w-20" >
+                <option>ข้อมูลเพื่อส่งเสริมหรืออุดหนุน</option>
+                <option>ผู้ป่วย</option>
+                <option>คนแก่</option>
+                <option>ผู้พิการ</option>
+                </CFormSelect>
           </div>
           <button className="wblue-button-unrounded mt-auto mb-5 w-10 text-center" onClick={nextPage}>ถัดไป</button>
 
@@ -658,65 +720,62 @@ const WaterRegister = () => {
             <div className="d-flex w-75 justify-content-between">
               <CForm className="mx-5 w-33">
                 <CFormInput className="mb-2"
-                  type=""
-                  id=""
                   label="บ้านเลขที่"
-                  placeholder=""
-                  aria-describedby="exampleFormControlInputHelpInline"
+                  name="address"
+                  value={addNewData.address}
+                  onChange={handleNewInputChange}
                 />
 
-                <CFormSelect className="mt-2 mb-2" label="ซอย">
+                <CFormSelect className="mt-2 mb-2" label="ซอย"
+                name="soi" value={addNewData.soi}
+                onChange={handleNewSelectChange}>
                   <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
+                  <option value="เพชรเกษม">เพชรเกษม</option>
                 </CFormSelect>
-                <CFormSelect className="mt-2 mb-2" label="อำเภอ / เขต">
+                <CFormSelect className="mt-2 mb-2" label="อำเภอ / เขต"
+                name="amphoe_name" value={addNewData.amphoe_name}
+                onChange={handleNewInputChange}>
                   <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
+                  <option value="ศรีสวัสดิ์">ศรีสวัสดิ์</option>
                 </CFormSelect>
 
               </CForm>
               <CForm className="mx-5 w-33">
-                <CFormInput className="mb-2"
-                  type=""
-                  id=""
+              <CFormInput className="mb-2"
                   label="หมู่"
-                  placeholder=""
-                  aria-describedby="exampleFormControlInputHelpInline"
+                  name="moo"
+                  value={addNewData.moo}
+                  onChange={handleNewInputChange}
                 />
                 <CFormSelect className="mt-2 mb-2" label="ชุมชน">
                   <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
+                  <option value="1">To Be Number One</option>
                 </CFormSelect>
-                <CFormSelect className="mt-2 mb-2" label="จังหวัด">
+                <CFormSelect className="mt-2 mb-2" label="จังหวัด"
+                name="province_name" value={addNewData.province_name}
+                onChange={handleNewInputChange}>
                   <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
+                  <option value="กาญจนบุรี">กาญจนบุรี</option>
                 </CFormSelect>
 
               </CForm>
               <CForm className="mx-5 w-33">
-                <CFormSelect className="mt-2 mb-2" label="ถนน">
+                <CFormSelect className="mb-2" label="ถนน">
                   <option></option>
                   <option value="1">One</option>
                   <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
                 </CFormSelect>
-                <CFormSelect className="mt-2 mb-2" label="ตำบล / แขวง">
+                <CFormSelect className="mt-2 mb-2" label="ตำบล / แขวง"
+                name="tambon_name" value={addNewData.tambon_name}
+                onChange={handleNewInputChange}>
                   <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
+                  <option value="หนองเป็ด">หนองเป็ด</option>
                 </CFormSelect>
-                <CFormSelect className="mt-2 mb-2" label="รหัสไปรษณีย์">
+                <CFormSelect className="mt-2 mb-2" label="รหัสไปรษณีย์"
+                name="zipcode" value={addNewData.zipcode}
+                onChange={handleNewInputChange}>
                   <option></option>
-                  <option value="1">One</option>
+                  <option value="71250">71250</option>
                 </CFormSelect>
 
               </CForm>
@@ -757,12 +816,7 @@ const WaterRegister = () => {
                 </CFormSelect>
               </CForm>
               <CForm className="mx-5 w-33">
-                <CFormSelect className="mt-2 mb-2" label="เลขที่ประจำมาตรวัดน้ำ">
-                  <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3" disabled>Three</option>
-                </CFormSelect>
+                <CFormInput className="mt-2 mb-2" label="เลขที่ประจำมาตรวัดน้ำ" />
               </CForm>
               <CForm className="mx-5 w-33">
                 <CFormSelect className="mt-2 mb-2" label="ประเภทมาตรวัดน้ำ">
@@ -845,7 +899,7 @@ const WaterRegister = () => {
             </div>
           </div>
 
-          <button className="wblue-button-unrounded mt-5 mb-5 w-10 text-center" onClick={nextPage}>ถัดไป</button>
+          <button className="wblue-button-unrounded mt-5 mb-5 w-10 text-center" onClick={() => { nextPage(); debugBro(); }}>ถัดไป</button>
 
         </div>
 
@@ -987,6 +1041,7 @@ const WaterRegister = () => {
   const handleEdit = (data) => {
     setEditData(data)
     console.log(editData)
+    console.log(NHARA_API)
 
   }
   if (registerpage === 3) {
@@ -1118,74 +1173,89 @@ const WaterRegister = () => {
                 </h5>
                 <div className="d-flex w-75 justify-content-between">
                   <CForm className="mx-5 w-33">
-                  <CFormInput
-                        className="mt-2 mb-2"
-                        label="เลขที่ประจำมาตรวัดน้ำ"
-                        name="meternumber"
-                        value={formData.meternumber}
-                        onChange={handleInputChange}
-                      />
+                    <CFormInput
+                      className="mt-2 mb-2"
+                      label="เลขที่ประจำมาตรวัดน้ำ"
+                      name="meternumber"
+                      value={formData.meternumber}
+                      onChange={handleInputChange}
+                    />
                     <CFormSelect className="mt-2 mb-2" label="วัสดุมาตรวัดน้ำ"
-                              name="metermaterial"
-                              value={formData.metermaterial}
-                              onChange={handleSelectChange}>
+                      name="metermaterial"
+                      value={formData.metermaterial}
+                      onChange={handleSelectChange}>
                       <option></option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3" disabled>Three</option>
+                      <option value="ทองแดง">แมว</option>
+                      <option value="ทองเหลือง">ทองเหลือง</option>
                     </CFormSelect>
-                    <CFormSelect className="mt-2 mb-2" label="วันที่ของการใช้น้ำ">
+                    <CFormSelect className="mt-2 mb-2" label="วันที่ของการใช้น้ำ"
+                    name="dateused"
+                      value={formData.dateused}
+                      onChange={handleSelectChange}>
                       <option></option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3" disabled>Three</option>
-                    </CFormSelect>
-
-                  </CForm>
-                  <CForm className="mx-5 w-33">
-                    <CFormSelect className="mt-2 mb-2" label="ประเภทมาตรวัดน้ำ">
-                      <option></option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3" disabled>Three</option>
-                    </CFormSelect>
-                    <CFormSelect className="mt-2 mb-2" label="ขนาดท่อน้ำประปา">
-                      <option></option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3" disabled>Three</option>
-                    </CFormSelect>
-                    <CFormSelect className="mt-2 mb-2" label="วันที่เริ่มใช้น้ำ">
-                      <option></option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3" disabled>Three</option>
+                      <option value="ทองแดง">แมว</option>
+                      <option value="ทองเหลือง">ทองเหลือง</option>
                     </CFormSelect>
 
                   </CForm>
                   <CForm className="mx-5 w-33">
-                    <CFormSelect className="mt-2 mb-2" label="ขนาดมาตรวัดน้ำ">
+                    <CFormSelect className="mt-2 mb-2" label="ประเภทมาตรวัดน้ำ"
+                    name="metertypename"
+                      value={formData.metertypename}
+                      onChange={handleSelectChange}>
                       <option></option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3" disabled>Three</option>
+                      <option value="Muti-jet Turbine water meter">Muti-jet Turbine water meter</option>
+                      <option value="ประเภทกระดาษ">ประเภทกระดาษ</option>
                     </CFormSelect>
-                    <CFormSelect className="mt-2 mb-2" label="ประเภทการใช้">
+                    <CFormSelect className="mt-2 mb-2" label="ขนาดท่อน้ำประปา"
+                    name="international_size"
+                      value={formData.international_size}
+                      onChange={handleSelectChange}>
                       <option></option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3" disabled>Three</option>
+                      <option value="3">3</option>
+                      <option value="3.175">3.175</option>
                     </CFormSelect>
-                    <CFormSelect className="mt-2 mb-2" label="ประเภทผู้ใช้">
+                    <CFormSelect className="mt-2 mb-2" label="วันที่เริ่มใช้น้ำ"
+                    name="datestarted"
+                      value={formData.datestarted}
+                      onChange={handleSelectChange}>
                       <option></option>
-                      <option value="1">One</option>
+                      <option value="ทองแดง">แมว</option>
+                      <option value="ทองเหลือง">ทองเหลือง</option>
+                    </CFormSelect>
+
+                  </CForm>
+                  <CForm className="mx-5 w-33">
+                    <CFormSelect className="mt-2 mb-2" label="ขนาดมาตรวัดน้ำ"
+                    name="international_size"
+                      value={formData.international_size}
+                      onChange={handleSelectChange}>
+                      <option></option>
+                      <option value="3">3</option>
+                      <option value="3.175">3.175</option>
+                    </CFormSelect>
+                    <CFormSelect className="mt-2 mb-2" label="ประเภทการใช้"
+                    name="typeusage"
+                      value={formData.typeusage}
+                      onChange={handleSelectChange}>
+                      <option></option>
+                      <option value="การเกษตร">การเกษตร</option>
+                      <option value="อุปโภคบริโภค">อุปโภคบริโภค</option>
+                    </CFormSelect>
+                    <CFormSelect className="mt-2 mb-2" label="ประเภทผู้ใช้"
+                    name="usertype"
+                      value={formData.usertype}
+                      onChange={handleSelectChange}>
+                      <option></option>
+                      <option value="แมว">แมว</option>
+                      <option value="นกแก้ว">นกแก้ว</option>
                     </CFormSelect>
 
                   </CForm>
 
                 </div>
               </div>
-              <div className="d-flex mx-5 mt-5 ">
+              {/* <div className="d-flex mx-5 mt-5 ">
                 <h5 className="w-25">
                   สถานะและค่าธรรมเนียม
                 </h5>
@@ -1200,13 +1270,13 @@ const WaterRegister = () => {
                     <CFormInput label="ค่าประกัน" />
                   </CForm>
                 </div>
-              </div>
-              <div className="d-flex mx-5 mt-5 ">
+              </div> */}
+              {/* <div className="d-flex mx-5 mt-5 ">
                 <h5 className="w-25">
                   ดาวน์โหลดเอกสาร
                 </h5>
                 <div className="d-flex mt-5 w-75">
-                  <button className="minicontainer w-30 mx-3" onClick={alertBro}>
+                  <button className="minicontainer w-30 mx-3" onClick={debugBro}>
                     <div className="d-flex align-items-center">
                       <img className="mx-1 w-25" src={require("../../assets/images/FilePic.png")} width={80} height={80} />
                       <div className="w-75">เอกสารคำขอมาตรวัดน้ำ</div>
@@ -1225,8 +1295,8 @@ const WaterRegister = () => {
                     </div>
                   </button>
                 </div>
-              </div>
-              <div className="d-flex mx-5 mt-5 decoline">
+              </div> */}
+              {/* <div className="d-flex mx-5 mt-5 decoline">
                 <div className="w-25">
                 </div>
                 <div className="d-flex mt-5 w-75">
@@ -1249,7 +1319,7 @@ const WaterRegister = () => {
                     </div>
                   </button>
                 </div>
-              </div>
+              </div> */}
               <button className="wblue-button-unrounded mt-5 mb-5 w-20 text-center">บันทึกข้อมูล</button>
 
 
@@ -1335,7 +1405,7 @@ const WaterRegister = () => {
       </div>
 
       <div className="mt-auto text-center">
-        <button className="wred-button " >ยกเลิก</button>
+        <button className="wred-button " onClick={handleSuspendModalExit}>ยกเลิก</button>
         <button className="wred-button " >ระงับการใช้น้ำ</button>
 
       </div>

@@ -4,14 +4,14 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import CIcon from '@coreui/icons-react'
 import {
   cilSearch,
 } from '@coreui/icons'
-
+import axios from 'axios';
 import {
   CFormCheck,
   CFormInput,
@@ -26,6 +26,15 @@ import {
 
 
 const WaterMeterData = () => {
+
+  const [datax, setDatax] = useState([])
+  const NHARA_API = process.env.REACT_APP_NHARA_API
+  useEffect(() => {
+    axios.get(NHARA_API)
+      .then(res => setDatax(res.data.data))
+      .catch(err => console.log(err));
+  }, [])
+
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   })
@@ -192,20 +201,25 @@ const WaterMeterData = () => {
           <button className="wblue-button" >รายการมิเตอร์ที่ยังไม่ถูกใช้</button>
         </div>
 
-        <DataTable value={data} header="รายชื่อ" filters={filters}
+        <DataTable value={datax} header="รายชื่อ" filters={filters}
           paginator
           rows={8}
           paginatorTemplate="CurrentPageReport PageLinks PrevPageLink NextPageLink"
           currentPageReportTemplate="หน้า {currentPage} จาก {totalPages}"
         >
 
-          <Column field="agentid" header="เลขที่ประจำมาตรวัดน้ำ"></Column>
-          <Column field="metertype" header="ประเภทมิเตอร์"></Column>
-          <Column field="metersize" header="ขนาดมิเตอร์"></Column>
-          <Column field="metermat" header="วัสดุมิเตอร์"></Column>
-          <Column field="agent" header="เจ้าของมาตรวัดน้ำ"></Column>
-          <Column field="rem" body={EditIcon} header=""></Column>
-          <Column field="localelink" body={RemoveIcon} header=""></Column>
+          <Column field="meternumber" header="เลขที่ประจำมาตรวัดน้ำ"></Column>
+          <Column field="metertypename" header="ประเภทมิเตอร์"></Column>
+          <Column field="international_size" header="ขนาดมิเตอร์"></Column>
+          <Column field="metermaterial" header="วัสดุมิเตอร์"></Column>
+          {/* <Column field="fullname" header="เจ้าของมาตรวัดน้ำ"></Column> */}
+          <Column header="เจ้าของมาตรวัดน้ำ" body={(rowData) => (
+              <span>
+                {rowData.prefix} {rowData.fname} {rowData.lname}
+              </span>
+            )} />
+          <Column field="" body={EditIcon} header=""></Column>
+          <Column field="" body={RemoveIcon} header=""></Column>
         </DataTable>
 
       </>

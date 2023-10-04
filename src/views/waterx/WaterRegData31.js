@@ -56,16 +56,7 @@ const WaterRegData31 = () => {
     return (
       <>
       <h4 className="mt-4 mx-4">รายงานทะเบียนคุมสมุดจดมาตรวัดน้ำ (ป.31)</h4>
-        {
-          data.map((user,index) => {
-            return <tr key={index}>
-              <td>{user.prapaowner_id}</td>
-              <td>{user.census_id}</td>
-              <td>{user.address}</td>
-              <td>{user.lname}</td>
-            </tr>
-          })
-        }
+
       </>
   )
 }
