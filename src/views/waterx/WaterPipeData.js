@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import CIcon from '@coreui/icons-react'
+import axios from 'axios';
 import {
   cilSearch,
 } from '@coreui/icons'
@@ -27,7 +28,7 @@ const WaterPipeData = () => {
   const [pipepage, setPipepage] = useState('0')
   const [visible, setVisible] = useState(false)
   const alertBro = () => {
-    alert("ทดสอบว่าปุ่มกดได้จริงๆไม่ได้โม้ไม่ได้หลอก")
+    alert("ทดสอบ")
   }
 
   const EditIcon = () => {

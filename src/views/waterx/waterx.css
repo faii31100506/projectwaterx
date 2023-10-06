@@ -287,6 +287,23 @@
   margin-right: auto;
   
 }
+.customcontainer6
+{
+    width: 95%;
+    background: transparent;
+    height: auto;
+    border-radius: 30px;
+    border: 1px solid #EAECF0;
+    background: white;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3rem;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    vertical-align: middle;
+}
 .role-modal-container
 {
     border-radius: 30px;
@@ -526,6 +543,7 @@ h3 { font-size: 1.67em; }
 h4 { font-size: 1.62em; }
 h5 { font-size: 1.33em; }
 h6 { font-size: 1.25em; }
+h7 { font-size: 1em;}
 
 .ml-12
 {

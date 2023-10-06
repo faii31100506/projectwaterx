@@ -59,6 +59,8 @@ const WaterRegister = () => {
   const [registerpage, setRegisterpage] = useState(0)
   const [suspendvisible, setSuspendvisible] = useState(false)
   const [paymentvisible, setPaymentvisible] = useState(false)
+  const [newpersonalvisible, setNewpersonalvisible] = useState(false)
+  const [editpersonalvisible, setEditpersonalvisible] = useState(false)
   const [registerform, setRegisterform] = useState(0)
   const [dialogpage, setDialogpage] = useState('0')
   const [activeIndex, setActiveIndex] = useState(0);
@@ -85,8 +87,8 @@ const WaterRegister = () => {
     setActiveIndex(activeIndex + 1)
   }
   const [addNewData, setAddNewData] = useState({
-    address: '',
-    moo: '',
+    baddress: '',
+    bmoo: '',
     road: '',
     soi: '',
     // community: '',
@@ -104,31 +106,53 @@ const WaterRegister = () => {
     // usertype: '',
     // dateused: '',
     // datestarted: '',
-
+    fname:  '',
+    lname:  '',
+    prefix: '',
+    caddress: '',
+    cmoo: '',
+    ctambon_name: '',
+    camphoe_name: '',
+    cprovince_name: '',
+    pop_id: '',
   })
 
   const [formData, setFormData] = useState({
-    address: '', // Initialize with an empty string or provide a default value if needed
-    moo: '', // Initialize with an empty string or provide a default value if needed
+    status_name: '',
+    road: '',
+    baddress: '', // Initialize with an empty string or provide a default value if needed
+    bmoo: '', // Initialize with an empty string or provide a default value if needed
     tambon_name: '',
     amphoe_name: '',
     province_name: '',
+    ctambon_name: '',
+    camphoe_name: '',
+    cprovince_name: '',
     meternumber: '',
     metermaterial: '',
     metertypename: '',
     international_size: '',
     // pipesize:'',
-    // typeuse: '',
+    watertype_name: '',
     // usertype: '',
     // dateused: '',
     // datestarted: '',
+    fname:  '',
+    lname:  '',
+    prefix: '',
+    caddress: '',
+    cmoo: '',
+    pop_id: '',
+    zipcode: '',
   
   });
 
   useEffect(() => {
     setFormData({
-      address: editData.address || '', // Provide a default value if editData.name is undefined
-      moo: editData.moo || '', // Provide a default value if editData.work is undefined
+      status_name: editData.status_name || '',
+      road: editData.road || '',
+      baddress: editData.baddress || '', // Provide a default value if editData.name is undefined
+      bmoo: editData.bmoo || '', // Provide a default value if editData.work is undefined
       tambon_name: editData.tambon_name || '',
       amphoe_name: editData.amphoe_name || '',
       province_name: editData.province_name || '',
@@ -137,10 +161,20 @@ const WaterRegister = () => {
       metertypename: editData.metertypename || '',
       international_size: editData.international_size || '',
     // pipesize: editData.pipsize || '',
-    // typeuse: editData.typeuse || '',
+    watertype_name: editData. watertype_name || '',
     // usertype: editData.usertype || '',
     // dateused: editData.dateused || '',
     // datestarted: editData.datestarted || '',
+    fname: editData.fname  ||  '',
+    lname: editData.lname ||  '',
+    prefix: editData.prefix || '',
+    caddress: editData.caddress || '',
+    cmoo: editData.cmoo || '',
+    ctambon_name: editData.ctambon_name || '',
+    camphoe_name: editData.camphoe_name || '',
+    cprovince_name: editData.cprovince_name || '',
+    pop_id: editData.pop_id || '',
+    zipcode: editData.zipcode || '',
     });
   }, [editData]);
 
@@ -228,6 +262,19 @@ const WaterRegister = () => {
   const handleSuspendModalExit = () => {
     setSuspendvisible(false)
   }
+  const handlePersonalEdit = () => {
+    setEditpersonalvisible(true)
+  }
+  const handlePersonalNew = () => {
+    setNewpersonalvisible(true)
+  }
+
+  const handlePersonalEditExit = () => {
+    setEditpersonalvisible(false)
+  }
+  const handlePersonalNewExit = () => {
+    setNewpersonalvisible(false)
+  }
 
   const SuspendButton = (data) => {
     const handleSuspendClick = () => {
@@ -266,24 +313,24 @@ const WaterRegister = () => {
         setRegisterform(1)
       }
     },
-    {
-      label: 'ไฟล์คำขอต่างๆ',
-      command: (event) => {
-        setRegisterform(2)
-      }
-    },
-    {
-      label: 'รายละเอียดค่าใช้จ่าย',
-      command: (event) => {
-        setRegisterform(3)
-      }
-    },
-    {
-      label: 'สถานะการอนุมัติ',
-      command: (event) => {
-        setRegisterform(4)
-      }
-    }
+    // {
+    //   label: 'ไฟล์คำขอต่างๆ',
+    //   command: (event) => {
+    //     setRegisterform(2)
+    //   }
+    // },
+    // {
+    //   label: 'รายละเอียดค่าใช้จ่าย',
+    //   command: (event) => {
+    //     setRegisterform(3)
+    //   }
+    // },
+    // {
+    //   label: 'สถานะการอนุมัติ',
+    //   command: (event) => {
+    //     setRegisterform(4)
+    //   }
+    // }
   ];
 
 
@@ -558,7 +605,7 @@ const WaterRegister = () => {
 
           </div>
           <div className='d-flex me-5'>
-            <button type="button" className="btn btn-outline-danger rounded-pill me-2" onClick={() => setRegisterpage(1)}>รายการค้างชำระ</button>
+            {/* <button type="button" className="btn btn-outline-danger rounded-pill me-2" onClick={() => setRegisterpage(1)}>รายการค้างชำระ</button> */}
             <button type="button" className="btn btn-outline-success rounded-pill" onClick={() => setRegisterpage(2)}>+ เพิ่มทะเบียนผู้ใช้น้ำ</button>
           </div>
         </div>
@@ -581,13 +628,13 @@ const WaterRegister = () => {
               </span>
             )} />
             <Column field="meternumber" header="เลขที่ประจำมาตรวัดน้ำ"></Column>
-            {/* <Column field="address" header="ที่ติดตั้งมาตร"></Column> */}
+            {/* <Column field="baddress" header="ที่ติดตั้งมาตร"></Column> */}
             <Column header="ที่ติดตั้งมาตร" body={(rowData) => (
               <span>
-                {rowData.address} หมู่ {rowData.moo} ตำบล {rowData.tambon_name} อำเภอ {rowData.amphoe_name} จังหวัด {rowData.province_name}
+                {rowData.baddress} หมู่ {rowData.bmoo} ตำบล {rowData.tambon_name} อำเภอ {rowData.amphoe_name} จังหวัด {rowData.province_name}
               </span>
             )} />
-            <Column field="" header="ประเภทการใช้น้ำ"></Column>
+            <Column field="watertype_name" header="ประเภทการใช้น้ำ"></Column>
             <Column field="status_name" header="สถานะการใช้น้ำ"></Column>
             {/* <Column field="localelink" body={MapIcon} header="ตำแหน่ง"></Column> */}
             <Column field="editstat" body={(rowData) => (EditIcon(rowData))} header=""></Column>
@@ -651,26 +698,32 @@ const WaterRegister = () => {
         <div className="customcontainer1 d-flex flex-column">
           <div className="d-flex mx-5 mt-5">
             <h5 className="w-25">ข้อมูลผู้ใช้น้ำ</h5>
-            <CFormCheck className="w-30" type="radio" name="flexRadioDefault" id="flexRadioDefault1" label="ช่องค้นหา" />
-            <CFormCheck type="radio" name="flexRadioDefault" id="flexRadioDefault2" label="เสียบบัตรประชาชน" defaultChecked />
+            {/* <CFormCheck className="w-30" type="radio" name="flexRadioDefault" id="flexRadioDefault1" label="ช่องค้นหา" />
+            <CFormCheck type="radio" name="flexRadioDefault" id="flexRadioDefault2" label="เสียบบัตรประชาชน" defaultChecked /> */}
           </div>
-          <div className='customcontainer3 h-20 w-40 d-flex'>
+          <div className='customcontainer6 h-20 w-50 d-flex'>
             <div className="w-15">
               <img src={require("../../assets/images/alt_avatar.png")} ></img>
             </div>
-            <div className="d-flex flex-column px-5">
-              นางสาว กินรี จันทร์สวัสดิ์
-              <br></br>บ้านเลขที่ 232 หมู่ 1
-              <br></br>ต.นครปฐม อ.นครปฐม จ.นครปฐม
+            <div className="d-flex flex-column w-50 px-5">
+            {addNewData.prefix} {addNewData.fname} {addNewData.lname}
+                    <br></br><h7>บ้านเลขที่&nbsp;{addNewData.caddress}&nbsp;หมู่&nbsp;{addNewData.cmoo}
+                    <br></br>ตำบล&nbsp;&nbsp;&nbsp;&nbsp;{addNewData.ctambon_name}
+                    <br></br>อำเภอ&nbsp;&nbsp;&nbsp;{addNewData.camphoe_name} 
+                    <br></br>จังหวัด&nbsp;&nbsp;{addNewData.cprovince_name}
+                    </h7>
 
             </div>
 
 
 
 
-            <div className="d-flex mx-auto">
-              <button className="buttonpic me-3"><img src={require("../../assets/images/edit.png")} width={30} height={30} onClick={alertBro} /></button>
-              <button className="buttonpic"><img src={require("../../assets/images/remove.png")} width={30} height={30} onClick={alertBro} /></button>
+            <div className="d-flex">
+              {/* <button className="buttonpic me-3"><img src={require("../../assets/images/edit.png")} width={30} height={30} onClick={alertBro} /></button> */}
+           
+              <button className="wblue-button-unrounded mt-auto mb-5 text-center" onClick={handlePersonalNew} >เพิ่มข้อมูล</button>
+          
+              {/* <button className="buttonpic mx-4"><img src={require("../../assets/images/remove.png")} width={40} height={40} onClick={alertBro} /></button> */}
 
             </div>
 
@@ -701,7 +754,7 @@ const WaterRegister = () => {
 
         <div className="customcontainer3 d-flex flex-column">
 
-          <div className="p-input-icon-left mt-2 mx-5">
+          {/* <div className="p-input-icon-left mt-2 mx-5">
             <CIcon icon={cilSearch}></CIcon>
             <InputText className="p-inputtext-sm rounded-pill" placeholder='ค้นหาตำแหน่ง'
               onInput={(e) =>
@@ -713,7 +766,7 @@ const WaterRegister = () => {
           </div>
           <h5 className="mx-5 mt-5">หรือ ปักหมุดตำแหน่งของที่ตั้งมาตรวัด</h5>
 
-          <div className="mapcontainer"> map </div>
+          <div className="mapcontainer"> map </div> */}
 
           <div className="d-flex">
             <h5 className="w-20">ข้อมูลตำแหน่งมาตร</h5>
@@ -721,17 +774,15 @@ const WaterRegister = () => {
               <CForm className="mx-5 w-33">
                 <CFormInput className="mb-2"
                   label="บ้านเลขที่"
-                  name="address"
-                  value={addNewData.address}
+                  name="baddress"
+                  value={addNewData.baddress}
                   onChange={handleNewInputChange}
                 />
 
-                <CFormSelect className="mt-2 mb-2" label="ซอย"
+                <CFormInput className="mt-2 mb-2" label="ซอย"
                 name="soi" value={addNewData.soi}
-                onChange={handleNewSelectChange}>
-                  <option></option>
-                  <option value="เพชรเกษม">เพชรเกษม</option>
-                </CFormSelect>
+                onChange={handleNewSelectChange}/>
+                
                 <CFormSelect className="mt-2 mb-2" label="อำเภอ / เขต"
                 name="amphoe_name" value={addNewData.amphoe_name}
                 onChange={handleNewInputChange}>
@@ -741,10 +792,9 @@ const WaterRegister = () => {
 
               </CForm>
               <CForm className="mx-5 w-33">
-              <CFormInput className="mb-2"
-                  label="หมู่"
-                  name="moo"
-                  value={addNewData.moo}
+              <CFormInput className="mb-2"label="หมู่"
+                  name="bmoo"
+                  value={addNewData.bmoo}
                   onChange={handleNewInputChange}
                 />
                 <CFormSelect className="mt-2 mb-2" label="ชุมชน">
@@ -760,16 +810,18 @@ const WaterRegister = () => {
 
               </CForm>
               <CForm className="mx-5 w-33">
-                <CFormSelect className="mb-2" label="ถนน">
-                  <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                </CFormSelect>
+                <CFormInput className="mb-2" label="ถนน"
+                name="road" value={addNewData.road}
+                onChange={handleNewInputChange}/>
+
                 <CFormSelect className="mt-2 mb-2" label="ตำบล / แขวง"
                 name="tambon_name" value={addNewData.tambon_name}
                 onChange={handleNewInputChange}>
-                  <option></option>
-                  <option value="หนองเป็ด">หนองเป็ด</option>
+          <option></option>
+          <option value="หนองเป็ด">
+              หนองเป็ด       
+          </option>
+
                 </CFormSelect>
                 <CFormSelect className="mt-2 mb-2" label="รหัสไปรษณีย์"
                 name="zipcode" value={addNewData.zipcode}
@@ -863,6 +915,7 @@ const WaterRegister = () => {
                   <option></option>
                   <option value="อุปโภค บริโภค">อุปโภค บริโภค</option>
                   <option value="การเกษตร">การเกษตร</option>
+                  <option value="ประปาชั่วคราว">ประปาชั่วคราว</option>
                 </CFormSelect>
               </CForm>
               <CForm className="mx-5 w-33">
@@ -904,7 +957,8 @@ const WaterRegister = () => {
             </div>
           </div>
 
-          <button className="wblue-button-unrounded mt-5 mb-5 w-10 text-center" onClick={() => { nextPage(); debugBro(); }}>ถัดไป</button>
+          {/* <button className="wblue-button-unrounded mt-5 mb-5 w-10 text-center" onClick={() => { nextPage(); debugBro(); }}>ถัดไป</button> */}
+          <button className="wblue-button-unrounded mt-5 mb-5 w-10 text-center" onClick={() => { setRegisterpage(0); debugBro(); }}>บันทึก</button>
 
         </div>
 
@@ -1043,6 +1097,9 @@ const WaterRegister = () => {
       </>
     );
   }
+
+
+
   const handleEdit = (data) => {
     setEditData(data)
     console.log(editData)
@@ -1088,8 +1145,8 @@ const WaterRegister = () => {
                       <CFormInput
                         className="cloud w-90"
                         label="บ้านเลขที่ติดตั้ง"
-                        name="address"
-                        value={formData.address}
+                        name="baddress"
+                        value={formData.baddress}
                         onChange={handleInputChange}
                       />
                     </CForm>
@@ -1097,8 +1154,8 @@ const WaterRegister = () => {
                       <CFormInput
                         className="cloud w-90"
                         label="หมู่"
-                        name="moo"
-                        value={formData.moo}
+                        name="bmoo"
+                        value={formData.bmoo}
                         onChange={handleInputChange}
                       />
                     </CForm>
@@ -1147,7 +1204,7 @@ const WaterRegister = () => {
                 <h5 className="w-25">
                   สถานะผู้ใช้น้ำ
                 </h5>
-                <>คุณถูกระงับ ทดสอบ</>
+                {formData.status_name}
               </div>
               <div className="d-flex mx-5 mt-5 ">
                 <h5 className="w-25">
@@ -1158,15 +1215,15 @@ const WaterRegister = () => {
                     <img src={require("../../assets/images/alt_avatar.png")} ></img>
                   </div>
                   <div className="d-flex flex-column px-5 w-75">
-                    นางสาว กินรี จันทร์สวัสดิ์
-                    <br></br>บ้านเลขที่ 232 หมู่ 1
-                    <br></br>ต.นครปฐม อ.นครปฐม จ.นครปฐม
+                    {formData.prefix} {formData.fname} {formData.lname}
+                    <br></br>บ้านเลขที่ {formData.caddress} หมู่ {formData.cmoo}
+                    <br></br>ต.{formData.ctambon_name} อ.{formData.camphoe_name} จ.{formData.cprovince_name}
 
                   </div>
 
                   <div className="d-flex w-15 ml-auto">
-                    <button className="buttonpic me-3"><img src={require("../../assets/images/edit.png")} width={50} height={50} onClick={alertBro} /></button>
-                    <button className="buttonpic"><img src={require("../../assets/images/remove.png")} width={50} height={50} onClick={alertBro} /></button>
+                    <button className="buttonpic me-3"><img src={require("../../assets/images/edit.png")} width={50} height={50} onClick={handlePersonalEdit} /></button>
+                    {/* <button className="buttonpic"><img src={require("../../assets/images/remove.png")} width={50} height={50} onClick={alertBro} /></button> */}
 
                   </div>
 
@@ -1240,12 +1297,12 @@ const WaterRegister = () => {
                       <option value="3.175">3.175</option>
                     </CFormSelect>
                     <CFormSelect className="mt-2 mb-2" label="ประเภทการใช้"
-                    name="typeusage"
-                      value={formData.typeusage}
+                    name="watertype_name"
+                      value={formData.watertype_name}
                       onChange={handleSelectChange}>
                       <option></option>
                       <option value="การเกษตร">การเกษตร</option>
-                      <option value="อุปโภคบริโภค">อุปโภคบริโภค</option>
+                      <option value="อุปโภค บริโภค">อุปโภค บริโภค</option>
                     </CFormSelect>
                     <CFormSelect className="mt-2 mb-2" label="ประเภทผู้ใช้"
                     name="usertype"
@@ -1339,6 +1396,183 @@ const WaterRegister = () => {
 
   let dialogcontent1;
   let dialogcontent2;
+  let dialog_editpersonal;
+  let dialog_newpersonal;
+  dialog_editpersonal = (
+    <>
+      <h5 className="text-center mt-5">แก้ไขข้อมูลส่วนตัวของผู้ใช้น้ำ</h5>
+      <div className="d-flex mt-5">
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="คำนำหน้าชื่อ"
+                name="prefix" value={formData.prefix}
+                onChange={handleInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="ชื่อจริง" 
+                name="fname" value={formData.fname}
+                onChange={handleInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="นามสกุล"
+                name="lname" value={formData.lname}
+                onChange={handleInputChange}/>
+              </CForm>
+
+            </div>
+            <div className="d-flex mt-3">
+              <CForm className="mx-5 w-33">
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="เลขที่บัตรประจำตัวประชาชน" 
+                name="pop_id" value={formData.pop_id}
+                onChange={handleInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+              </CForm>
+
+            </div>
+            <div className="d-flex mt-3">
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="บ้านเลขที่"
+                name="caddress" value={formData.caddress}
+                onChange={handleInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="หมู่" 
+                name="coo" value={formData.cmoo}
+                onChange={handleInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="ซอย" 
+                name="soi" value={formData.soi}
+                onChange={handleInputChange}/>
+              </CForm>
+            </div>
+            <div className="d-flex mt-3 mb-3">
+            <CForm className="mx-5 w-33">
+              <CFormInput className="mt-2 mb-2" label="ถนน" 
+                name="road" value={formData.road}
+                onChange={handleInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="ตำบล/แขวง"
+                name="ctambon_name" value={formData.ctambon_name}
+                onChange={handleInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="อำเภอ/เขต" 
+                name="camphoe_name" value={formData.camphoe_name}
+                onChange={handleInputChange}/>
+              </CForm>
+
+            </div>
+            <div className="d-flex mt-3 mb-3">
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="จังหวัด"
+                name="cprovince_name" value={formData.cprovince_name}
+                onChange={handleInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="รหัสไปรษณีย์" 
+                name="zipcode" value={formData.zipcode}
+                onChange={handleInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+              </CForm>
+
+            </div>
+
+            <button className="wblue-button-unrounded mt-5 mb-3 w-10 text-center" onClick={handlePersonalEditExit}>บันทึก</button>
+    </>
+  )
+
+  dialog_newpersonal = (
+    <>
+      <h5 className="text-center mt-5">เพิ่มข้อมูลส่วนตัวของผู้ใช้น้ำ</h5>
+      <div className="d-flex mt-5">
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="คำนำหน้าชื่อ"
+                name="prefix" value={addNewData.prefix}
+                onChange={handleNewInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="ชื่อจริง" 
+                name="fname" value={addNewData.fname}
+                onChange={handleNewInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="นามสกุล"
+                name="lname" value={addNewData.lname}
+                onChange={handleNewInputChange}/>
+              </CForm>
+
+            </div>
+            <div className="d-flex mt-3">
+              <CForm className="mx-5 w-33">
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="เลขที่บัตรประจำตัวประชาชน" 
+                name="pop_id" value={addNewData.pop_id}
+                onChange={handleNewInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+              </CForm>
+
+            </div>
+            <div className="d-flex mt-3">
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="บ้านเลขที่"
+                name="caddress" value={addNewData.caddress}
+                onChange={handleNewInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="หมู่" 
+                name="cmoo" value={addNewData.cmoo}
+                onChange={handleNewInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="ซอย" 
+                name="soi" value={addNewData.soi}
+                onChange={handleNewInputChange}/>
+              </CForm>
+            </div>
+            <div className="d-flex mt-3 mb-3">
+            <CForm className="mx-5 w-33">
+              <CFormInput className="mt-2 mb-2" label="ถนน" 
+                name="road" value={addNewData.road}
+                onChange={handleNewInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="ตำบล/แขวง"
+                name="ctambon_name" value={addNewData.ctambon_name}
+                onChange={handleNewInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="อำเภอ/เขต" 
+                name="camphoe_name" value={addNewData.camphoe_name}
+                onChange={handleNewInputChange}/>
+              </CForm>
+
+            </div>
+            <div className="d-flex mt-3 mb-3">
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="จังหวัด"
+                name="cprovince_name" value={addNewData.cprovince_name}
+                onChange={handleNewInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+                <CFormInput className="mt-2 mb-2" label="รหัสไปรษณีย์" 
+                name="zipcode" value={addNewData.zipcode}
+                onChange={handleNewInputChange}/>
+              </CForm>
+              <CForm className="mx-5 w-33">
+              </CForm>
+
+            </div>
+
+            <button className="wblue-button-unrounded mt-5 mb-3 w-10 text-center" onClick={handlePersonalNewExit}>บันทึก</button>
+    </>
+  )
 
   dialogcontent1 = (
     <>
@@ -1444,6 +1678,28 @@ const WaterRegister = () => {
 
       >
         {dialogcontent1}
+      </Dialog>
+     
+      <Dialog visible={newpersonalvisible}
+        onHide={() => setNewpersonalvisible(false)}
+        draggable={false}
+        dismissableMask
+        style={{ width: "75rem", height: "auto" }}
+        showHeader={false}
+
+      >
+        {dialog_newpersonal}
+      </Dialog>
+     
+      <Dialog visible={editpersonalvisible}
+        onHide={() => setEditpersonalvisible(false)}
+        draggable={false}
+        dismissableMask
+        style={{ width: "75rem", height: "auto" }}
+        showHeader={false}
+
+      >
+        {dialog_editpersonal}
       </Dialog>
 
     </>
