@@ -47,7 +47,7 @@ import { Row } from 'primereact/row';
 import { getAllByDisplayValue } from '@testing-library/react';
 
 const WaterSettingFee = () => {
-  const [settingPage, setSettingPage] = useState("0");
+  const [settingPage, setSettingPage] = useState("13");
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   })
@@ -791,7 +791,7 @@ const WaterSettingFee = () => {
             <h5 className="me-5 mt-2">จัดการเรื่อง</h5>
             <div className="me-2">
               <CFormSelect className="mb-3" value={settingPage} onChange={(e) => handleSelectPage(e.target.value)}>
-                <option value="0">เลือกเรื่องที่ต้องการตั้งค่า</option>
+                {/* <option value="0">เลือกเรื่องที่ต้องการตั้งค่า</option>
                 <option value="1">อัตราค่าน้ำประปา</option>
                 <option value="2">ค่าธรรมเนียมการขอใช้น้ำ</option>
                 <option value="3">ค่ามิเตอร์น้ำ</option>
@@ -803,7 +803,7 @@ const WaterSettingFee = () => {
                 <option value="9">ค่าปรับการสูบน้ำจากท่อประปา</option>
                 <option value="10">ค่าประกันการใช้น้ำ</option>
                 <option value="11">ค่าปรับการทุจริต</option>
-                <option value="12">ค่าปรับจากการรั่วไหล</option>
+                <option value="12">ค่าปรับจากการรั่วไหล</option> */}
                 <option value="13">ข้อมูลเพื่อส่งเสริมหรืออุดหนุน</option>
               </CFormSelect>
 
