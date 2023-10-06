@@ -1,5 +1,5 @@
-import React from 'react'
-import CIcon from '@coreui/icons-react'
+import React from "react";
+import CIcon from "@coreui/icons-react";
 import {
   cilDrop,
   cilBarChart,
@@ -8,8 +8,8 @@ import {
   cilSpeedometer,
   cilPeople,
   cilMap,
-} from '@coreui/icons'
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+} from "@coreui/icons";
+import { CNavGroup, CNavItem, CNavTitle } from "@coreui/react";
 
 const _nav = [
   // {
@@ -18,36 +18,36 @@ const _nav = [
   //   to: '/dashboard',
   //   icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
   // },
+  // {
+  //   component: CNavItem,
+  //   name: 'ข้อมูลแผนที่',
+  //   to: '/water-map',
+  //   icon: <CIcon icon={cilMap} customClassName="nav-icon" />,
+  // },
   {
     component: CNavItem,
-    name: 'ข้อมูลแผนที่',
-    to: '/water-map',
-    icon: <CIcon icon={cilMap} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'ข้อมูลผู้ใช้น้ำ',
-    to: '/water-register',
+    name: "ข้อมูลผู้ใช้น้ำ",
+    to: "/water-register",
     icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
-    name: 'ข้อมูลมิเตอร์',
-    to: '/water-meter',
+    name: "ข้อมูลมิเตอร์",
+    to: "/water-meter",
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
-    name: 'ข้อมูลมิเตอร์ค่าน้ำ',
-    to: '/water-meter-ft',
+    name: "จดค่าน้ำ",
+    to: "/water-meter-ft",
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
-  {
-    component: CNavItem,
-    name: 'ข้อมูลท่อน้ำ',
-    to: '/water-pipe',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: "ข้อมูลท่อน้ำ",
+  //   to: "/water-pipe",
+  //   icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  // },
   // {
   //   component: CNavItem,
   //   name: 'ข้อมูลแหล่งกักเก็บน้ำ',
@@ -89,43 +89,43 @@ const _nav = [
   // },
   {
     component: CNavGroup,
-    name: 'รายงาน',
+    name: "รายงาน",
     icon: <CIcon icon={cilBarChart} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'รายงานการใช้น้ำ',
-        to: '/water-report-usage',
+        name: "รายงานการใช้น้ำ",
+        to: "/water-report-usage",
       },
       {
         component: CNavItem,
-        name: 'ภาษีมูลค่าเพิ่ม',
-        to: '/water-report-taxes',
+        name: "ภาษีมูลค่าเพิ่ม",
+        to: "/water-report-taxes",
       },
       {
         component: CNavItem,
-        name: 'ผู้จดมาตรน้ำ',
-        to: '/water-report-agent',
+        name: "ผู้จดมาตรน้ำ",
+        to: "/water-report-agent",
       },
     ],
   },
   {
     component: CNavGroup,
-    name: 'ตั้งค่า',
+    name: "ตั้งค่า",
     icon: <CIcon icon={cilSettings} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'เอกสาร',
-        to: '/water-setting-docs',
+        name: "เอกสาร",
+        to: "/water-setting-docs",
       },
       {
         component: CNavItem,
-        name: 'ค่าธรรมเนียม',
-        to: '/water-setting-fee',
+        name: "ค่าธรรมเนียม",
+        to: "/water-setting-fee",
       },
     ],
   },
-]
+];
 
-export default _nav
+export default _nav;
