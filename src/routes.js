@@ -105,7 +105,6 @@ const routes = [
   { path: "/water-pipe", name: "WaterPipeData", element: WaterPipeData },
   { path: "/water-meter-ft", name: "WaterMeterFt", element: WaterMeterFt },
   { path: "/water-user-role", name: "WaterUserRole", element: WaterUserRole },
-  { path: "/promotion", name: "promotion", element: promotion },
 ];
 
 export default routes;

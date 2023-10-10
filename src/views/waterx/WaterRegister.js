@@ -1479,6 +1479,7 @@ const WaterRegister = () => {
     </>
   );
 
+  //ใบชำระเงิน
   dialogcontent1 = (
     <>
       <div className="d-flex align-items-center justify-content-center">

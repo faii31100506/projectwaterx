@@ -50,7 +50,7 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: "ค่าธรรมเนียม",
+    name: "ข้อมูลส่งเสริม",
     to: "/water-setting-fee",
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },

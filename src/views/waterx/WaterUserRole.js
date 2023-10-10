@@ -1,219 +1,469 @@
-import React from 'react'
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import React from "react";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
-import "./waterx.css"
-import { Dropdown } from 'primereact/dropdown';
-import { Dialog } from 'primereact/dialog';
-import PropTypes from 'prop-types';
-import { InputSwitch } from 'primereact/inputswitch';
-import { Steps } from 'primereact/steps';
-import { CFormSwitch } from '@coreui/react'
+import "./waterx.css";
+import { Dropdown } from "primereact/dropdown";
+import { Dialog } from "primereact/dialog";
+import PropTypes from "prop-types";
+import { InputSwitch } from "primereact/inputswitch";
+import { Steps } from "primereact/steps";
+import { CFormSwitch } from "@coreui/react";
+import axios from "axios";
 import {
-    CAvatar,
-    CButton,
-    CButtonGroup,
-    CCard,
-    CCardBody,
-    CCardFooter,
-    CCardHeader,
-    CCol,
-    CImage,
-    CProgress,
-    CRow,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow,
-    CFormCheck,
-    CFormInput,
-    CForm,
-    CFormSelect,
-    CFormTextarea,
-  } from '@coreui/react'
-  import { CChartLine } from '@coreui/react-chartjs'
-  import { getStyle, hexToRgba } from '@coreui/utils'
-  import CIcon from '@coreui/icons-react'
-  import {
-    cilSearch,
-    cilChevronLeft,
-  } from '@coreui/icons'
-  import { Row } from 'primereact/row';
-  
+  CAvatar,
+  CButton,
+  CButtonGroup,
+  CCard,
+  CCardBody,
+  CCardFooter,
+  CCardHeader,
+  CCol,
+  CImage,
+  CProgress,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+  CFormCheck,
+  CFormInput,
+  CForm,
+  CFormSelect,
+  CFormTextarea,
+  CAlert,
+} from "@coreui/react";
+import { CChartLine } from "@coreui/react-chartjs";
+import { getStyle, hexToRgba } from "@coreui/utils";
+import CIcon from "@coreui/icons-react";
+import { cilSearch, cilChevronLeft } from "@coreui/icons";
+import { Row } from "primereact/row";
 
 const WaterUserRole = () => {
-    const [filters, setFilters] = useState({
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      })
-    const [addrolevisible, setAddrolevisible] = useState(false)
-    const [checked1, setChecked1] = useState(false);
-    const [checked2, setChecked2] = useState(false);
-    const [checked3, setChecked3] = useState(false);
-    const [checked4, setChecked4] = useState(false);
-    const [checked5, setChecked5] = useState(false);
-    const [checked6, setChecked6] = useState(false);
-    const data0=[
-        {
-            name:"นายทำดี สีสะอาด",
-            email:"Tumdee@gmail.com",
-            role:"Administrator",
-            specify:"หัวหน้าฝ่าย xxxx",
-            status:"active"
-        },
-        {
-            name:"นางสมศรี มานะ",
-            email:"somdee@gmail.com",
-            role:"IT Administrator",
-            specify:"เจ้าพนักงาน xxxx",
-            status:"active"
-        },
-        {
-            name:"นางวิภาวดี หทัยงาม",
-            email:"vipavadee@gmail.com",
-            role:"Administrator",
-            specify:"เจ้าพนักงาน xxxx",
-            status:"active"
-        },
-        {
-            name:"นายมานะ ขยันดี",
-            email:"maanaaKD@gmail.com",
-            role:"Users",
-            specify:"เจ้าพนักงาน xxxx",
-            status:"active"
-        },
-        {
-            name:"นางสาวแอนนา มณีงาม",
-            email:"anna211@gmail.com",
-            role:"Administrator",
-            specify:"เจ้าพนักงาน xxxx",
-            status:"active"
-        },
-        {
-            name:"นายธามไท สีขาว",
-            email:"Timethai@gmail.com",
-            role:"IT Administrator",
-            specify:"เจ้าพนักงาน xxxx",
-            status:"suspend"
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  });
+  const [addrolevisible, setAddrolevisible] = useState(false);
+  // const [checked1, setChecked1] = useState(false);
+  // const [checked2, setChecked2] = useState(false);
+  // const [checked3, setChecked3] = useState(false);
+  // const [checked4, setChecked4] = useState(false);
+  // const [checked5, setChecked5] = useState(false);
+  // const [checked6, setChecked6] = useState(false);
+  const [datax, setDatax] = useState([]);
+  const [registerpage, setRegisterpage] = useState(1);
+  const [editData, setEditData] = useState([]);
+  const [search, setSearch] = useState([]);
+  const OFFICER_API = process.env.REACT_APP_OFFICER_API;
+
+  //ดึงข้อมูล
+  useEffect(() => {
+    axios
+      .get(OFFICER_API)
+      .then((res) => setDatax(res.data.data))
+      .catch((err) => console.log(err));
+  }, []);
+
+  // ค้นหา
+  // const handleSeach = async (e) => {
+  //   var data = {
+  //     officer_id: filters,
+  //   };
+  //   console.log(e);
+  //   axios
+  //     .get(
+  //       "hhttp://localhost:4034/api/nahra/searchofficer?id=" + data.officer_id,
+  //       {}
+  //     )
+  //     .then((res) => {
+  //       if (res.status == 200) {
+  //         alert("succesfull");
+  //       }
+  //       console.log(res);
+  //       console.log(res.data);
+  //       return res.data.token;
+  //     });
+  // };
+
+  // บันทึกข้อมูล
+  const handlepost = (event) => {
+    var data = {
+      name: name,
+      lastname: lastname,
+      pos_name: pos_name,
+      org_name: org_name,
+    };
+    console.log(event);
+    fetch("http://localhost:4034/api/nahra/modelofficer", {
+      method: "POST",
+      headers: {
+        Accept: "application/form-data",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then((res) => {
+      if (res.status == 200) {
+        alert("succesfull");
+      }
+      console.log(res);
+      console.log(res.data);
+    });
+    return window.location.reload();
+  };
+
+  // แก้ไข
+  const handleput = (event) => {
+    event.preventDefault();
+    var data = {
+      name: addNewData.name,
+      lastname: addNewData.lastname,
+      pos_name: addNewData.pos_name,
+      org_name: addNewData.org_name,
+    };
+    console.log(event);
+    axios
+      .put(
+        "http://localhost:4034/api/nahra/officer/" + addNewData.officer_id,
+        data
+      )
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+        return res.data.token, window.location.reload();
+      });
+  };
+
+  // ลบ
+  const handleDel = (officer_id) => {
+    var data = {
+      officer_id: officer_id,
+    };
+    console.log(officer_id);
+    axios
+      .delete(
+        "http://localhost:4034/api/nahra/officerdel/" + data.officer_id,
+        {}
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          alert("succesfull");
         }
-    ]
-    let dialogcontent1;
-    dialogcontent1=(
-        <>
-        <h5 className="mx-4">เพิ่มบทบาท</h5>
-        <div className="mx-4 mt-3">
-        <CFormInput placeholder="พิมพ์ชื่อบทบาทภาษาอังกฤษ"/>
-        </div>
-        <div className="mx-4 mt-3">
-        <CFormInput placeholder="พิมพ์ชื่อบทบาทภาษาไทย"/>
-        </div>
-        <div className="mx-4 mt-3">
-        <CFormSelect>
-            <option>Prara - Adminstrator</option>
-        </CFormSelect>
+        console.log(res);
+        console.log(res.data);
+        return res.data.token, window.location.reload();
+      });
+  };
 
-        </div>
-        <div className="role-modal-container mt-4 pt-1 d-flex flex-column">
-        
-        <div className="d-flex justify-content-center mt-3 mbg-white">
-            <div className="w-60 text-start">User Management</div>
-        <InputSwitch checked={checked1} onChange={(e) => setChecked1(e.value)} />
-        </div>
-        <div className="d-flex justify-content-center mt-3 mbg-white">
-        <div className="w-60 text-start">Rule Base Management</div>
-        <InputSwitch checked={checked2} onChange={(e) => setChecked2(e.value)} />
-        </div>
-        <div className="d-flex justify-content-center mt-3 mbg-white">
-        <div className="w-60 text-start">Configuration</div>
-        <InputSwitch checked={checked3} onChange={(e) => setChecked3(e.value)} />
-        </div>
-        <div className="d-flex justify-content-center mt-3 mbg-white">
-        <div className="w-60 text-start">Investigator Module</div>
-        <InputSwitch checked={checked4} onChange={(e) => setChecked4(e.value)} />
-        </div>
-        <div className="d-flex justify-content-center mt-3 mbg-white">
-        <div className="w-60 text-start">อนุมัติขอข้อมูลภายนอก</div>
-        <InputSwitch checked={checked5} onChange={(e) => setChecked5(e.value)} />
-        </div>
-        <div className="d-flex justify-content-center mt-3 mb-5 mbg-white">
-        <div className="w-60 text-start">จ่ายงาน</div>
-        <InputSwitch checked={checked6} onChange={(e) => setChecked6(e.value)} />
-        </div>
-        </div>
-        <button className="wblue-button-unrounded w-50 mt-4 text-center" onClick={()=> alert("go")}>เพิ่มบทบาท</button>
-        </>
-    )
+  //ปุ่มแกไข
+  const EditIcon = (data) => {
     return (
-   <>
-        <div className="d-flex flex-column mb-5">
-        <div className="d-flex mt-4">
-            <h4 className="mx-5">รายการบทบาท</h4>
+      <button className="buttonpic">
+        <img
+          src={require("../../assets/images/edit.png")}
+          width={30}
+          height={30}
+          onClick={() => {
+            setRegisterpage(2);
+            handleEdit(data);
+          }}
+        />
+      </button>
+    );
+  };
+  // ปุ่มลบ
+  const RemoveIcon = (data) => {
+    return (
+      <button className="buttonpic">
+        <img
+          src={require("../../assets/images/remove.png")}
+          width={30}
+          height={30}
+          onClick={() => {
+            handleDel(data);
+          }}
+        />
+      </button>
+    );
+  };
 
-          </div>
-          <div className="d-flex mt-3">
-            <div className="user-role-card w-33">
-            <div className="mt-4 mx-4 mb-4">จำนวนทั้งหมด 6 คน</div>
-            <h5 className="mx-4">Administrator</h5>
-            <button className="mx-4 buttonpicblue w-10 mb-2" onClick={()=>alert("go")}>แก้ไข</button>
-            </div>
-            <div className="user-role-card w-33">
-            <div className="mt-4 mx-4 mb-4">จำนวนทั้งหมด 8 คน</div>
-            <h5 className="mx-4">IT Administrator</h5>
-            <button className="mx-4 buttonpicblue w-10 mb-2" onClick={()=>alert("go")}>แก้ไข</button>
-            </div>
-            <div className="user-role-card w-33">
-            <div className="mt-4 mx-4 mb-4">จำนวนทั้งหมด 12 คน</div>
-            <h5 className="mx-4">Users</h5>
-            <button className="mx-4 buttonpicblue w-10 mb-2" onClick={()=>alert("go")}>แก้ไข</button>
-            </div>
-            </div>
-            <button className="wblue-button-unrounded-nocenter w-10 h-50 mt-4 mx-5 text-center" onClick={() => setAddrolevisible(true)}>เพิ่มบทบาท</button>
-        <div className="d-flex mt-5 justify-content-between">
-        <h4 className="mx-5">ผู้ใช้ทั้งหมดที่มีบทบาท</h4>
-        <div className="p-input-icon-left mx-5">
+  // แก้ไข
+  const [addNewData, setAddNewData] = useState({
+    officer_id: "",
+    name: "",
+    lastname: "",
+    pos_name: "",
+    org_name: "",
+  });
+
+  // แก้ไข
+  useEffect(() => {
+    setAddNewData({
+      officer_id: editData.officer_id || "",
+      name: editData.name || "",
+      lastname: editData.lastname || "",
+      pos_name: editData.pos_name || "",
+      org_name: editData.org_name || "",
+    });
+  }, [editData]);
+
+  // แก้ไข
+  const handleNewInputChange = (e) => {
+    const { name, value } = e.target;
+    // Update the form data as the user types
+    setAddNewData({
+      ...addNewData,
+      [name]: value,
+    });
+    console.log(addNewData);
+  };
+
+  // เพิ่มข้อมูล
+  const [name, setname] = useState("");
+  const [lastname, setlastname] = useState("");
+  const [pos_name, setposname] = useState("");
+  const [org_name, setorgname] = useState("");
+
+  let content;
+
+  // หน้าแสดงหลัก
+  if (registerpage === 1) {
+    content = (
+      <>
+        <div className="d-flex flex-column  mb-5 ml-5 mr-5">
+          <div className="d-flex mt-5 justify-content-between">
+            <h4 className="mx-5">รายชื่อพนักงาน</h4>
+            <div className="p-input-icon-left mx-5 mr-10">
               <CIcon icon={cilSearch}></CIcon>
-              <InputText className="p-inputtext-sm rounded-pill" placeholder='ค้นหา'
+              <InputText
+                className="p-inputtext-sm rounded-pill mr-2"
+                placeholder="ค้นหารายชื่อพนักงาน"
                 onInput={(e) =>
                   setFilters({
-                    global: { value: e.target.value, matchMode: FilterMatchMode.CONTAINS },
+                    global: {
+                      value: e.target.value,
+                      matchMode: FilterMatchMode.CONTAINS,
+                    },
                   })
                 }
+                onChange={(e) => handleSeach(e)}
               />
+              <CButton
+                color="info"
+                className="buttoninsert"
+                onClick={() => {
+                  setRegisterpage(3);
+                }}
+              >
+                เพิ่มข้อมูล
+              </CButton>
             </div>
-            </div>
-        <DataTable value={data0} header="ผู้ใช้ทั้งหมดที่มีบทบาท"
-          paginator
-          rows={8}
-          paginatorTemplate="CurrentPageReport PageLinks PrevPageLink NextPageLink"
-          currentPageReportTemplate="หน้า {currentPage} จาก {totalPages}"
-        >
-          <Column field="check" header="O"></Column>
-          <Column field="name" header="ชื่อ นามสกุล"></Column>
-          <Column field="email" header="EMAIL"></Column>
-          <Column field="role" header="บทบาท"></Column>
-          <Column field="specify" header="ตำแหน่ง"></Column>
-          <Column field="status" header="สถานะ"></Column>
-          <Column field="agent" header=""></Column>
-        </DataTable>
+          </div>
+          <DataTable
+            value={datax}
+            header="รายชื่อทั้งหมด"
+            paginator
+            rows={8}
+            paginatorTemplate="CurrentPageReport PageLinks PrevPageLink NextPageLink"
+            currentPageReportTemplate="หน้า {currentPage} จาก {totalPages}"
+          >
+            <Column
+              header="ชื่อ นามสกุล"
+              body={(rowData) => (
+                <span>
+                  {rowData.name}&nbsp;&nbsp;
+                  {rowData.lastname}
+                </span>
+              )}
+            ></Column>
+            <Column
+              header="ตำแหน่ง"
+              body={(rowData) => <span>{rowData.pos_name}</span>}
+            ></Column>
+            <Column
+              header="องค์กร"
+              body={(rowData) => <span>{rowData.org_name}</span>}
+            ></Column>
+            <Column
+              field="editstat"
+              body={(rowData) => EditIcon(rowData)}
+              header=""
+            ></Column>
+            <Column
+              body={(rowData) => RemoveIcon(rowData.officer_id)}
+              header=""
+            ></Column>
+          </DataTable>
         </div>
-    
-      <Dialog visible={addrolevisible}
-        onHide={() => setAddrolevisible(false)}
-        draggable={false}
-        dismissableMask
-        position="right"
-        style={{ width: "28rem", height: "100rem" }}
+      </>
+    );
+  }
 
-      >
-        {dialogcontent1}
-      </Dialog>
-   </>
-  )
-}
+  // แก้ไขข้อมูล
+  const handleEdit = (data) => {
+    setEditData(data);
+    console.log(editData);
+    console.log(OFFICER_API);
+  };
 
-export default WaterUserRole
+  // แก้ไข
+  if (registerpage === 2) {
+    content = (
+      <>
+        <div className="d-flex flex-column">
+          <h2 className="mx-3">แก้ไขข้อมูลพนักงาน</h2>
+          <div className="d-flex mt-4">
+            <img
+              className="mt-1"
+              src={require("../../assets/images/backbutton.png")}
+              width={30}
+              height={30}
+              onClick={() => setRegisterpage(1)}
+            />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <CForm className="row g-3">
+              <CForm className="w-50">
+                <CFormInput
+                  label="ชื่อ"
+                  name="name"
+                  value={addNewData.name}
+                  onChange={handleNewInputChange}
+                />
+              </CForm>
+              <CForm className="w-50">
+                <CFormInput
+                  label="นามสกุล"
+                  name="lastname"
+                  value={addNewData.lastname}
+                  onChange={handleNewInputChange}
+                />
+              </CForm>
+              <CForm className="w-50">
+                <CFormSelect
+                  className="mb-3"
+                  aria-label="Small select example"
+                  label="ตำแหน่ง"
+                  name="pos_name"
+                  value={addNewData.pos_name}
+                  onChange={handleNewInputChange}
+                >
+                  <option>เลือกตำแหน่ง</option>
+                  <option value="พนักงานทั่วไป">พนักงานทั่วไป</option>
+                  <option value="พนักงานภาคสนาม">พนักงานภาคสนาม</option>
+                </CFormSelect>
+              </CForm>
+              <CForm className="w-50">
+                <CFormInput
+                  label="องค์กร"
+                  name="org_name"
+                  value={addNewData.org_name}
+                  onChange={handleNewInputChange}
+                />
+              </CForm>
+            </CForm>
+          </div>
+          <div className="d-flex mt-4">
+            <CCol className="align-items-center">
+              <button
+                type="button"
+                class="btn btn-primary "
+                onClick={handleput}
+                style={{ float: "right" }}
+              >
+                บันทึก
+              </button>
+            </CCol>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  //เพิ่มข้อมูล
+  if (registerpage === 3) {
+    content = (
+      <>
+        <div className="d-flex flex-column">
+          <h2 className="mx-3">เพิ่มข้อมูลพนักงาน</h2>
+          <div className="d-flex mt-4">
+            <img
+              className="mt-1"
+              src={require("../../assets/images/backbutton.png")}
+              width={30}
+              height={30}
+              onClick={() => setRegisterpage(1)}
+            />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <CForm className="row g-3">
+              <CForm className="w-50">
+                <CFormInput
+                  label="ชื่อ"
+                  name="name"
+                  onChange={(e) => setname(e.target.value)}
+                />
+              </CForm>
+              <CForm className="w-50">
+                <CFormInput
+                  label="นามสกุล"
+                  name="lastname"
+                  onChange={(e) => setlastname(e.target.value)}
+                />
+              </CForm>
+              <CForm className="w-50">
+                <CFormSelect
+                  // size="sm"
+                  className="mb-3"
+                  aria-label="Small select example"
+                  label="ตำแหน่ง"
+                  onChange={(e) => setposname(e.target.value)}
+                >
+                  <option>เลือกตำแหน่ง</option>
+                  <option value="พนักงานทั่วไป">พนักงานทั่วไป</option>
+                  <option value="พนักงานภาคสนาม">พนักงานภาคสนาม</option>
+                </CFormSelect>
+              </CForm>
+              <CForm className="w-50">
+                <CFormSelect
+                  // size="sm"
+                  className="mb-3"
+                  aria-label="Small select example"
+                  label="องค์กร"
+                  onChange={(e) => setorgname(e.target.value)}
+                >
+                  <option>เลือกองค์กร</option>
+                  <option value="หนองเป็ด">หนองเป็ด</option>
+                </CFormSelect>
+              </CForm>
+            </CForm>
+          </div>
+          <div className="d-flex mt-4">
+            <CCol className="align-items-center">
+              <button
+                type="button"
+                class="btn btn-primary "
+                onClick={handlepost}
+                style={{ float: "right" }}
+              >
+                บันทึก
+              </button>
+            </CCol>
+          </div>
+        </div>
+      </>
+    );
+  }
+  return (
+    <>
+      <div className="customcontainer3 mt-5">
+        <div className="d-flex flex-column">{content}</div>
+      </div>
+    </>
+  );
+};
+
+export default WaterUserRole;
