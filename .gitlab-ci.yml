@@ -36,5 +36,5 @@ deploy:
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login 192.168.1.16:5000 -u root -p P@ssowrd" || true
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker stop nahra-web" || true
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker rm nahra-web" || true
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run --name nahra-web -d -p 3034:3034 192.168.1.16:5000/nahra-web:main" || true
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run --env-file .env.dev --name nahra-web -d -p 3034:3034 192.168.1.16:5000/nahra-web:main" || true
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker rmi $(docker images --filter "dangling=true" -q --no-trunc) -f" || true
