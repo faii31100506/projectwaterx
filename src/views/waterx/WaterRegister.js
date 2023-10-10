@@ -57,7 +57,7 @@ const WaterRegister = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [editData, setEditData] = useState([]);
   const [datax, setDatax] = useState([]);
-  const NHARA_API = process.env.REACT_APP_NHARA_API;
+  const NHARA_API = process.env.REACT_APP_CENSUS_API;
 
   useEffect(() => {
     axios
@@ -75,82 +75,235 @@ const WaterRegister = () => {
     setActiveIndex(activeIndex + 1);
   };
   const [addNewData, setAddNewData] = useState({
+    prapaowner_id: "",
+    census_id: "",
+    bid_id: "",
+    land_id: "",
+    flag:"",
+    create_at:"",
+    modify_at: "",
+    annual: "",
+    promotion_id: "",
+    meterasset_id:"",
+    prapaowner_number: "",
+    meterphoto_installation_id: "",
+    paraowner_status_id: "",
+    watertypeuse_id: "",
+    bid: "",
+    oid: "",
     baddress: "",
     bmoo: "",
-    road: "",
-    soi: "",
     tambon_name: "",
     amphoe_name: "",
     province_name: "",
     zipcode: "",
-    international_size: "",
-    meternumber: "",
-    metertypename: "",
-    metermaterial: "",
+    id: "",
+    pop_id: "",
+    prefix: "",
     fname: "",
     lname: "",
-    prefix: "",
     caddress: "",
     cmoo: "",
+    soi: "",
+    road: "",
+    fullname: "",
+    numberphone: "",
     ctambon_name: "",
     camphoe_name: "",
     cprovince_name: "",
-    pop_id: "",
+    waterusetype_id: "",
+    watertype_name: "",
+    detail: "",
+    metermaster_id: "",
+    lora_devui: "",
+    longitude: "",
+    latitude: "",
+    longitude_gps: "",
+    latitude_gps: "",
+    meterphoto_id: "",
+    numberstamp: "",
+    manufacture_date: "",
+    startnumbermanufacturer: "",
+    meter_status: "",
+    geom: "",
+    meternumber: "",
+    the_geom: "",
+    status_name: "",
+    active: "",
+    metersize_id: "",
+    metertype_id: "",
+    metermaterial_id: "",
+    brand: "",
+    model: "",
+    battery: "",
+    valuecontrol: "",
+    paymentmode: "",
+    pressureworking: "",
+    communication: "",
+    class: "",
+    temperatureworking: "",
+    digitrange: "",
+    locationonboard: "",
+    selfrecharge: "",
+    metermaterial: "",
+    metertypename: "",
+    thai_size: "",
+    international_size: ""
   });
 
   const [formData, setFormData] = useState({
-    status_name: "",
-    road: "",
-    baddress: "", // Initialize with an empty string or provide a default value if needed
-    bmoo: "", // Initialize with an empty string or provide a default value if needed
+    prapaowner_id: "",
+    census_id: "",
+    bid_id: "",
+    land_id: "",
+    flag:"",
+    create_at:"",
+    modify_at: "",
+    annual: "",
+    promotion_id: "",
+    meterasset_id:"",
+    prapaowner_number: "",
+    meterphoto_installation_id: "",
+    paraowner_status_id: "",
+    watertypeuse_id: "",
+    bid: "",
+    oid: "",
+    baddress: "",
+    bmoo: "",
     tambon_name: "",
     amphoe_name: "",
     province_name: "",
+    zipcode: "",
+    id: "",
+    pop_id: "",
+    prefix: "",
+    fname: "",
+    lname: "",
+    caddress: "",
+    cmoo: "",
+    soi: "",
+    road: "",
+    fullname: "",
+    numberphone: "",
     ctambon_name: "",
     camphoe_name: "",
     cprovince_name: "",
+    waterusetype_id: "",
+    watertype_name: "",
+    detail: "",
+    metermaster_id: "",
+    lora_devui: "",
+    longitude: "",
+    latitude: "",
+    longitude_gps: "",
+    latitude_gps: "",
+    meterphoto_id: "",
+    numberstamp: "",
+    manufacture_date: "",
+    startnumbermanufacturer: "",
+    meter_status: "",
+    geom: "",
     meternumber: "",
+    the_geom: "",
+    status_name: "",
+    active: "",
+    metersize_id: "",
+    metertype_id: "",
+    metermaterial_id: "",
+    brand: "",
+    model: "",
+    battery: "",
+    valuecontrol: "",
+    paymentmode: "",
+    pressureworking: "",
+    communication: "",
+    class: "",
+    temperatureworking: "",
+    digitrange: "",
+    locationonboard: "",
+    selfrecharge: "",
     metermaterial: "",
     metertypename: "",
-    international_size: "",
-    // pipesize:'',
-    watertype_name: "",
-    // usertype: '',
-    // dateused: '',
-    // datestarted: '',
-    fname: "",
-    lname: "",
-    prefix: "",
-    caddress: "",
-    cmoo: "",
-    pop_id: "",
-    zipcode: "",
+    thai_size: "",
+    international_size: ""
   });
 
   useEffect(() => {
     setFormData({
-      status_name: editData.status_name || "",
-      road: editData.road || "",
-      baddress: editData.baddress || "", // Provide a default value if editData.name is undefined
-      bmoo: editData.bmoo || "", // Provide a default value if editData.work is undefined
+      prapaowner_id: editData.prapaowner_id || "",
+      census_id: editData.census_id || "",
+      bid_id: editData.bid_id || "",
+      land_id: editData.land_id || "",
+      flag: editData.flag || "",
+      create_at:editData.create_at || "",
+      modify_at:editData.modify_at || "",
+      annual: editData.annual || "",
+      promotion_id: editData.promotion_id || "",
+      meterasset_id: editData.meterasset_id || "",
+      prapaowner_number: editData.prapaowner_number || "",
+      meterphoto_installation_id: editData.meterphoto_installation_id || "",
+      paraowner_status_id: editData.paraowner_status_id || "",
+      watertypeuse_id: editData.watertypeuse_id || "",
+      bid: editData.bid || "",
+      oid: editData.oid || "",
+      baddress: editData.baddress || "",
+      bmoo: editData.bmoo || "",
       tambon_name: editData.tambon_name || "",
       amphoe_name: editData.amphoe_name || "",
       province_name: editData.province_name || "",
-      meternumber: editData.meternumber || "",
-      metermaterial: editData.metermaterial || "",
-      metertypename: editData.metertypename || "",
-      international_size: editData.international_size || "",
-      watertype_name: editData.watertype_name || "",
+      zipcode: editData.zipcode || "",
+      id: editData.id || "",
+      pop_id: editData.pop_id || "",
+      prefix: editData.prefix || "",
       fname: editData.fname || "",
       lname: editData.lname || "",
-      prefix: editData.prefix || "",
       caddress: editData.caddress || "",
       cmoo: editData.cmoo || "",
+      soi: editData.soi || "",
+      road: editData.road || "",
+      fullname: editData.fullname || "",
+      numberphone: editData.numberphone || "",
       ctambon_name: editData.ctambon_name || "",
       camphoe_name: editData.camphoe_name || "",
       cprovince_name: editData.cprovince_name || "",
-      pop_id: editData.pop_id || "",
-      zipcode: editData.zipcode || "",
+      waterusetype_id: editData.waterusetype_id ||"",
+      watertype_name: editData.watertype_name || "",
+      detail: editData.detail || "",
+      metermaster_id: editData.metermaster_id || "",
+      lora_devui: editData.lora_devui || "",
+      longitude: editData.longitude || "",
+      latitude: editData.latitude || "",
+      longitude_gps: editData.longitude_gps || "",
+      latitude_gps: editData.latitude_gps || "",
+      meterphoto_id: editData.meterphoto_id ||"",
+      numberstamp: editData.numberstamp || "",
+      manufacture_date: editData.manufacture_date || "",
+      startnumbermanufacturer: editData.startnumbermanufacturer || "",
+      meter_status: editData.meter_status || "",
+      geom: editData.geom || "",
+      meternumber: editData.meternumber || "",
+      the_geom: editData.the_geom || "",
+      status_name: editData.status_name || "",
+      active: editData.active || "",
+      metersize_id: editData.metersize_id || "",
+      metertype_id: editData.metertype_id || "",
+      metermaterial_id: editData.metermaterial_id || "",
+      brand: editData.brand || "",
+      model: editData.model || "",
+      battery: editData.battery || "",
+      valuecontrol: editData.valuecontrol || "",
+      paymentmode: editData.paymentmode || "",
+      pressureworking: editData.pressureworking || "",
+      communication: editData.communication || "",
+      class: editData.class || "",
+      temperatureworking: editData.temperatureworking || "",
+      digitrange: editData.digitrange || "",
+      locationonboard: editData.locationonboard || "",
+      selfrecharge: editData.selfrecharge || "",
+      metermaterial: editData.metermaterial || "",
+      metertypename: editData.metertypename || "",
+      thai_size: editData.thai_size || "",
+      international_size: editData.international_size || ""
     });
   }, [editData]);
 
@@ -263,6 +416,115 @@ const WaterRegister = () => {
   PaydeptButton.propTypes = {
     data: PropTypes.object.isRequired, // Define the 'data' prop type
   };
+
+
+  const custommeterfilter = (value,filter) => {
+    return filter === 'true' ? value !== null : true;
+  };
+
+  const handleAddNewData = () => {
+    console.log(addNewData)
+        // axios.post("http://localhost:4034/api/nahra/owner/" + addNewData.prapaowner_id, addNewData)
+    // .then((response) => {
+    //   console.log('POST request successful');
+    //   console.log('Response:', response.data);
+    // })
+    // .catch((error) => {
+    //   console.error('Error:', error);
+    // });
+      alert("เพิ่มข้อมูลเสร็จสิ้น")
+      setAddNewData({
+        prapaowner_id: "",
+        census_id: "",
+        bid_id: "",
+        land_id: "",
+        flag:"",
+        create_at:"",
+        modify_at: "",
+        annual: "",
+        promotion_id: "",
+        meterasset_id:"",
+        prapaowner_number: "",
+        meterphoto_installation_id: "",
+        paraowner_status_id: "",
+        watertypeuse_id: "",
+        bid: "",
+        oid: "",
+        baddress: "",
+        bmoo: "",
+        tambon_name: "",
+        amphoe_name: "",
+        province_name: "",
+        zipcode: "",
+        id: "",
+        pop_id: "",
+        prefix: "",
+        fname: "",
+        lname: "",
+        caddress: "",
+        cmoo: "",
+        soi: "",
+        road: "",
+        fullname: "",
+        numberphone: "",
+        ctambon_name: "",
+        camphoe_name: "",
+        cprovince_name: "",
+        waterusetype_id: "",
+        watertype_name: "",
+        detail: "",
+        metermaster_id: "",
+        lora_devui: "",
+        longitude: "",
+        latitude: "",
+        longitude_gps: "",
+        latitude_gps: "",
+        meterphoto_id: "",
+        numberstamp: "",
+        manufacture_date: "",
+        startnumbermanufacturer: "",
+        meter_status: "",
+        geom: "",
+        meternumber: "",
+        the_geom: "",
+        status_name: "",
+        active: "",
+        metersize_id: "",
+        metertype_id: "",
+        metermaterial_id: "",
+        brand: "",
+        model: "",
+        battery: "",
+        valuecontrol: "",
+        paymentmode: "",
+        pressureworking: "",
+        communication: "",
+        class: "",
+        temperatureworking: "",
+        digitrange: "",
+        locationonboard: "",
+        selfrecharge: "",
+        metermaterial: "",
+        metertypename: "",
+        thai_size: "",
+        international_size: ""
+      });
+  }
+
+  const handleEditData = () => {
+    console.log(formData)
+    // axios.put("http://localhost:4034/api/nahra/owner/" + formData.prapaowner_id, formData)
+    // .then((response) => {
+    //   console.log('POST request successful');
+    //   console.log('Response:', response.data);
+    // })
+    // .catch((error) => {
+    //   console.error('Error:', error);
+    // });
+       alert("แก้ไขสำเร็จ")
+
+  }
+
   const handleSuspendModalExit = () => {
     setSuspendvisible(false);
   };
@@ -386,7 +648,7 @@ const WaterRegister = () => {
                 </span>
               )}
             />
-            <Column field="meternumber" header="เลขที่ประจำมาตรวัดน้ำ"></Column>
+            <Column field="meternumber" header="เลขที่ประจำมาตรวัดน้ำ" filter filterMatchMode="custom" filterFunction={custommeterfilter}></Column>
             {/* <Column field="baddress" header="ที่ติดตั้งมาตร"></Column> */}
             <Column
               header="ที่ติดตั้งมาตร"
@@ -785,7 +1047,7 @@ const WaterRegister = () => {
             className="wblue-button-unrounded mt-5 mb-5 w-10 text-center"
             onClick={() => {
               setRegisterpage(0);
-              debugBro();
+              handleAddNewData();
             }}
           >
             บันทึก
@@ -947,7 +1209,7 @@ const WaterRegister = () => {
 
   const handleEdit = (data) => {
     setEditData(data);
-    console.log(editData);
+    console.log(data);
     console.log(NHARA_API);
   };
   if (registerpage === 3) {
@@ -1197,7 +1459,10 @@ const WaterRegister = () => {
                 </div>
               </div>
 
-              <button className="wblue-button-unrounded mt-5 mb-5 w-20 text-center">
+              <button className="wblue-button-unrounded mt-5 mb-5 w-20 text-center"onClick={() => {
+              setRegisterpage(0);
+              handleEditData();
+            }}>
                 บันทึกข้อมูล
               </button>
             </div>
