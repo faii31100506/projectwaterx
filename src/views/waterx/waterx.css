@@ -309,6 +309,22 @@
   background: var(--gray-200);
 }
 
+.minicontainer2 {
+  width: 45%;
+  background: transparent;
+  height: auto;
+  border-radius: 30px;
+  border: 1px solid #eaecf0;
+  background: white;
+  margin-left: 5rem;
+  margin-top: 5%;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+
 .cloud {
   background-color: #315efb0d;
 }
