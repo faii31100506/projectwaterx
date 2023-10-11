@@ -646,7 +646,7 @@ const WaterRegister = () => {
                 </span>
               )}
             />
-            <Column field="meternumber" header="เลขที่ประจำมาตรวัดน้ำ" filter filterMatchMode="custom" filterFunction={custommeterfilter}></Column>
+            <Column field="meternumber" header="เลขที่ประจำมาตรวัดน้ำ"></Column>
             {/* <Column field="baddress" header="ที่ติดตั้งมาตร"></Column> */}
             <Column
               header="ที่ติดตั้งมาตร"
