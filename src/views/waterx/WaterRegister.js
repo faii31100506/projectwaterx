@@ -514,11 +514,10 @@ const WaterRegister = () => {
   const handleEditData = () => {
     console.log(formData)
     axios.put("http://localhost:4034/api/nahra/owner/" + formData.prapaowner_id, formData)
-    .then((response) => {
-      console.log("Success:", response.data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
+    .then((res) => {
+      console.log(res);
+      console.log(res.data);
+      return res.data.token, window.location.reload();
     });
        alert("แก้ไขสำเร็จ")
 
@@ -1226,7 +1225,7 @@ const WaterRegister = () => {
             <h2 className="mx-3">แก้ไขทะเบียนผู้ใช้น้ำ</h2>
           </div>
           <div className="customcontainer3 mt-4">
-            <div className="p-input-icon-left mt-5 mx-5">
+            {/* <div className="p-input-icon-left mt-5 mx-5">
               <CIcon icon={cilSearch}></CIcon>
               <InputText
                 className="p-inputtext-sm rounded-pill"
@@ -1241,12 +1240,12 @@ const WaterRegister = () => {
                 }
               />
             </div>
-            <h5 className="mt-4 mx-5">หรือ ปักหมุดตำแหน่งของที่ตั้งมาตรวัด</h5>
+            <h5 className="mt-4 mx-5">หรือ ปักหมุดตำแหน่งของที่ตั้งมาตรวัด</h5> */}
             <div className="d-flex flex-column">
               <div className="d-flex mt-5">
-                <div className="d-flex w-65">
+                {/* <div className="d-flex w-65">
                   <div className="customcontainer4 ml-5 mr-5"></div>
-                </div>
+                </div> */}
                 <div className="d-flex flex-column w-35">
                   <div className="d-flex ml-5 mr-5">
                     <img
@@ -1309,14 +1308,14 @@ const WaterRegister = () => {
                   </div>
                 </div>
               </div>
-              <div className="d-flex mx-5 mt-5 ">
+              {/* <div className="d-flex mx-5 mt-5 ">
                 <h5 className="w-25">รูปมิเตอร์วัดน้ำ</h5>
                 <img
                   src={require("../../assets/images/ex_meter.png")}
                   width={200}
                   height={200}
                 />
-              </div>
+              </div> */}
               <div className="d-flex mx-5 mt-5 ">
                 <h5 className="w-25">สถานะผู้ใช้น้ำ</h5>
                 {formData.status_name}
@@ -1395,7 +1394,7 @@ const WaterRegister = () => {
                       <option value="Muti-jet Turbine water meter">
                         Muti-jet Turbine water meter
                       </option>
-                      <option value="ประเภทกระดาษ">ประเภทกระดาษ</option>
+                      <option value="Displacement Water Meter">Displacement Water Meter</option>
                     </CFormSelect>
                     <CFormSelect
                       className="mt-2 mb-2"
@@ -1407,6 +1406,7 @@ const WaterRegister = () => {
                       <option></option>
                       <option value="3">3</option>
                       <option value="3.175">3.175</option>
+                      <option value="3/4">3/4</option>
                     </CFormSelect>
                     <CFormSelect
                       className="mt-2 mb-2"
