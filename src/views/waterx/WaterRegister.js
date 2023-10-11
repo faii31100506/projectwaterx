@@ -79,12 +79,12 @@ const WaterRegister = () => {
     census_id: null,
     bid_id: null,
     land_id: null,
-    flag:null,
-    create_at:null,
+    flag: null,
+    create_at: null,
     modify_at: null,
     annual: null,
     promotion_id: null,
-    meterasset_id:null,
+    meterasset_id: null,
     prapaowner_number: null,
     meterphoto_installation_id: null,
     paraowner_status_id: null,
@@ -148,7 +148,7 @@ const WaterRegister = () => {
     metermaterial: null,
     metertypename: null,
     thai_size: null,
-    international_size: null
+    international_size: null,
   });
 
   const [formData, setFormData] = useState({
@@ -156,12 +156,12 @@ const WaterRegister = () => {
     census_id: null,
     bid_id: null,
     land_id: null,
-    flag:null,
-    create_at:null,
+    flag: null,
+    create_at: null,
     modify_at: null,
     annual: null,
     promotion_id: null,
-    meterasset_id:null,
+    meterasset_id: null,
     prapaowner_number: null,
     meterphoto_installation_id: null,
     paraowner_status_id: null,
@@ -225,7 +225,7 @@ const WaterRegister = () => {
     metermaterial: null,
     metertypename: null,
     thai_size: null,
-    international_size: null
+    international_size: null,
   });
 
   useEffect(() => {
@@ -235,8 +235,8 @@ const WaterRegister = () => {
       bid_id: editData.bid_id || null,
       land_id: editData.land_id || null,
       flag: editData.flag || null,
-      create_at:editData.create_at || null,
-      modify_at:editData.modify_at || null,
+      create_at: editData.create_at || null,
+      modify_at: editData.modify_at || null,
       annual: editData.annual || null,
       promotion_id: editData.promotion_id || null,
       meterasset_id: editData.meterasset_id || null,
@@ -266,7 +266,7 @@ const WaterRegister = () => {
       ctambon_name: editData.ctambon_name || null,
       camphoe_name: editData.camphoe_name || null,
       cprovince_name: editData.cprovince_name || null,
-      waterusetype_id: editData.waterusetype_id ||null,
+      waterusetype_id: editData.waterusetype_id || null,
       watertype_name: editData.watertype_name || null,
       detail: editData.detail || null,
       metermaster_id: editData.metermaster_id || null,
@@ -275,7 +275,7 @@ const WaterRegister = () => {
       latitude: editData.latitude || null,
       longitude_gps: editData.longitude_gps || null,
       latitude_gps: editData.latitude_gps || null,
-      meterphoto_id: editData.meterphoto_id ||null,
+      meterphoto_id: editData.meterphoto_id || null,
       numberstamp: editData.numberstamp || null,
       manufacture_date: editData.manufacture_date || null,
       startnumbermanufacturer: editData.startnumbermanufacturer || null,
@@ -303,7 +303,7 @@ const WaterRegister = () => {
       metermaterial: editData.metermaterial || null,
       metertypename: editData.metertypename || null,
       thai_size: editData.thai_size || null,
-      international_size: editData.international_size ||null
+      international_size: editData.international_size || null,
     });
   }, [editData]);
 
@@ -417,14 +417,13 @@ const WaterRegister = () => {
     data: PropTypes.object.isRequired, // Define the 'data' prop type
   };
 
-
-  const custommeterfilter = (value,filter) => {
-    return filter === 'true' ? value !== null : true;
+  const custommeterfilter = (value, filter) => {
+    return filter === "true" ? value !== null : true;
   };
 
   const handleAddNewData = () => {
-    console.log(addNewData)
-        // axios.post("http://localhost:4034/api/nahra/owner/" + addNewData.prapaowner_id, addNewData)
+    console.log(addNewData);
+    // axios.post("http://localhost:4034/api/nahra/owner/" + addNewData.prapaowner_id, addNewData)
     // .then((response) => {
     //   console.log('POST request successful');
     //   console.log('Response:', response.data);
@@ -432,97 +431,100 @@ const WaterRegister = () => {
     // .catch((error) => {
     //   console.error('Error:', error);
     // });
-      alert("เพิ่มข้อมูลเสร็จสิ้น")
-      setAddNewData({
-        prapaowner_id: null,
-        census_id: null,
-        bid_id: null,
-        land_id: null,
-        flag:null,
-        create_at:null,
-        modify_at: null,
-        annual: null,
-        promotion_id: null,
-        meterasset_id:null,
-        prapaowner_number: null,
-        meterphoto_installation_id: null,
-        paraowner_status_id: null,
-        watertypeuse_id: null,
-        bid: null,
-        oid: null,
-        baddress: null,
-        bmoo: null,
-        tambon_name: null,
-        amphoe_name: null,
-        province_name: null,
-        zipcode: null,
-        id: null,
-        pop_id: null,
-        prefix: null,
-        fname: null,
-        lname: null,
-        caddress: null,
-        cmoo: null,
-        soi: null,
-        road: null,
-        fullname: null,
-        numberphone: null,
-        ctambon_name: null,
-        camphoe_name: null,
-        cprovince_name: null,
-        waterusetype_id: null,
-        watertype_name: null,
-        detail: null,
-        metermaster_id: null,
-        lora_devui: null,
-        longitude: null,
-        latitude: null,
-        longitude_gps: null,
-        latitude_gps: null,
-        meterphoto_id: null,
-        numberstamp: null,
-        manufacture_date: null,
-        startnumbermanufacturer: null,
-        meter_status: null,
-        geom: null,
-        meternumber: null,
-        the_geom: null,
-        status_name: null,
-        active: null,
-        metersize_id: null,
-        metertype_id: null,
-        metermaterial_id: null,
-        brand: null,
-        model: null,
-        battery: null,
-        valuecontrol: null,
-        paymentmode: null,
-        pressureworking: null,
-        communication: null,
-        class: null,
-        temperatureworking: null,
-        digitrange: null,
-        locationonboard: null,
-        selfrecharge: null,
-        metermaterial: null,
-        metertypename: null,
-        thai_size: null,
-        international_size: null
-      });
-  }
+    alert("เพิ่มข้อมูลเสร็จสิ้น");
+    setAddNewData({
+      prapaowner_id: null,
+      census_id: null,
+      bid_id: null,
+      land_id: null,
+      flag: null,
+      create_at: null,
+      modify_at: null,
+      annual: null,
+      promotion_id: null,
+      meterasset_id: null,
+      prapaowner_number: null,
+      meterphoto_installation_id: null,
+      paraowner_status_id: null,
+      watertypeuse_id: null,
+      bid: null,
+      oid: null,
+      baddress: null,
+      bmoo: null,
+      tambon_name: null,
+      amphoe_name: null,
+      province_name: null,
+      zipcode: null,
+      id: null,
+      pop_id: null,
+      prefix: null,
+      fname: null,
+      lname: null,
+      caddress: null,
+      cmoo: null,
+      soi: null,
+      road: null,
+      fullname: null,
+      numberphone: null,
+      ctambon_name: null,
+      camphoe_name: null,
+      cprovince_name: null,
+      waterusetype_id: null,
+      watertype_name: null,
+      detail: null,
+      metermaster_id: null,
+      lora_devui: null,
+      longitude: null,
+      latitude: null,
+      longitude_gps: null,
+      latitude_gps: null,
+      meterphoto_id: null,
+      numberstamp: null,
+      manufacture_date: null,
+      startnumbermanufacturer: null,
+      meter_status: null,
+      geom: null,
+      meternumber: null,
+      the_geom: null,
+      status_name: null,
+      active: null,
+      metersize_id: null,
+      metertype_id: null,
+      metermaterial_id: null,
+      brand: null,
+      model: null,
+      battery: null,
+      valuecontrol: null,
+      paymentmode: null,
+      pressureworking: null,
+      communication: null,
+      class: null,
+      temperatureworking: null,
+      digitrange: null,
+      locationonboard: null,
+      selfrecharge: null,
+      metermaterial: null,
+      metertypename: null,
+      thai_size: null,
+      international_size: null,
+    });
+  };
 
   const handleEditData = () => {
-    console.log(formData)
-    axios.put("http://localhost:4034/api/nahra/owner/" + formData.prapaowner_id, formData)
-    .then((response) => {
-      console.log("Success:", response.data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-       alert("แก้ไขสำเร็จ")
-
-  }
+    console.log(formData);
+    axios
+      .put(
+        "http://localhost:4034/api/nahra/owner/" + formData.prapaowner_id,
+        formData
+      )
+      .then((response) => {
+        console.log("Success:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    alert("แก้ไขสำเร็จ");
+  };
 
   const handleSuspendModalExit = () => {
     setSuspendvisible(false);
@@ -647,7 +649,13 @@ const WaterRegister = () => {
                 </span>
               )}
             />
-            <Column field="meternumber" header="เลขที่ประจำมาตรวัดน้ำ" filter filterMatchMode="custom" filterFunction={custommeterfilter}></Column>
+            <Column
+              field="meternumber"
+              header="เลขที่ประจำมาตรวัดน้ำ"
+              filter
+              filterMatchMode="custom"
+              filterFunction={custommeterfilter}
+            ></Column>
             {/* <Column field="baddress" header="ที่ติดตั้งมาตร"></Column> */}
             <Column
               header="ที่ติดตั้งมาตร"
@@ -1458,10 +1466,13 @@ const WaterRegister = () => {
                 </div>
               </div>
 
-              <button className="wblue-button-unrounded mt-5 mb-5 w-20 text-center"onClick={() => {
-              setRegisterpage(0);
-              handleEditData();
-            }}>
+              <button
+                className="wblue-button-unrounded mt-5 mb-5 w-20 text-center"
+                onClick={() => {
+                  // setRegisterpage(0);
+                  handleEditData();
+                }}
+              >
                 บันทึกข้อมูล
               </button>
             </div>

@@ -119,6 +119,9 @@ const WaterSettingFee = () => {
     axios
       .delete("http://localhost:4034/api/nahra/prodel/" + data.promotion_id, {})
       .then((res) => {
+        if (res.status == 200) {
+          alert("succesfull");
+        }
         console.log(res);
         console.log(res.data);
         return res.data.token, window.location.reload();
@@ -127,6 +130,7 @@ const WaterSettingFee = () => {
 
   //ปุ่มแกไข
   const EditIcon = (data) => {
+    console.log(data);
     return (
       <button className="buttonpic">
         <img

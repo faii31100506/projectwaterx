@@ -28,9 +28,12 @@ const WaterMeterFt = () => {
   const [meterFtpage, setMeterFtpage] = useState(0);
   const [paymentvisible, setPaymentvisible] = useState(false);
   const [datax, setDatax] = useState([]);
+  const [dataxcensus, setDataxcensus] = useState([]);
   const [editData, setEditData] = useState([]);
+
   const TRANSACTION_API = process.env.REACT_APP_TRANSACTION_API;
   // const NHARA_API = process.env.REACT_APP_NHARA_API;
+
   useEffect(() => {
     axios
       .get(TRANSACTION_API)
@@ -38,11 +41,19 @@ const WaterMeterFt = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:4034/api/nahra/listcensus")
+      .then((res) => setDataxcensus(res.data.data))
+      .catch((err) => console.log(err));
+  }, []);
+
   // ปุ่มใบเเจ้งหนี้
   const PaydeptButton = ({ data }) => {
-    const handlePayClick = () => {
+    console.log(data);
+    const handlePayClick = (data) => {
       // Use the 'data' prop here
-      setPaymentvisible(true);
+      setPaymentvisible(true, data);
       // You can also call functions to handle the payment logic, etc.
       // For example: handlePayment(data);
     };
@@ -50,7 +61,11 @@ const WaterMeterFt = () => {
       <button
         type="button"
         className="btn btn-outline-success rounded-pill"
-        onClick={handlePayClick(data)}
+        // onClick={handlePayClick(data)}
+        onClick={() => {
+          handlePayClick(data);
+          console.log(data);
+        }}
         style={{ fontSize: 14 }}
       >
         ใบเเจ้งหนี้
@@ -61,31 +76,59 @@ const WaterMeterFt = () => {
   PaydeptButton.propTypes = {
     data: PropTypes.object.isRequired, // Define the 'data' prop type
   };
-  const MeterRecord = ({ data }) => {
-    const handleMeterRecordClick = () => {
-      // Use the 'data' prop here
-      setMeterFtpage(3);
+  // const MeterRecord = ({ data }) => {
+  //   console.log(data);
+  //   const handleMeterRecordClick = (data) => {
+  //     // Use the 'data' prop here
+  //     setMeterFtpage(3);
 
-      // You can also call functions to handle the payment logic, etc.
-      // For example: handlePayment(data);
-    };
-
+  //     // You can also call functions to handle the payment logic, etc.
+  //     // For example: handlePayment(data);
+  //   };
+  //   return (
+  //     <button
+  //       type="button"
+  //       className="btn btn-outline-success rounded-pill"
+  //       onClick={() => {
+  //         handleMeterRecordClick(data);
+  //       }}
+  //       style={{ fontSize: 14 }}
+  //     >
+  //       จดมิเตอร์ค่าน้ำ
+  //     </button>
+  //   );
+  // };
+  const MeterRecord = (data) => {
+    console.log(data);
     return (
       <button
         type="button"
         className="btn btn-outline-success rounded-pill"
-        onClick={handleMeterRecordClick}
+        onClick={() => {
+          handleMeterRecordClick(data);
+          setMeterFtpage(3);
+        }}
+        style={{ fontSize: 14 }}
       >
         จดมิเตอร์ค่าน้ำ
       </button>
     );
   };
-
   MeterRecord.propTypes = {
     data: PropTypes.object.isRequired, // Define the 'data' prop type
   };
 
-  const [formData, setformData] = useState({
+  // const [prefix, setprefix] = useState("");
+  // const [fname, setfname] = useState("");
+  // const [lname, setlname] = useState("");
+  // const [meternumber, setmeternumber] = useState("");
+  // const [address, setaddress] = useState("");
+  // const [meter_status, setmeter_status] = useState("");
+  // const [previousnum, setpreviousnum] = useState("");
+  // const [currentnum, setcurrentnum] = useState("");
+  // const [unituse, setunituse] = useState("");
+
+  const [addNewData, setAddNewData] = useState({
     prefix: "",
     fname: "",
     lname: "",
@@ -97,7 +140,7 @@ const WaterMeterFt = () => {
     unituse: "",
   });
   useEffect(() => {
-    setformData({
+    setAddNewData({
       prefix: editData.prefix || "",
       fname: editData.fname || "",
       lname: editData.lname || "",
@@ -109,6 +152,16 @@ const WaterMeterFt = () => {
       unituse: editData.unituse || "",
     });
   }, [editData]);
+
+  const handleNewInputChange = (e) => {
+    const { name, value } = e.target;
+    // Update the form data as the user types
+    setAddNewData({
+      ...addNewData,
+      [name]: value,
+    });
+    console.log(addNewData);
+  };
 
   let content;
   if (meterFtpage === 0) {
@@ -144,6 +197,7 @@ const WaterMeterFt = () => {
           <button
             className="wblue-button me-5"
             onClick={() => setMeterFtpage(1)}
+            style={{ fontSize: 14 }}
           >
             + จดมิเตอร์ค่าน้ำ
           </button>
@@ -216,6 +270,8 @@ const WaterMeterFt = () => {
       </>
     );
   }
+
+  // ตารางจดมาตรน้ำ
   if (meterFtpage === 1) {
     content = (
       <>
@@ -254,24 +310,61 @@ const WaterMeterFt = () => {
         </div>
         <div className="mt-5">
           <DataTable
-            value={datax}
             header="ตารางรายการจดมิเตอร์ค่าน้ำ"
             filters={filters}
             paginator
+            value={dataxcensus}
             rows={8}
             paginatorTemplate="CurrentPageReport PageLinks PrevPageLink NextPageLink"
             currentPageReportTemplate="หน้า {currentPage} จาก {totalPages}"
           >
-            <Column field="name" header="ชื่อ นามสกุล"></Column>
-            <Column field="meterid" header="เลขที่ประจำมาตรวัดน้ำ"></Column>
-            <Column field="meterplace" header="ที่ติดตั้งมาตร"></Column>
-            <Column field="wstatus" header="สถานะการใช้น้ำ"></Column>
-            <Column body={MeterRecord} header="จดมิเตอร์ค่าน้ำ"></Column>
+            <Column
+              header="ชื่อ นามสกุล"
+              style={{ fontSize: 14 }}
+              body={(rowData) => (
+                <span>
+                  {rowData.prefix} {rowData.fname} {rowData.lname}
+                </span>
+              )}
+            ></Column>
+            <Column
+              header="เลขที่ประจำมาตรวัดน้ำ"
+              style={{ fontSize: 14 }}
+              body={(rowData) => <span>{rowData.meternumber}</span>}
+            ></Column>
+            <Column
+              header="ที่ติดตั้งมาตร"
+              style={{ fontSize: 14 }}
+              body={(rowData) => (
+                <span>
+                  {rowData.baddress} หมู่ {rowData.bmoo} ตำบล{" "}
+                  {rowData.tambon_name} อำเภอ {rowData.amphoe_name} จังหวัด{" "}
+                  {rowData.province_name}
+                </span>
+              )}
+            ></Column>
+            <Column
+              header="สถานะการใช้น้ำ"
+              style={{ fontSize: 14 }}
+              body={(rowData) => <span>{rowData.meter_status}</span>}
+            ></Column>
+            <Column
+              field="จดมิเตอร์ค่าน้ำ"
+              body={(rowData) => MeterRecord(rowData)}
+              header=""
+            ></Column>
           </DataTable>
         </div>
       </>
     );
   }
+
+  const handleMeterRecordClick = (data) => {
+    setEditData(data);
+    console.log(editData);
+    // console.log(PROMOTION_API);
+  };
+  // หน้าจด
   if (meterFtpage === 3) {
     content = (
       <>
@@ -285,14 +378,13 @@ const WaterMeterFt = () => {
           />
           <h2 className="ms-2">จดมิเตอร์ค่าน้ำ</h2>
         </div>
+
         <div className="customcontainer2 mt-4 ms-4">
           <div className="d-flex flex-column">
             <div className="d-flex mt-5 mb-3 ms-5">
               <h5 className="w-20">ข้อมูลผู้ใช้น้ำ</h5>
               <div className="d-flex flex-column w-20">
-                <div className="break-word mt-1">
-                  ชื่อนามสกุล : นายทำดี สีสะอาด
-                </div>
+                <div className="break-word mt-1">ชื่อนามสกุล : นายทำดี</div>
                 <div className="break-word mt-1">
                   เลขที่ประจำมาตรวัดน้ำ : 0-112734-56
                 </div>
@@ -335,6 +427,11 @@ const WaterMeterFt = () => {
     );
   }
 
+  const handlePayClick = (data) => {
+    setEditData(data);
+    console.log(editData);
+    console.log(TRANSACTION_API);
+  };
   //ใบเสร็จ
   let dialogcontent1;
   dialogcontent1 = (
@@ -347,13 +444,29 @@ const WaterMeterFt = () => {
           height={60}
         />
       </div>
-      <div className="d-flex flex-column">
-        <h5 className="text-left mt-3">สรุปยอดชำระ</h5>
-        <div className="mt-4">ชื่อ-นามสกุล:</div>
-        เลขที่ประจำมาตรวัดน้ำ:
-        <br></br>ที่ติดตั้งมาตร:
-        <br></br>โทรศัพท์:
-        {/* <div className="customcontainer2">
+      <CForm className="w-50">
+        <CFormInput
+          label="สิทธิ์ที่ได้รับ (ส่วนลด)"
+          name="promotion_percent"
+          value={addNewData.unituse}
+          onChange={handleNewInputChange}
+        />
+      </CForm>
+      {/* <div className="d-flex flex-column"  > */}
+      {/* <p class="fw-bolder">
+          สรุปยอดชำระ
+          <CFormInput
+            label="สรุปยอดชำระ"
+            name="unituse"
+            value={addNewData.unituse}
+            onChange={handleNewInputChange}
+          />
+        </p> */}
+      {/* <div className="mt-4">ชื่อ-นามสกุล:</div> */}
+      {/* เลขที่ประจำมาตรวัดน้ำ: */}
+      {/* <br></br>ที่ติดตั้งมาตร:
+        <br></br>โทรศัพท์: */}
+      {/* <div className="customcontainer2">
           <div className="d-flex">
             <img
               className="mt-4"
@@ -369,7 +482,7 @@ const WaterMeterFt = () => {
             </div>
           </div>
         </div> */}
-      </div>
+      {/* </div> */}
       {/* <div className="text-center mb-3">
         <button className="wblue-button-unrounded mt-4 w-100">
           พิมพ์ใบชำระเงิน
@@ -408,6 +521,7 @@ const WaterMeterFt = () => {
         dismissableMask
         style={{ width: "25rem", height: "auto" }}
         showHeader={false}
+        value={datax}
       >
         {dialogcontent1}
       </Dialog>
