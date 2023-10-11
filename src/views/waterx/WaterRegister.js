@@ -75,6 +75,7 @@ const WaterRegister = () => {
     setActiveIndex(activeIndex + 1);
   };
   const [addNewData, setAddNewData] = useState({
+<<<<<<< HEAD
     prapaowner_id: null,
     census_id: null,
     bid_id: null,
@@ -149,6 +150,30 @@ const WaterRegister = () => {
     metertypename: null,
     thai_size: null,
     international_size: null,
+=======
+    prefix:null,
+    fname:null,
+    lname:null,
+    caddress:null,
+    cmoo:null,
+    soi:null,
+    road:null,
+    ctambon_name:null,
+    camphoe_name:null,
+    cprovince_name:null,
+    zipcode:null,
+    baddress:null,
+    bmoo:null,
+    tambon_name:null,
+    amphoe_name:null,
+    province_name:null,
+    international_size:null,
+    meternumber:null,
+    metermaterial:null,
+    metertypename:null,
+    typeuse:null,
+    usertype:null,
+>>>>>>> 5ecbe79e7bfbd0c3e7a502f44dd6b85ef8051c3a
   });
 
   const [formData, setFormData] = useState({
@@ -422,6 +447,7 @@ const WaterRegister = () => {
   };
 
   const handleAddNewData = () => {
+<<<<<<< HEAD
     console.log(addNewData);
     // axios.post("http://localhost:4034/api/nahra/owner/" + addNewData.prapaowner_id, addNewData)
     // .then((response) => {
@@ -525,6 +551,55 @@ const WaterRegister = () => {
       });
     alert("แก้ไขสำเร็จ");
   };
+=======
+    console.log(addNewData)
+        axios.post("http://localhost:4034/api/nahra/modelowner", addNewData)
+    .then((response) => {
+      console.log('POST request successful');
+      console.log('Response:', response.data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+      alert("เพิ่มข้อมูลเสร็จสิ้น")
+      setAddNewData({
+        prefix:null,
+        fname:null,
+        lname:null,
+        caddress:null,
+        cmoo:null,
+        soi:null,
+        road:null,
+        ctambon_name:null,
+        camphoe_name:null,
+        cprovince_name:null,
+        zipcode:null,
+        baddress:null,
+        bmoo:null,
+        tambon_name:null,
+        amphoe_name:null,
+        province_name:null,
+        international_size:null,
+        meternumber:null,
+        metermaterial:null,
+        metertypename:null,
+        typeuse:null,
+        usertype:null,
+      });
+  }
+
+  const handleEditData = () => {
+    console.log(formData)
+    axios.put("http://localhost:4034/api/nahra/owner/" + formData.prapaowner_id, formData)
+    .then((res) => {
+      console.log(res);
+      console.log(res.data);
+      return res.data.token, window.location.reload();
+    });
+       alert("แก้ไขสำเร็จ")
+
+  }
+>>>>>>> 5ecbe79e7bfbd0c3e7a502f44dd6b85ef8051c3a
 
   const handleSuspendModalExit = () => {
     setSuspendvisible(false);
@@ -649,6 +724,7 @@ const WaterRegister = () => {
                 </span>
               )}
             />
+<<<<<<< HEAD
             <Column
               field="meternumber"
               header="เลขที่ประจำมาตรวัดน้ำ"
@@ -656,6 +732,9 @@ const WaterRegister = () => {
               filterMatchMode="custom"
               filterFunction={custommeterfilter}
             ></Column>
+=======
+            <Column field="meternumber" header="เลขที่ประจำมาตรวัดน้ำ"></Column>
+>>>>>>> 5ecbe79e7bfbd0c3e7a502f44dd6b85ef8051c3a
             {/* <Column field="baddress" header="ที่ติดตั้งมาตร"></Column> */}
             <Column
               header="ที่ติดตั้งมาตร"
@@ -958,6 +1037,9 @@ const WaterRegister = () => {
                   <option value="Muti-jet Turbine water meter">
                     Muti-jet Turbine water meter
                   </option>
+                  <option value="Displacement Water Meter">
+                  Displacement Water Meter
+                  </option>
                 </CFormSelect>
               </CForm>
             </div>
@@ -1234,7 +1316,7 @@ const WaterRegister = () => {
             <h2 className="mx-3">แก้ไขทะเบียนผู้ใช้น้ำ</h2>
           </div>
           <div className="customcontainer3 mt-4">
-            <div className="p-input-icon-left mt-5 mx-5">
+            {/* <div className="p-input-icon-left mt-5 mx-5">
               <CIcon icon={cilSearch}></CIcon>
               <InputText
                 className="p-inputtext-sm rounded-pill"
@@ -1249,12 +1331,12 @@ const WaterRegister = () => {
                 }
               />
             </div>
-            <h5 className="mt-4 mx-5">หรือ ปักหมุดตำแหน่งของที่ตั้งมาตรวัด</h5>
+            <h5 className="mt-4 mx-5">หรือ ปักหมุดตำแหน่งของที่ตั้งมาตรวัด</h5> */}
             <div className="d-flex flex-column">
               <div className="d-flex mt-5">
-                <div className="d-flex w-65">
+                {/* <div className="d-flex w-65">
                   <div className="customcontainer4 ml-5 mr-5"></div>
-                </div>
+                </div> */}
                 <div className="d-flex flex-column w-35">
                   <div className="d-flex ml-5 mr-5">
                     <img
@@ -1317,14 +1399,14 @@ const WaterRegister = () => {
                   </div>
                 </div>
               </div>
-              <div className="d-flex mx-5 mt-5 ">
+              {/* <div className="d-flex mx-5 mt-5 ">
                 <h5 className="w-25">รูปมิเตอร์วัดน้ำ</h5>
                 <img
                   src={require("../../assets/images/ex_meter.png")}
                   width={200}
                   height={200}
                 />
-              </div>
+              </div> */}
               <div className="d-flex mx-5 mt-5 ">
                 <h5 className="w-25">สถานะผู้ใช้น้ำ</h5>
                 {formData.status_name}
@@ -1403,7 +1485,7 @@ const WaterRegister = () => {
                       <option value="Muti-jet Turbine water meter">
                         Muti-jet Turbine water meter
                       </option>
-                      <option value="ประเภทกระดาษ">ประเภทกระดาษ</option>
+                      <option value="Displacement Water Meter">Displacement Water Meter</option>
                     </CFormSelect>
                     <CFormSelect
                       className="mt-2 mb-2"
@@ -1415,6 +1497,7 @@ const WaterRegister = () => {
                       <option></option>
                       <option value="3">3</option>
                       <option value="3.175">3.175</option>
+                      <option value="3/4">3/4</option>
                     </CFormSelect>
                     <CFormSelect
                       className="mt-2 mb-2"

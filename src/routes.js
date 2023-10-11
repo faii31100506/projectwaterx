@@ -47,7 +47,11 @@ const WaterMeterFt = React.lazy(() => import("./views/waterx/WaterMeterFt.js"));
 const WaterUserRole = React.lazy(() =>
   import("./views/waterx/WaterUserRole.js")
 );
+const WaterDashBoard = React.lazy(() => import("./views/waterx/WaterDashBoard.js")
+);
+
 const promotion = React.lazy(() => import("./views/waterx/promotion.js"));
+
 // Base
 
 const routes = [
@@ -105,6 +109,7 @@ const routes = [
   { path: "/water-pipe", name: "WaterPipeData", element: WaterPipeData },
   { path: "/water-meter-ft", name: "WaterMeterFt", element: WaterMeterFt },
   { path: "/water-user-role", name: "WaterUserRole", element: WaterUserRole },
+  { path: "/water-dashboard", name: "WaterDashBoard", element: WaterDashBoard}
 ];
 
 export default routes;

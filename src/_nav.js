@@ -55,6 +55,13 @@ const _nav = [
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
 
+  {
+    component: CNavItem,
+    name: "ข้อมูลสถิติการใช้น้ำ",
+    to: "/water-dashboard",
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+
   // {
   //   component: CNavItem,
   //   name: "ข้อมูลท่อน้ำ",
