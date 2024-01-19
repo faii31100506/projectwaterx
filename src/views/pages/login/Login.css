@@ -13,7 +13,7 @@
 }
 
 .CardGroup {
-  width: 50%;
+  width: 40%;
   border: 10px;
   border-radius: 50px;
 }
@@ -112,3 +112,5 @@
   font-style: normal;
   font-weight: 200;
 }
+
+
