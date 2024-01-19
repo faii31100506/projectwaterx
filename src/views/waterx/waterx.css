@@ -12,10 +12,10 @@
   --backgroundred: #d92d20;
   --moreinfocol: #f0f3ff;
 }
-@import url("https://fonts.googleapis.com/css2?family=Inter&family=Lato:wght@400;700&family=Prompt:wght@200;400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Lato:wght@400;700&family=Prompt:wght@200;400&display=swap');
 
 * {
-  font-family: "Prompt", sans-serif !important;
+  font-family: 'Prompt', sans-serif !important;
 }
 
 .customcontainer1 {
@@ -153,6 +153,7 @@
 .wblue-button-unrounded-nocenter:hover {
   background-color: var(--backgroundblue);
   color: white;
+  box-shadow: 0px 5px 20px 0px rgba(49, 94, 251, 0.3);
 }
 
 .customcontainer4 .wblue-button-unrounded {
@@ -252,7 +253,7 @@
   width: 95%;
   background: transparent;
   height: auto;
-  border-radius: 30px;
+  border-radius: 10px;
   border: 1px solid #eaecf0;
   background: white;
   margin-left: auto;
@@ -313,7 +314,7 @@
   width: 45%;
   background: transparent;
   height: auto;
-  border-radius: 30px;
+  border-radius: 10px;
   border: 1px solid #eaecf0;
   background: white;
   margin-left: 5rem;
@@ -323,7 +324,6 @@
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
-
 
 .cloud {
   background-color: #315efb0d;
@@ -504,6 +504,9 @@ h7 {
 .ml-12 {
   margin-left: 12%;
 }
+.ml-7 {
+  margin-left: 7%;
+}
 
 .mr-auto {
   margin-left: auto;
@@ -527,4 +530,138 @@ h7 {
 .columtable {
   font-size: 14 px;
   padding: 1rem 0.5rem;
+}
+.promotion_name {
+  width: max-content;
+  margin-bottom: 5%;
+}
+.promotion_percent {
+  width: max-content;
+  margin-bottom: 5%;
+}
+.h7 {
+  position: absolute;
+}
+.w-20 {
+  width: 30%;
+  margin-left: 25%;
+  margin-top: 2%;
+  border: 1px solid #eaecf0;
+}
+.text-start {
+  margin-left: 2%;
+}
+.p-dialog .p-dialog-content:last-of-type {
+  /* border-bottom-right-radius: 6px; */
+  /* border-bottom-left-radius: 6px; */
+  border-radius: 25px;
+}
+.ptransaction {
+  color: #667085;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 100% */
+}
+.ptransaction2 {
+  margin-left: 10%;
+}
+.input {
+  border-radius: 10px;
+}
+.inputcurren {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--cui-input-color, var(--cui-body-color));
+  appearance: none;
+  background-color: var(--cui-input-bg, var(--cui-body-bg));
+  background-clip: padding-box;
+  border: var(--cui-border-width) solid
+    var(--cui-input-border-color, var(--cui-border-color));
+  border-radius: var(--cui-border-radius);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s;
+}
+.sidebar-nav .nav-link.active {
+  color: var(--cui-sidebar-nav-link-active-color);
+  background: var(--cui-sidebar-nav-link-active-bg);
+  box-shadow: 0px 5px 20px 0px rgba(49, 94, 251, 0.3);
+}
+.name {
+  padding-top: 2%;
+  padding-right: 1rem !important;
+}
+.showname {
+  color: #778899;
+}
+.showname2 {
+  display: inline-block;
+}
+.calendar {
+  color: #0d6efd;
+}
+.p-button:enabled {
+  color: #ffffff;
+  background: #0d6efd;
+  border: 1px solid #0d6efd;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+    box-shadow 0.2s;
+  border-radius: 6px;
+}
+
+.p-button:enabled:hover,
+.p-button:not(button):not(a):not(.p-disabled):hover {
+  background: #0d6efd;
+  color: #ffffff;
+  border-color: #0d6efd;
+}
+.setimg {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  padding: 9px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background-color: #e5f8fe;
+  border-radius: 8px;
+  background: linear-gradient(0deg, #e5f8fe 0%, #e5f8fe 100%), #e5f8fe;
+}
+.set {
+  display: inline-flex;
+}
+.setunit {
+  margin-left: 16px;
+}
+.setunit2 {
+  color: var(--Light-Text-Secondary, rgba(76, 78, 100, 0.68));
+  font-feature-settings: 'clig' off, 'liga' off;
+  margin-left: 55px;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 15px;
+  letter-spacing: 0.4px;
+  margin-top: -16px;
+}
+.p-dialog {
+  border-radius: 0px;
+}
+.w-2 {
+  width: 2%;
+}
+.w-14 {
+  width: 14.5%;
+}
+.w-6 {
+  width: 6%;
+}
+.w-5 {
+  width: 5%;
 }

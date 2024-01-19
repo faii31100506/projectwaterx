@@ -12,6 +12,7 @@ import { Dialog } from "primereact/dialog";
 import PropTypes from "prop-types";
 import { Steps } from "primereact/steps";
 import axios from "axios";
+import Swal from "sweetalert2";
 import {
   CAvatar,
   CButton,
@@ -74,20 +75,65 @@ const WaterSettingFee = () => {
 
   // บันทึกข้อมูล
   const handlepost = (event) => {
+    if (promotion_name == "" || promotion_percent == "") {
+      return Swal.fire({
+        text: "โปรดกรอกข้อมูลก่อนบันทึก",
+        icon: "warning",
+        buttonsStyling: false,
+        confirmButtonText: "ตกลง",
+        customClass: {
+          confirmButton: "btn fw-bold btn-primary",
+        },
+      });
+    }
     var data = {
       promotion_name: promotion_name,
       promotion_percent: promotion_percent,
     };
-    console.log(event);
-    fetch("http://localhost:4034/api/nahra/modelpro", {
-      method: "POST",
-      headers: {
-        Accept: "application/form-data",
-        "Content-Type": "application/json",
+    Swal.fire({
+      text: "คุณต้องการบันทึกข้อมูลหรือไม่ ?",
+      icon: "warning",
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-light",
       },
-      body: JSON.stringify(data),
-    }).then((res) => res.json({}));
-    return window.location.reload();
+    }).then(async function (result) {
+      if (result.value) {
+        let resultsL = await axios
+          .post("http://localhost:4034/api/nahra/modelpro", data)
+          .then(
+            (res) => {
+              if (res.status === 200) {
+                // alert("succesfull");
+              }
+              console.log(res);
+              Swal.fire({
+                icon: "success",
+                title: "succesfull",
+                preConfirm: () => {
+                  return window.location.reload();
+                },
+              });
+            },
+            async (error) => {
+              Swal.fire({
+                text: "บันทึกข้อมูลไม่สำเร็จ.",
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "ตกลง.",
+                customClass: {
+                  confirmButton: "btn fw-bold btn-primary",
+                },
+              });
+            }
+          );
+      }
+    });
+    // return window.location.reload();
   };
 
   // แก้ไข
@@ -98,16 +144,60 @@ const WaterSettingFee = () => {
       promotion_name: addNewData.promotion_name,
     };
     console.log(event);
-    axios
-      .put(
-        "http://localhost:4034/api/nahra/promotion/" + addNewData.promotion_id,
-        data
-      )
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
-        return res.data.token, window.location.reload();
-      });
+
+    Swal.fire({
+      text: "คุณต้องการแก้ไขข้อมูลหรือไม่ ?",
+      icon: "warning",
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-light",
+      },
+    }).then(async function (result) {
+      if (result.value) {
+        let resultsL = await axios
+          .put(
+            "http://localhost:4034/api/nahra/promotion/" +
+              addNewData.promotion_id,
+            data
+          )
+          .then(
+            (res) => {
+              if (res.status === 200) {
+                // alert("succesfull");
+              }
+              console.log(res);
+              Swal.fire({
+                text: "บันทึกข้อมูลสำเร็จ.",
+                icon: "success",
+                buttonsStyling: false,
+                confirmButtonText: "ตกลง",
+                customClass: {
+                  confirmButton: "btn fw-bold btn-primary",
+                },
+                preConfirm: () => {
+                  return window.location.reload();
+                },
+              });
+              // await RefreshData();
+            },
+            async (error) => {
+              Swal.fire({
+                text: "บันทึกข้อมูลไม่สำเร็จ.",
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "ตกลง",
+                customClass: {
+                  confirmButton: "btn fw-bold btn-primary",
+                },
+              });
+            }
+          );
+      }
+    });
   };
 
   // ลบ
@@ -116,16 +206,59 @@ const WaterSettingFee = () => {
       promotion_id: promotion_id,
     };
     console.log(promotion_id);
-    axios
-      .delete("http://localhost:4034/api/nahra/prodel/" + data.promotion_id, {})
-      .then((res) => {
-        if (res.status == 200) {
-          alert("succesfull");
-        }
-        console.log(res);
-        console.log(res.data);
-        return res.data.token, window.location.reload();
-      });
+
+    Swal.fire({
+      text: "คุณต้องการลบข้อมูลหรือไม่ ?",
+      icon: "warning",
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-light",
+      },
+    }).then(async function (result) {
+      if (result.value) {
+        let resultsL = await axios
+          .delete(
+            "http://localhost:4034/api/nahra/prodel/" + data.promotion_id,
+            {}
+          )
+          .then(
+            (res) => {
+              if (res.status === 200) {
+                // alert("succesfull");
+              }
+              console.log(res);
+              Swal.fire({
+                text: "ลบสำเร็จ.",
+                icon: "success",
+                buttonsStyling: false,
+                confirmButtonText: "ตกลง.",
+                customClass: {
+                  confirmButton: "btn fw-bold btn-primary",
+                },
+                preConfirm: () => {
+                  return window.location.reload();
+                },
+              });
+              // await RefreshData();
+            },
+            async (error) => {
+              Swal.fire({
+                text: "ลบข้อมูลไม่สำเร็จ.",
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "ตกลง.",
+                customClass: {
+                  confirmButton: "btn fw-bold btn-primary",
+                },
+              });
+            }
+          );
+      }
+    });
   };
 
   //ปุ่มแกไข
@@ -266,7 +399,7 @@ const WaterSettingFee = () => {
       <>
         <div className="d-flex flex-column">
           <h2 className="mx-3">แก้ไข</h2>
-          <div className="d-flex mt-4">
+          <div className="d-flex flex-colum mt-4">
             <img
               className="mt-1"
               src={require("../../assets/images/backbutton.png")}
@@ -277,16 +410,22 @@ const WaterSettingFee = () => {
             &nbsp;&nbsp;&nbsp;&nbsp;
             <CForm className="row g-3">
               <CForm className="w-50">
+                <label className="promotion_name">
+                  ประเภทข้อมูลเพื่อส่งเสริมหรืออุดหนุน
+                </label>
                 <CFormInput
-                  label="ประเภทข้อมูลเพื่อส่งเสริมหรืออุดหนุน"
+                  label=""
                   name="promotion_name"
                   value={addNewData.promotion_name}
                   onChange={handleNewInputChange}
                 />
               </CForm>
               <CForm className="w-50">
+                <label className="promotion_percent">
+                  สิทธิ์ที่ได้รับ (ส่วนลด)
+                </label>
                 <CFormInput
-                  label="สิทธิ์ที่ได้รับ (ส่วนลด)"
+                  // label="สิทธิ์ที่ได้รับ (ส่วนลด)"
                   name="promotion_percent"
                   value={addNewData.promotion_percent}
                   onChange={handleNewInputChange}

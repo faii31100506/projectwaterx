@@ -9,6 +9,7 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import "../views/waterx/waterx.css";
+
 import { AppSidebarNav } from "./AppSidebarNav";
 
 import { logoNegative } from "src/assets/brand/logo-negative";
