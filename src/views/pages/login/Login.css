@@ -32,8 +32,9 @@
 }
 
 .Loghead {
+  padding-top: 50px;
   font-family: Kanit;
-  font-size: 24px;
+  font-size: 30px;
   font-style: normal;
   font-weight: 700;
 
@@ -53,10 +54,6 @@
   display: inline-grid;
   justify-content: center;
   width: 100%;
-}
-
-.Logintext {
-  padding-top: 100px;
 }
 
 .textInput {

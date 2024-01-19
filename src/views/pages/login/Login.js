@@ -44,7 +44,7 @@ const Login = () => {
                   <CForm>
                     <div className="Loghead">
                       <h1
-                        className="Logintext"
+                        className="Loghead"
                         style={{ marginBottom: "0rem" }}
                       >
                         Log in
