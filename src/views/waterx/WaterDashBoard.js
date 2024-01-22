@@ -234,7 +234,9 @@ const WaterDashBoard = () => {
         </div>
 
         <div className="minicontainer2">
-          <h5 style={{ width: "350px" }}>สถิติการใช้น้ำเดือนมกราคม ปี 2566</h5>
+          <h5 style={{ width: "350px" }}>
+            สถิติการใช้น้ำ เดือน มกราคม ปี 2566
+          </h5>
           <CRow className="TopRow">
             <CCol className="set">
               <img
@@ -306,7 +308,7 @@ const WaterDashBoard = () => {
             paginator
             rows={8}
             paginatorTemplate="CurrentPageReport PageLinks PrevPageLink NextPageLink"
-            currentPageReportTemplate="หน้า {currentPage} จาก {totalPages}"
+            currentPageReportTemplate="หน้า {currentPage} จาก {totalPages} "
           >
             <Column header="ชื่อ นามสกุล" field="fullname"></Column>
             <Column
