@@ -4,9 +4,9 @@
   display: flex;
   min-height: 100vh;
   align-items: center;
-  background-color: rgb(194, 255, 255);
+  background-color: rgb(255, 255, 255);
 
-  background-image: url("../../../assets/images/BackGround.png");
+  background-image: url("../../../assets/images/BackGround.svg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
