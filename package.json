@@ -29,6 +29,8 @@
     "@coreui/react": "^4.9.0-rc.0",
     "@coreui/react-chartjs": "^2.1.3",
     "@coreui/utils": "^2.0.2",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
     "@mui/x-date-pickers": "^6.19.0",
     "@react-google-maps/api": "^2.19.2",
     "axios": "^1.5.1",
@@ -50,11 +52,7 @@
     "react-to-print": "^2.14.15",
     "redux": "4.2.1",
     "simplebar-react": "^2.4.3",
-<<<<<<< HEAD
-    "sweetalert2": "^11.10.1"
-=======
     "sweetalert2": "^11.10.3"
->>>>>>> 78cb8ca730dfba66ff6e0ae1162c60cfe2e54cbd
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
