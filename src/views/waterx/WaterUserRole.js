@@ -71,27 +71,6 @@ const WaterUserRole = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  // ค้นหา
-  // const handleSeach = async (e) => {
-  //   var data = {
-  //     officer_id: filters,
-  //   };
-  //   console.log(e);
-  //   axios
-  //     .get(
-  //       "hhttp://localhost:4034/api/nahra/searchofficer?id=" + data.officer_id,
-  //       {}
-  //     )
-  //     .then((res) => {
-  //       if (res.status == 200) {
-  //         alert("succesfull");
-  //       }
-  //       console.log(res);
-  //       console.log(res.data);
-  //       return res.data.token;
-  //     });
-  // };
-
   // บันทึกข้อมูล
   const handlepost = (event) => {
     if (name == '' || name == null) {

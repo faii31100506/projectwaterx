@@ -102,6 +102,8 @@ const WaterRegister = () => {
   const [date, setDate] = useState('');
 
   const [maxcensusid, setmaxcensusid] = useState([]);
+  const [maxbid, setmaxbid] = useState([]);
+  const [prapaowner, setprapaownwer] = useState('');
 
   const [statusname, setstatusname] = useState([]);
 
@@ -198,6 +200,7 @@ const WaterRegister = () => {
     promotion();
     meternowner();
     maxcensus_id();
+    maxb_id();
   }, []);
 
   const census = () => {
@@ -211,6 +214,15 @@ const WaterRegister = () => {
     axios
       .get(process.env.REACT_APP_API + '/maxcensusid')
       .then((res) => setmaxcensusid(res.data.data[0].censusid))
+      .catch((err) => console.log(err));
+  };
+
+  const maxb_id = () => {
+    axios
+      .get(process.env.REACT_APP_API + '/getmaxbid')
+      .then((res) => {
+        setmaxbid(res.data.data[0].bid);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -238,20 +250,6 @@ const WaterRegister = () => {
   //เพิ่มผู้ใช้น้ำ
   const handleinsertprapaowner = () => {
     var id = maxcensusid + 1;
-
-    console.log('census', id);
-    console.log('prefix', prefix);
-    console.log('fname', fname);
-    console.log('lname', lname);
-    console.log('pop_id', pop_id);
-    console.log('caddress', caddress);
-    console.log('cmoo', cmoo);
-    console.log('csoi', csoi);
-    console.log('croad', croad);
-    console.log('cprovince', cprovince);
-    console.log('camphoe', camphoe);
-    console.log('ctambon', ctambon);
-    console.log('datazipcode', datazipcode);
 
     var datacensus = {
       id: id,
@@ -282,19 +280,101 @@ const WaterRegister = () => {
       },
     }).then(async function (result) {
       if (result.value) {
+        // สร้าง census
         let resultsL = await axios
           .post('http://localhost:4034/api/nahra/modelcensus', datacensus)
           .then(
-            (res) => {
+            async (res) => {
               if (res.status === 200) {
+                console.log('rescensus', res);
               }
               var census_id = res.data.data.id;
+              var data = {
+                census_id: census_id,
+                flag: 0,
+                promotion_id: promotionfee,
+                meterasset_id: meterasset_id,
+              };
+
+              // สร้าง prapaowner
+              await axios
+                .post('http://localhost:4034/api/nahra/modelowner', data)
+                .then(async (res) => {
+                  if (res.status === 200) {
+                    console.log('prapaowner', res);
+                  }
+
+                  setprapaownwer(res.data.data.prapaowner_id);
+                  console.log(res.data.data.prapaowner_id);
+
+                  var prapaowner2 = res.data.data.prapaowner_id;
+
+                  var bid = maxbid + 1;
+                  var databuilding = {
+                    bid: bid,
+                    address: address,
+                    moo: moo,
+                    soi: soi,
+                    road: road,
+                    tambon_id: tambon_id,
+                    amphoe_id: amphoe_id,
+                    province_id: province_id,
+                  };
+
+                  //สร้าง bu ที่ตั้งของมาตรน้ำ
+                  await axios
+                    .post(
+                      'http://localhost:4034/api/nahra/modelbuilding',
+                      databuilding
+                    )
+                    .then(async (res) => {
+                      if (res.status === 200) {
+                        console.log('building', res);
+                      }
+                      var bid = res.data.data.bid;
+
+                      var dataupdate = {
+                        prapaowner_id: prapaowner2,
+                        bid_id: bid,
+                      };
+
+                      console.log('dataupdate', dataupdate);
+
+                      // updateb_id ใน prapaowner
+                      await axios
+                        .put(
+                          'http://localhost:4034/api/nahra/bidinprapaowner',
+                          dataupdate
+                        )
+                        .then((res) => {
+                          if (res.status === 200) {
+                            console.log('updatebidinprapaowner', res);
+                          }
+                        })
+                        .catch((err) => console.log(err));
+                    })
+                    .catch((err) => console.log(err));
+                })
+                .catch((err) => console.log(err));
             },
             async (error) => {}
           );
       }
     });
   };
+
+  // const handleinsertprapaowner = () => {
+  //   var bid = maxbid + 1;
+
+  //   console.log('bid', bid);
+  //   console.log('address', address);
+  //   console.log('moo', moo);
+  //   console.log('soi', soi);
+  //   console.log('road', road);
+  //   console.log('tambon_id', tambon_id);
+  //   console.log('amphoe_id', amphoe_id);
+  //   console.log('province_id', province_id);
+  // };
 
   const alertBro = () => {
     alert('ทดสอบ');
@@ -354,8 +434,8 @@ const WaterRegister = () => {
       amphoe_name: editData.amphoe_name || null,
       province_name: editData.province_name || null,
       zipcode: editData.zipcode || null,
-      bsoi: editData.soi || null,
-      broad: editData.road || null,
+      bsoi: editData.bsoi || null,
+      broad: editData.broad || null,
       id: editData.id || null,
       pop_id: editData.pop_id || null,
       prefix: editData.prefix || null,
@@ -375,6 +455,9 @@ const WaterRegister = () => {
       status_name: editData.status_name || null,
       brand: editData.brand || null,
       model: editData.model || null,
+      metermaterial: editData.metermaterial || null,
+      metertypename: editData.metertypename || null,
+      international_size: editData.international_size || null,
     });
   }, [editData]);
 
@@ -410,6 +493,7 @@ const WaterRegister = () => {
           onClick={() => {
             setRegisterpage(3);
             handleEdit(data);
+            console.log(data);
           }}
         />
       </button>
@@ -1354,35 +1438,15 @@ const WaterRegister = () => {
                       onChange={handleInputChange}
                     />
                     <CFormInput
-                      className='mt-2 mb-2'
-                      label='Brand'
-                      value={showbrand}
+                      className='mt-2 mb-2 '
+                      label='ขนาดมาตรน้ำ'
+                      value={formData.brand}
                       disabled
                     />
                     <CFormInput
                       className='mt-2 mb-2'
-                      label='Brand'
-                      value={showbrand}
-                      disabled
-                    />
-                  </CForm>
-                  <CForm className='mx-5 w-33'>
-                    <CFormInput
-                      className='mt-2 mb-2'
-                      label='Brand'
-                      value={showbrand}
-                      disabled
-                    />
-                    <CFormInput
-                      className='mt-2 mb-2'
-                      label='Brand'
-                      value={showbrand}
-                      disabled
-                    />
-                    <CFormInput
-                      className='mt-2 mb-2'
-                      label='Brand'
-                      value={showbrand}
+                      label='ประเภทมาตร'
+                      value={formData.metertypename}
                       disabled
                     />
                   </CForm>
@@ -1390,19 +1454,28 @@ const WaterRegister = () => {
                     <CFormInput
                       className='mt-2 mb-2'
                       label='Brand'
-                      value={showbrand}
+                      value={formData.brand}
                       disabled
                     />
                     <CFormInput
                       className='mt-2 mb-2'
-                      label='Brand'
-                      value={showbrand}
+                      label='ขนาดมาตร'
+                      value={formData.international_size}
                       disabled
                     />
+                  </CForm>
+                  <CForm className='mx-5 w-33'>
                     <CFormInput
                       className='mt-2 mb-2'
-                      label='Brand'
-                      value={showbrand}
+                      label='Model'
+                      value={formData.model}
+                      disabled
+                    />
+
+                    <CFormInput
+                      className='mt-2 mb-2 '
+                      label='ประเภทวัสดุ'
+                      value={formData.metermaterial}
                       disabled
                     />
                   </CForm>
