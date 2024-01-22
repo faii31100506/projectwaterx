@@ -201,13 +201,67 @@ const WaterDashBoard = () => {
 
   let content;
 
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const month = [
+    { label: "มกราคม", value: "January" },
+    { label: "กุมภาพันธ์", value: "February" },
+    { label: "มีนาคม", value: "March" },
+    { label: "เมษายน", value: "April" },
+    { label: "พฤษภาคม", value: "May" },
+    { label: "มิถุนายน", value: "June" },
+    { label: "กรกฎาคม", value: "July" },
+    { label: "สิงหาคม", value: "August" },
+    { label: "กันยายน", value: "September" },
+    { label: "ตุลาคม", value: "October" },
+    { label: "พฤศจิกายน", value: "November" },
+    { label: "ธันวาคม", value: "December" },
+  ];
+
+  const [selecteperson, setSelecteperson] = useState(null);
+  const typeperson = [
+    { label: "คน เ ก เ ร", value: "GayLay" },
+    { label: "พรี๊โต", value: "PeeTho" },
+    { label: "พรี๊หลาม", value: "PeeHlam" },
+    { label: "พรี๊คาสึยะ", value: "PeeKazuya" },
+    { label: "อ้ายคาน", value: "EyKhan" },
+    { label: "อ้ายมันคนซั่ว", value: "EyManKhonSow" },
+  ];
+
+  const [selectedYears, setSelectedYears] = useState(null);
+  const years = [
+    "2556",
+    "2557",
+    "2558",
+    "2559",
+    "2560",
+    "2561",
+    "2562",
+    "2563",
+    "2564",
+    "2565",
+    "2566",
+  ];
+  const mapyears = years.map((year) => ({ label: year, value: year }));
+
   content = (
     <>
       <div style={{ padding: "3.125rem 1.875rem" }}>
         <div className="d-flex mt-2">
           <div style={{ paddingBottom: "50px" }}>
-            <Dropdown placeholder="2556" className="ms-2 rounded-pill" />
-            <Dropdown placeholder="มกราคม" className="ms-2 rounded-pill" />
+            <Dropdown
+              placeholder="Year"
+              className="ms-2 rounded-pill"
+              value={selectedYears}
+              onChange={(e) => setSelectedYears(e.value)}
+              options={mapyears}
+            />
+            <Dropdown
+              placeholder="Month"
+              className="ms-2 rounded-pill"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.value)}
+              options={month}
+            />
             <div className="p-input-icon-left ms-2">
               <CIcon icon={cilSearch}></CIcon>
               <InputText
@@ -229,6 +283,9 @@ const WaterDashBoard = () => {
               placeholder="ประเภทบุคคลที่ได้รับการยกเว้น"
               className="ms-2 rounded-pill"
               style={{ display: "flex", justifyContent: "end" }}
+              value={selecteperson}
+              onChange={(e) => setSelecteperson(e.value)}
+              options={typeperson}
             />
           </div>
         </div>
