@@ -106,7 +106,7 @@ const WaterDashBoard = () => {
         Useset_unit: "10",
       },
       {
-        fullname: "Raphaël-Varane",
+        fullname: "Raphaël Varane",
         meter_num: "0-112734-56",
         address: "72 หมู่ 3 ต.จรเข้เผือก",
         type: "xxxxxxxxxxxxxxxxxxx",
@@ -114,7 +114,7 @@ const WaterDashBoard = () => {
         Useset_unit: "5",
       },
       {
-        fullname: "Diogo-Dalot",
+        fullname: "Diogo Dalot",
         meter_num: "0-112734-56",
         address: "95 หมู่ 6 ต.จรเข้เผือก",
         type: "xxxxxxxxxxxxxxxxxxx",
@@ -122,7 +122,7 @@ const WaterDashBoard = () => {
         Useset_unit: "7",
       },
       {
-        fullname: "Luke-Shaw",
+        fullname: "Luke Shaw",
         meter_num: "0-112734-56",
         address: "61 หมู่ 7 ต.จรเข้เผือก",
         type: "xxxxxxxxxxxxxxxxxxx",
@@ -130,7 +130,7 @@ const WaterDashBoard = () => {
         Useset_unit: "15",
       },
       {
-        fullname: "Aaron-Wan-Bissaka",
+        fullname: "Aaron Wan-Bissaka",
         meter_num: "0-112734-56",
         address: "83 หมู่ 1 ต.จรเข้เผือก",
         type: "xxxxxxxxxxxxxxxxxxx",
@@ -138,7 +138,7 @@ const WaterDashBoard = () => {
         Useset_unit: "10",
       },
       {
-        fullname: "Jonny-Evans",
+        fullname: "Jonny Evans",
         meter_num: "0-112734-56",
         address: "47 หมู่ 9 ต.จรเข้เผือก",
         type: "xxxxxxxxxxxxxxxxxxx",
@@ -146,7 +146,7 @@ const WaterDashBoard = () => {
         Useset_unit: "9",
       },
       {
-        fullname: "Bruno-Fernandes",
+        fullname: "Bruno Fernandes",
         meter_num: "0-112734-56",
         address: "59 หมู่ 5 ต.จรเข้เผือก",
         type: "xxxxxxxxxxxxxxxxxxx",
@@ -154,7 +154,7 @@ const WaterDashBoard = () => {
         Useset_unit: "8",
       },
       {
-        fullname: "Christian-Eriksen",
+        fullname: "Christian Eriksen",
         meter_num: "0-112734-56",
         address: "34 หมู่ 2 ต.จรเข้เผือก",
         type: "xxxxxxxxxxxxxxxxxxx",
@@ -170,7 +170,7 @@ const WaterDashBoard = () => {
         Useset_unit: "40",
       },
       {
-        fullname: "Facundo-Pellistri",
+        fullname: "Facundo Pellistri",
         meter_num: "0-112734-56",
         address: "21 หมู่ 10 ต.จรเข้เผือก",
         type: "xxxxxxxxxxxxxxxxxxx",
