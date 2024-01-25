@@ -78,8 +78,10 @@ const WaterMeterFt = () => {
   }, []);
 
   const [rate, setrate] = useState([]);
+
   useEffect(() => {
     axios
+
       .get("http://localhost:4034/api/nahra/rate")
       .then((res) => {
         const data = res.data.data;
@@ -95,7 +97,7 @@ const WaterMeterFt = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4034/api/nahra/listcensus")
+      .get("http://localhost:4034/api/nahra/listusernitprasection")
       .then((res) => {
         setDataxcensus(res.data.data);
         // setmeterasset_id(res.data.data.meterasset_id);

@@ -71,27 +71,6 @@ const WaterUserRole = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  // ค้นหา
-  // const handleSeach = async (e) => {
-  //   var data = {
-  //     officer_id: filters,
-  //   };
-  //   console.log(e);
-  //   axios
-  //     .get(
-  //       "hhttp://localhost:4034/api/nahra/searchofficer?id=" + data.officer_id,
-  //       {}
-  //     )
-  //     .then((res) => {
-  //       if (res.status == 200) {
-  //         alert("succesfull");
-  //       }
-  //       console.log(res);
-  //       console.log(res.data);
-  //       return res.data.token;
-  //     });
-  // };
-
   // บันทึกข้อมูล
   const handlepost = (event) => {
     if (name == '' || name == null) {
@@ -143,6 +122,8 @@ const WaterUserRole = () => {
       lastname: lastname,
       pos_name: pos_name,
       org_name: org_name,
+      username: username,
+      pass: pass,
     };
     console.log(data);
     Swal.fire({
@@ -198,6 +179,8 @@ const WaterUserRole = () => {
       lastname: addNewData.lastname,
       pos_name: addNewData.pos_name,
       org_name: addNewData.org_name,
+      username: addNewData.username,
+      pass: addNewData.pass,
     };
 
     Swal.fire({
@@ -351,6 +334,8 @@ const WaterUserRole = () => {
     lastname: '',
     pos_name: '',
     org_name: '',
+    username: '',
+    pass: '',
   });
 
   // แก้ไข
@@ -361,6 +346,8 @@ const WaterUserRole = () => {
       lastname: editData.lastname || '',
       pos_name: editData.pos_name || '',
       org_name: editData.org_name || '',
+      username: editData.username,
+      pass: editData.pass,
     });
   }, [editData]);
 
@@ -380,6 +367,8 @@ const WaterUserRole = () => {
   const [lastname, setlastname] = useState('');
   const [pos_name, setposname] = useState('');
   const [org_name, setorgname] = useState('');
+  const [username, setusername] = useState('');
+  const [pass, setpass] = useState('');
 
   let content;
 
@@ -523,6 +512,22 @@ const WaterUserRole = () => {
                   onChange={handleNewInputChange}
                 />
               </CForm>
+              <CForm className='w-40'>
+                <CFormInput
+                  label='Username'
+                  name='username'
+                  value={addNewData.username}
+                  onChange={handleNewInputChange}
+                />
+              </CForm>
+              <CForm className='w-40'>
+                <CFormInput
+                  label='Password'
+                  name='pass'
+                  value={addNewData.pass}
+                  onChange={handleNewInputChange}
+                />
+              </CForm>
             </CForm>
           </div>
           <div className='d-flex mt-4'>
@@ -558,21 +563,21 @@ const WaterUserRole = () => {
             />
             &nbsp;&nbsp;&nbsp;&nbsp;
             <CForm className='row g-3'>
-              <CForm className='w-50'>
+              <CForm className='w-40'>
                 <CFormInput
                   label='ชื่อ'
                   name='name'
                   onChange={(e) => setname(e.target.value)}
                 />
               </CForm>
-              <CForm className='w-50'>
+              <CForm className='w-40'>
                 <CFormInput
                   label='นามสกุล'
                   name='lastname'
                   onChange={(e) => setlastname(e.target.value)}
                 />
               </CForm>
-              <CForm className='w-50'>
+              <CForm className='w-40'>
                 <CFormSelect
                   // size="sm"
                   className='mb-3'
@@ -585,7 +590,7 @@ const WaterUserRole = () => {
                   <option value='พนักงานภาคสนาม'>พนักงานภาคสนาม</option>
                 </CFormSelect>
               </CForm>
-              <CForm className='w-50'>
+              <CForm className='w-40'>
                 <CFormSelect
                   // size="sm"
                   className='mb-3'
@@ -596,6 +601,20 @@ const WaterUserRole = () => {
                   <option>เลือกองค์กร</option>
                   <option value='หนองเป็ด'>หนองเป็ด</option>
                 </CFormSelect>
+              </CForm>
+              <CForm className='w-40'>
+                <CFormInput
+                  label='Username'
+                  name='user'
+                  onChange={(e) => setusername(e.target.value)}
+                />
+              </CForm>
+              <CForm className='w-40'>
+                <CFormInput
+                  label='Password'
+                  name='pass'
+                  onChange={(e) => setpass(e.target.value)}
+                />
               </CForm>
             </CForm>
           </div>

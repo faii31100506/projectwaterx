@@ -12,10 +12,10 @@
   --backgroundred: #d92d20;
   --moreinfocol: #f0f3ff;
 }
-@import url("https://fonts.googleapis.com/css2?family=Inter&family=Lato:wght@400;700&family=Prompt:wght@200;400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Lato:wght@400;700&family=Prompt:wght@200;400&display=swap');
 
 * {
-  font-family: "Prompt", sans-serif !important;
+  font-family: 'Prompt', sans-serif !important;
 }
 
 .customcontainer1 {
@@ -664,7 +664,7 @@ h7 {
 }
 .setunit2 {
   color: var(--Light-Text-Secondary, rgba(76, 78, 100, 0.68));
-  font-feature-settings: "clig" off, "liga" off;
+  font-feature-settings: 'clig' off, 'liga' off;
   /* margin-left: 55px; */
   font-family: Inter;
   font-size: 12px;

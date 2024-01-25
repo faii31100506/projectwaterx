@@ -1,14 +1,14 @@
-import React, { Suspense } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
-import { CContainer, CSpinner } from '@coreui/react'
-import "../views/waterx/waterx.css"
+import React, { Suspense } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { CContainer, CSpinner } from '@coreui/react';
+import '../views/waterx/waterx.css';
 // routes config
-import routes from '../routes'
+import routes from '../routes';
 
 const AppContent = () => {
   return (
     <CContainer fluid>
-      <Suspense fallback={<CSpinner color="primary" />}>
+      <Suspense fallback={<CSpinner color='primary' />}>
         <Routes>
           {routes.map((route, idx) => {
             return (
@@ -21,13 +21,14 @@ const AppContent = () => {
                   element={<route.element />}
                 />
               )
-            )
+            );
           })}
-          <Route path="/" element={<Navigate to="water-register" replace />} />
+          <Route path='/' element={<Navigate to='/water-register' replace />} />
+          {/* <Route path='/' element={<Navigate to='/login' replace />} /> */}
         </Routes>
       </Suspense>
     </CContainer>
-  )
-}
+  );
+};
 
-export default React.memo(AppContent)
+export default React.memo(AppContent);

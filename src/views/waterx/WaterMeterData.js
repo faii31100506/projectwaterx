@@ -643,23 +643,6 @@ const WaterMeterData = () => {
           >
             รายการลักษณะมาตรน้ำ
           </button>
-          <CDropdown>
-            <CDropdownToggle
-              href='#'
-              color='secondary'
-              className='wblue-button me-5'
-            >
-              เพิ่มข้อมูลครุภัณฑ์มาตร / ข้อมูลมาตร
-            </CDropdownToggle>
-            <CDropdownMenu>
-              <CDropdownItem onClick={() => setMeterpage(1)}>
-                เพิ่มข้อมูลมาตรวัดน้ำ
-              </CDropdownItem>
-              <CDropdownItem onClick={() => setMeterpage(6)}>
-                เพิ่มครุภัณฑ์มาตรวัดน้ำ
-              </CDropdownItem>
-            </CDropdownMenu>
-          </CDropdown>
         </div>
 
         <DataTable
@@ -722,7 +705,7 @@ const WaterMeterData = () => {
               src={require('../../assets/images/backbutton.png')}
               width={30}
               height={30}
-              onClick={() => setMeterpage(0)}
+              onClick={() => setMeterpage(4)}
             />
             <h2 className='ms-2'>เพิ่มข้อมูลมิเตอร์</h2>
           </div>
@@ -927,11 +910,9 @@ const WaterMeterData = () => {
 
   // หน้ารายการมิเตอร์ที่ยังไม่ถูกใช้งาน
   if (meterpage === 4) {
-    console.log(dataxnull);
-    console.log(datax);
     content = (
       <>
-        <h2 className='mt-4 ms-4'>รายการมิเตอร์ที่ยังไม่ถูกใช้</h2>
+        <h2 className='mt-4 ms-4'>รายการมาตรน้ำที่ยังไม่ถูกใช้</h2>
         <div className='d-flex justify-content-left mt-2 ms-4'>
           <img
             className='mt-1'
@@ -940,6 +921,20 @@ const WaterMeterData = () => {
             height={30}
             onClick={() => setMeterpage(0)}
           />
+        </div>
+        <div
+          className='d-flex justify-content-right mt-2 '
+          style={{ marginLeft: 50 }}
+        >
+          <button
+            className='wblue-button'
+            onClick={() => {
+              setMeterpage(6);
+            }}
+          >
+            {' '}
+            เพิ่มมาตรน้ำ
+          </button>
         </div>
         <DataTable
           value={dataxnull}
@@ -1067,7 +1062,7 @@ const WaterMeterData = () => {
               src={require('../../assets/images/backbutton.png')}
               width={30}
               height={30}
-              onClick={() => setMeterpage(0)}
+              onClick={() => setMeterpage(4)}
             />
             <h2 className='ms-2'>เพิ่มข้อมูลครุภัณฑ์มาตรวัดน้ำ</h2>
           </div>
@@ -1167,6 +1162,21 @@ const WaterMeterData = () => {
             onClick={() => setMeterpage(0)}
           />
         </div>
+        <div
+          className='d-flex justify-content-right mt-2 '
+          style={{ marginLeft: 50 }}
+        >
+          <button
+            className='wblue-button'
+            onClick={() => {
+              setMeterpage(1);
+            }}
+          >
+            {' '}
+            เพิ่มข้อมูลลักษณะมาตรน้ำ
+          </button>
+        </div>
+
         <DataTable
           value={datalistmeter}
           header='รายการ'
