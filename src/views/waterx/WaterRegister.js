@@ -75,10 +75,10 @@ const WaterRegister = () => {
   const [cmoo, setcmoo] = useState([]);
   const [csoi, setcsoi] = useState([]);
   const [croad, setcroad] = useState([]);
-  const [cprovince, setcprovice] = useState([]);
-  const [camphoe, setcamphoe] = useState([]);
-  const [ctambon, setctambon] = useState([]);
-  const [promotionfee, setpromotionfee] = useState([]);
+  const [cprovince, setcprovice] = useState('');
+  const [camphoe, setcamphoe] = useState('');
+  const [ctambon, setctambon] = useState('');
+  const [promotionfee, setpromotionfee] = useState('');
 
   const NHARA_API = process.env.REACT_APP_CENSUS_API;
 
@@ -170,6 +170,9 @@ const WaterRegister = () => {
     meter_status: null,
     meternumber: null,
     status_name: null,
+    camphoe_id: null,
+    ctambon_id: null,
+    cprovince_id: null,
   });
 
   useEffect(() => {
@@ -206,7 +209,10 @@ const WaterRegister = () => {
   const census = () => {
     axios
       .get(process.env.REACT_APP_API + '/listcensus')
-      .then((res) => setDatax(res.data.data))
+      .then((res) => {
+        setDatax(res.data.data);
+        console.log(res);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -292,8 +298,9 @@ const WaterRegister = () => {
               var data = {
                 census_id: census_id,
                 flag: 0,
-                promotion_id: promotionfee,
+                promotion_id: promotionfee !== '' ? promotionfee : null,
                 meterasset_id: meterasset_id,
+                paraowner_status_id: 1,
               };
 
               // สร้าง prapaowner
@@ -350,6 +357,13 @@ const WaterRegister = () => {
                           if (res.status === 200) {
                             console.log('updatebidinprapaowner', res);
                           }
+                          Swal.fire({
+                            icon: 'success',
+                            title: 'succesfull',
+                            preConfirm: () => {
+                              // return window.location.reload();
+                            },
+                          });
                         })
                         .catch((err) => console.log(err));
                     })
@@ -357,24 +371,21 @@ const WaterRegister = () => {
                 })
                 .catch((err) => console.log(err));
             },
-            async (error) => {}
+            async (error) => {
+              Swal.fire({
+                text: 'บันทึกข้อมูลไม่สำเร็จ.',
+                icon: 'error',
+                buttonsStyling: false,
+                confirmButtonText: 'ตกลง.',
+                customClass: {
+                  confirmButton: 'btn fw-bold btn-primary',
+                },
+              });
+            }
           );
       }
     });
   };
-
-  // const handleinsertprapaowner = () => {
-  //   var bid = maxbid + 1;
-
-  //   console.log('bid', bid);
-  //   console.log('address', address);
-  //   console.log('moo', moo);
-  //   console.log('soi', soi);
-  //   console.log('road', road);
-  //   console.log('tambon_id', tambon_id);
-  //   console.log('amphoe_id', amphoe_id);
-  //   console.log('province_id', province_id);
-  // };
 
   const alertBro = () => {
     alert('ทดสอบ');
@@ -399,6 +410,7 @@ const WaterRegister = () => {
   };
 
   const handlemeterasset = (e) => {
+    console.log('e', e.target.value);
     var value = e.target.value;
     var Activity = dataxnull.filter((res) => res.meterasset_id == value);
     if (Activity.length !== 0) {
@@ -458,15 +470,34 @@ const WaterRegister = () => {
       metermaterial: editData.metermaterial || null,
       metertypename: editData.metertypename || null,
       international_size: editData.international_size || null,
+      camphoe_id: editData.camphoe_id || null,
+      ctambon_id: editData.ctambon_id || null,
+      cprovince_id: editData.cprovince_id || null,
     });
   }, [editData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    handlemeterasset(e);
     setFormData({
       ...formData,
       [name]: value,
     });
+
+    console.log('name', name);
+    console.log('value', value);
+
+    var namee = name;
+    var valuee = value;
+
+    if (namee == 'cprovince_id') {
+      setcprovice(valuee);
+    }
+
+    if (namee == 'camphoe_id') {
+      alert('ตกนี่');
+      setcamphoe(valuee);
+    }
   };
 
   const MapIcon = () => {
@@ -590,27 +621,66 @@ const WaterRegister = () => {
 
   const handleEditData = () => {
     console.log(formData);
-    var data = {
-      address: address,
-      soi: soi,
-      tambon_id: tambon_id,
-      moo: moo,
-      province_id: province_id,
-      zipcode: zipcode,
-    };
-    axios
-      .put(
-        'http://localhost:4034/api/nahra/owner/' + formData.prapaowner_id,
-        formData
-        // data
-      )
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
-        // return res.data.token, window.location.reload();
-      });
-    alert('แก้ไขสำเร็จ');
+    // var data = {
+    //   address: address,
+    //   soi: soi,
+    //   tambon_id: tambon_id,
+    //   moo: moo,
+    //   province_id: province_id,
+    //   zipcode: zipcode,
+    // };
+
+    Swal.fire({
+      text: 'คุณต้องการบันทึกข้อมูลหรือไม่ ?',
+      icon: 'warning',
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: 'ยืนยัน',
+      cancelButtonText: 'ยกเลิก',
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-light',
+      },
+    }).then(async function (result) {
+      if (result.value) {
+        let resultsL = await axios
+          .put(
+            'http://localhost:4034/api/nahra/owner/' + formData.prapaowner_id,
+            formData
+          )
+          .then(
+            (res) => {
+              if (res.status === 200) {
+                // alert("succesfull");
+              }
+              console.log(res);
+              Swal.fire({
+                icon: 'success',
+                title: 'succesfull',
+                preConfirm: () => {
+                  return window.location.reload();
+                },
+              });
+            },
+            async (error) => {
+              Swal.fire({
+                text: 'บันทึกข้อมูลไม่สำเร็จ.',
+                icon: 'error',
+                buttonsStyling: false,
+                confirmButtonText: 'ตกลง.',
+                customClass: {
+                  confirmButton: 'btn fw-bold btn-primary',
+                },
+              });
+            }
+          );
+      }
+    });
   };
+
+  // const handleEditData = () => {
+  //   console.log('status', formData.paraowner_status_id);
+  // };
 
   const handleSuspendModalExit = () => {
     setSuspendvisible(false);
@@ -681,6 +751,8 @@ const WaterRegister = () => {
 
   let content;
   let formcontent;
+
+  // หน้าหลักแสดงรายชื่อผู้ใช้น้ำ
   if (registerpage === 0) {
     content = (
       <>
@@ -745,7 +817,7 @@ const WaterRegister = () => {
                 </span>
               )}
             />
-            <Column field='watertype_name' header='ประเภทการใช้น้ำ'></Column>
+            {/* <Column field='watertype_name' header='ประเภทการใช้น้ำ'></Column> */}
             <Column field='status_name' header='สถานะการใช้น้ำ'></Column>
             {/* <Column field="localelink" body={MapIcon} header="ตำแหน่ง"></Column> */}
             <Column
@@ -1016,7 +1088,7 @@ const WaterRegister = () => {
                 <CFormInput
                   className=' mb-2'
                   label='Model'
-                  value={showbrand}
+                  value={showmodel}
                   disabled
                 />
               </CForm>
@@ -1246,6 +1318,15 @@ const WaterRegister = () => {
     setprovince_id('71');
     settambon_id('710403');
     setamphoe_id('7104');
+
+    setshowbrand(data.brand);
+    setshowmodel(data.model);
+    setsizemodel(data.international_size);
+    settypemeter(data.metertypename);
+    setmatmeter(data.metermaterial);
+
+    setcprovice(data.cprovince_id);
+    setcamphoe(data.camphoe_id);
   };
 
   //หน้าแก้ไขข้อมูลผู้ใช้น้ำ
@@ -1376,13 +1457,13 @@ const WaterRegister = () => {
                 <CFormSelect
                   className='mt-2 mb-2 w-25'
                   // label='วัสดุมาตรวัดน้ำ'
-                  name='metermaterial'
-                  value={statusname}
-                  onChange={(e) => setstatusname(e.target.value)}
+                  name='paraowner_status_id'
+                  value={formData.paraowner_status_id}
+                  onChange={handleInputChange}
                 >
                   <option>เลือกสถานะผู้ใช้น้ำ</option>
-                  <option value='ปกติ'>ปกติ</option>
-                  <option value='ระงับการใช้น้ำ'>ระงับการใช้น้ำ</option>
+                  <option value='1'>ปกติ</option>
+                  <option value='2'>ระงับการใช้น้ำ</option>
                 </CFormSelect>
               </div>
               <div className='d-flex mx-5 mt-5 '>
@@ -1415,15 +1496,18 @@ const WaterRegister = () => {
                 <div className='d-flex w-5'></div>
 
                 <CFormSelect
+                  placeholder='ช่องข้อมูลเพื่อส่งเสริมหรืออุดหนุน'
                   className='mt-2 mb-2 w-25'
-                  // label='วัสดุมาตรวัดน้ำ'
-                  name='metermaterial'
-                  value={statusname}
-                  onChange={(e) => setstatusname(e.target.value)}
+                  name='promotion_id'
+                  value={formData.promotion_id}
+                  onChange={handleInputChange}
                 >
-                  <option>เลือกสถานะผู้ใช้น้ำ</option>
-                  <option value='ปกติ'>ปกติ</option>
-                  <option value='ระงับการใช้น้ำ'>ระงับการใช้น้ำ</option>
+                  <option value={''}>เลือกข้อมูลการส่งเสริม</option>
+                  {datapromotionfee.map((item, index) => (
+                    <option key={index} value={item.promotion_id}>
+                      {item.promotion_name}
+                    </option>
+                  ))}
                 </CFormSelect>
               </div>
               <div className='d-flex mx-5 mt-5 '>
@@ -1437,16 +1521,28 @@ const WaterRegister = () => {
                       value={formData.meternumber}
                       onChange={handleInputChange}
                     />
-                    <CFormInput
-                      className='mt-2 mb-2 '
-                      label='ขนาดมาตรน้ำ'
-                      value={formData.brand}
-                      disabled
-                    />
+                    <CFormSelect
+                      className=''
+                      aria-label='Small select example'
+                      label='เลขที่ประจำมาตรวัดน้ำ'
+                      name='meterasset_id'
+                      value={formData.meterasset_id}
+                      onChange={handleInputChange}
+                    >
+                      {/* <option value={formData.meterasset_id}>
+                        {formData.meternumber}
+                      </option> */}
+                      {dataxnull.map((item, index) => (
+                        <option key={index} value={item.meterasset_id}>
+                          {item.meternumber}
+                        </option>
+                      ))}
+                    </CFormSelect>
+
                     <CFormInput
                       className='mt-2 mb-2'
                       label='ประเภทมาตร'
-                      value={formData.metertypename}
+                      value={typemeter}
                       disabled
                     />
                   </CForm>
@@ -1454,13 +1550,13 @@ const WaterRegister = () => {
                     <CFormInput
                       className='mt-2 mb-2'
                       label='Brand'
-                      value={formData.brand}
+                      value={showbrand}
                       disabled
                     />
                     <CFormInput
                       className='mt-2 mb-2'
                       label='ขนาดมาตร'
-                      value={formData.international_size}
+                      value={sizemodel}
                       disabled
                     />
                   </CForm>
@@ -1468,14 +1564,14 @@ const WaterRegister = () => {
                     <CFormInput
                       className='mt-2 mb-2'
                       label='Model'
-                      value={formData.model}
+                      value={showmodel}
                       disabled
                     />
 
                     <CFormInput
                       className='mt-2 mb-2 '
                       label='ประเภทวัสดุ'
-                      value={formData.metermaterial}
+                      value={matmiter}
                       disabled
                     />
                   </CForm>
@@ -1589,33 +1685,78 @@ const WaterRegister = () => {
           />
         </CForm>
         <CForm className='mx-5 w-33'>
-          <CFormInput
+          {/* <CFormInput
             className='mt-2 mb-2'
             label='ตำบล/แขวง'
             name='ctambon_name'
             value={formData.ctambon_name}
             onChange={handleInputChange}
-          />
+          /> */}
+          <CFormSelect
+            label='จังหวัด'
+            aria-label='Default select example'
+            className='select'
+            value={formData.cprovince_id}
+            onChange={handleInputChange}
+            name='cprovince_id'
+          >
+            <option value={''}>เลือกจังหวัด</option>
+            {dataprovince.map((item, index) => (
+              <option key={index} value={item.province_id}>
+                {item.province_name}
+              </option>
+            ))}
+          </CFormSelect>
         </CForm>
         <CForm className='mx-5 w-33'>
-          <CFormInput
+          {/* <CFormInput
             className='mt-2 mb-2'
             label='อำเภอ/เขต'
             name='camphoe_name'
             value={formData.camphoe_name}
             onChange={handleInputChange}
-          />
+          /> */}
+          <CFormSelect
+            label='อำเภอ/เขต'
+            aria-label='Default select example'
+            className='select'
+            value={formData.camphoe_id}
+            onChange={handleInputChange}
+            name='camphoe_id'
+          >
+            <option value={''}>เลือกอำเภอ</option>
+            {dataamphoe.map((item, index) => (
+              <option key={index} value={item.amphoe_id}>
+                {item.amphoe_name}
+              </option>
+            ))}
+          </CFormSelect>
         </CForm>
       </div>
       <div className='d-flex mt-3 mb-3'>
         <CForm className='mx-5 w-33'>
-          <CFormInput
+          {/* <CFormInput
             className='mt-2 mb-2'
             label='จังหวัด'
             name='cprovince_name'
             value={formData.cprovince_name}
             onChange={handleInputChange}
-          />
+          /> */}
+          <CFormSelect
+            label='ตำบล/แขวง'
+            aria-label='Default select example'
+            className='select'
+            onChange={handleInputChange}
+            value={formData.ctambon_id}
+            name='ctambon_id'
+          >
+            <option value={''}>เลือกตำบล</option>
+            {datatambon.map((item, index) => (
+              <option key={index} value={item.tambon_id}>
+                {item.tambon_name}
+              </option>
+            ))}
+          </CFormSelect>
         </CForm>
         <CForm className='mx-5 w-33'>
           <CFormInput
