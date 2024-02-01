@@ -12,6 +12,7 @@ import { Dialog } from 'primereact/dialog';
 import PropTypes from 'prop-types';
 import { Steps } from 'primereact/steps';
 import axios from 'axios';
+import moment from 'moment-timezone';
 
 import {
   CAvatar,
@@ -36,6 +37,9 @@ import {
   CForm,
   CFormSelect,
   CFormTextarea,
+  CNav,
+  CNavItem,
+  CNavLink,
 } from '@coreui/react';
 import { CChartLine } from '@coreui/react-chartjs';
 import { getStyle, hexToRgba } from '@coreui/utils';
@@ -43,9 +47,58 @@ import CIcon from '@coreui/icons-react';
 import { cilSearch, cilChevronLeft } from '@coreui/icons';
 import { Row } from 'primereact/row';
 import { Container } from '@mui/system';
+function isNotEmpty(obj) {
+  return obj !== undefined && obj !== null && obj !== '';
+}
 
+function StrFilter2(data, query) {
+  var str = '';
+  Object.keys(data).forEach(function (key) {
+    if (isNotEmpty(data[key])) {
+      // if (query == "") {
+      if (str == '') {
+        str += '?' + [key] + '=' + data[key];
+      } else {
+        str += '&' + [key] + '=' + data[key];
+      }
+    }
+  });
+  return str;
+}
 const WaterDashBoard = () => {
+  let precycle_year = moment()
+    .tz('Asia/Bangkok')
+    .add(543, 'years')
+    .format('YYYY');
+  let precycle_month = moment().tz('Asia/Bangkok').format('M');
+
+  const [dashpage, setdashpage] = useState(0);
   const [Mocdata, setMocdata] = useState([]);
+  const [datapromotionfee, setdatapromotionfee] = useState([]);
+  const [datastatis, setdatastatis] = useState([]);
+  const [datastatisyear, setdatastatisyear] = useState([]);
+  const [dataxyear, setDataxyear] = useState([]);
+  const [showyear, setshowyear] = useState(precycle_year);
+  const [showmonth, setshowmonth] = useState(precycle_month);
+
+  const [datax, setDatax] = useState([]);
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  });
+
+  const [dataFiltermonthandyear, setFiltermonthandyear] = useState({
+    cycle_year: precycle_year,
+    cycle_month: precycle_month,
+    promotion_id: '',
+  });
+
+  useEffect(() => {
+    promo();
+    dash();
+    dashyear();
+    dashstatis();
+    dashstatisyear();
+  }, []);
 
   useEffect(() => {
     setMocdata([
@@ -181,40 +234,72 @@ const WaterDashBoard = () => {
     console.log(Mocdata);
   }, []);
 
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  });
-  const [datax, setDatax] = useState([]);
-  const NHARA_API = process.env.REACT_APP_CENSUS_API;
-
-  useEffect(() => {
+  //ดึงข้อมูลโปรโมชั่น
+  const promo = () => {
     axios
-      .get(process.env.REACT_APP_API + '/dash')
+      .get(process.env.REACT_APP_API + '/promotion')
+      .then((res) => setdatapromotionfee(res.data.data))
+      .catch((err) => console.log(err));
+  };
+
+  //ดึงข้อมูลdashbordหน้ารายเดือน
+  const dash = () => {
+    var strFilter = StrFilter2(dataFiltermonthandyear, '');
+    axios
+      .get(process.env.REACT_APP_API + '/dash' + strFilter)
       .then((res) => {
-        console.log(res);
-        setDatax(res.data.data[0].unituse);
+        setDatax(res.data.data[0]);
       })
       .catch((err) => console.log(err));
-  }, []);
+  };
 
-  console.log(datax);
+  //ดึงข้อมูลdashbordหน้ารายปี
+  const dashyear = () => {
+    var strFilter = StrFilter2(dataFiltermonthandyear, '');
+    axios
+      .get(process.env.REACT_APP_API + '/dashyear' + strFilter)
+      .then((res) => {
+        setDataxyear(res.data.data[0]);
+      })
+      .catch((err) => console.log(err));
+  };
 
-  let content;
+  //ดึงข้อมูล dashbord ตามเดือน
+  const dashstatis = () => {
+    var strFilter = StrFilter2(dataFiltermonthandyear, '');
+    axios
+      .get(process.env.REACT_APP_API + '/dashstatis' + strFilter)
+      .then((res) => {
+        setdatastatis(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
-  const [selectedMonth, setSelectedMonth] = useState(null);
+  //ดึงข้อมูล dashbord ตามปี
+  const dashstatisyear = () => {
+    var strFilter = StrFilter2(dataFiltermonthandyear, '');
+    axios
+      .get(process.env.REACT_APP_API + '/dashstatisyear' + strFilter)
+      .then((res) => {
+        setdatastatisyear(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const [selectedMonth, setSelectedMonth] = useState(precycle_month);
   const month = [
-    { label: 'มกราคม', value: 'January' },
-    { label: 'กุมภาพันธ์', value: 'February' },
-    { label: 'มีนาคม', value: 'March' },
-    { label: 'เมษายน', value: 'April' },
-    { label: 'พฤษภาคม', value: 'May' },
-    { label: 'มิถุนายน', value: 'June' },
-    { label: 'กรกฎาคม', value: 'July' },
-    { label: 'สิงหาคม', value: 'August' },
-    { label: 'กันยายน', value: 'September' },
-    { label: 'ตุลาคม', value: 'October' },
-    { label: 'พฤศจิกายน', value: 'November' },
-    { label: 'ธันวาคม', value: 'December' },
+    { label: 'มกราคม', value: '1' },
+    { label: 'กุมภาพันธ์', value: '2' },
+    { label: 'มีนาคม', value: '3' },
+    { label: 'เมษายน', value: '4' },
+    { label: 'พฤษภาคม', value: '5' },
+    { label: 'มิถุนายน', value: '6' },
+    { label: 'กรกฎาคม', value: '7' },
+    { label: 'สิงหาคม', value: '8' },
+    { label: 'กันยายน', value: '9' },
+    { label: 'ตุลาคม', value: '10' },
+    { label: 'พฤศจิกายน', value: '11' },
+    { label: 'ธันวาคม', value: '12' },
   ];
 
   const [selecteperson, setSelecteperson] = useState(null);
@@ -227,7 +312,7 @@ const WaterDashBoard = () => {
     { label: 'อ้ายมันคนซั่ว', value: 'EyManKhonSow' },
   ];
 
-  const [selectedYears, setSelectedYears] = useState(null);
+  const [selectedYears, setSelectedYears] = useState(precycle_year);
   const years = [
     '2556',
     '2557',
@@ -240,161 +325,514 @@ const WaterDashBoard = () => {
     '2564',
     '2565',
     '2566',
+    '2567',
   ];
   const mapyears = years.map((year) => ({ label: year, value: year }));
 
-  content = (
-    <>
-      <div style={{ padding: '3.125rem 1.875rem' }}>
-        <div className='d-flex mt-2'>
-          <div style={{ paddingBottom: '50px' }}>
-            <Dropdown
-              placeholder='Year'
-              className='ms-2 rounded-pill'
-              value={selectedYears}
-              onChange={(e) => setSelectedYears(e.value)}
-              options={mapyears}
-            />
-            <Dropdown
-              placeholder='Month'
-              className='ms-2 rounded-pill'
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.value)}
-              options={month}
-            />
-            <div className='p-input-icon-left ms-2'>
-              <CIcon icon={cilSearch}></CIcon>
-              <InputText
-                className='input-search rounded-pill'
-                placeholder='ค้นหา'
-                onInput={(e) =>
-                  setFilters({
-                    global: {
-                      value: e.target.value,
-                      matchMode: FilterMatchMode.CONTAINS,
-                    },
-                  })
-                }
+  const handlefilter = (e) => {
+    const { name, value } = e.target;
+    setFiltermonthandyear({
+      ...dataFiltermonthandyear,
+      [name]: value,
+    });
+
+    var namee = name;
+    var valuee = value;
+    if (namee == 'cycle_year') {
+      setSelectedYears(valuee);
+    }
+
+    if (namee == 'cycle_month') {
+      setSelectedMonth(valuee);
+    }
+
+    if (namee == 'promotion_id') {
+      setSelecteperson(valuee);
+    }
+  };
+  console.log('dataFiltermonthandyear', dataFiltermonthandyear);
+
+  const handleclink = () => {
+    setshowyear(selectedYears);
+    setshowmonth(selectedMonth);
+
+    var strFilter = StrFilter2(dataFiltermonthandyear, '');
+    axios
+      .get(process.env.REACT_APP_API + '/dashstatis' + strFilter)
+      .then((respone) => {
+        console.log(respone.data.data);
+        setdatastatis(respone.data.data);
+      })
+      .catch((err) => console.log(err));
+
+    axios
+      .get(process.env.REACT_APP_API + '/dashstatisyear' + strFilter)
+      .then((res) => {
+        setdatastatisyear(res.data.data);
+      })
+      .catch((err) => console.log(err));
+
+    axios
+      .get(process.env.REACT_APP_API + '/dash' + strFilter)
+      .then((res) => {
+        setDatax(res.data.data[0]);
+      })
+      .catch((err) => console.log(err));
+
+    axios
+      .get(process.env.REACT_APP_API + '/dashyear' + strFilter)
+      .then((res) => {
+        setDataxyear(res.data.data[0]);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handlereset = () => {
+    setSelectedMonth(precycle_month);
+    setSelectedYears(precycle_year);
+    setshowyear(precycle_year);
+    setshowmonth(precycle_month);
+    setSelecteperson('');
+
+    var cycle_year = 'cycle_year';
+    var cycle_month = 'cycle_month';
+    var promotion_id = 'promotion_id';
+
+    setFiltermonthandyear({
+      ...dataFiltermonthandyear,
+      [cycle_year]: precycle_year,
+      [cycle_month]: precycle_month,
+      [promotion_id]: '',
+    });
+
+    window.location.reload();
+
+    // onClick = { handleclink };
+    // handleclink();
+  };
+
+  const setpage = () => {
+    setdashpage(1);
+
+    var cycle_year = 'cycle_year';
+    var cycle_month = 'cycle_month';
+    var promotion_id = 'promotion_id';
+
+    setFiltermonthandyear({
+      ...dataFiltermonthandyear,
+      [cycle_year]: precycle_year,
+      [cycle_month]: '',
+      [promotion_id]: '',
+    });
+  };
+
+  const setpage2 = () => {
+    setdashpage(0);
+
+    var cycle_year = 'cycle_year';
+    var cycle_month = 'cycle_month';
+    var promotion_id = 'promotion_id';
+
+    setFiltermonthandyear({
+      ...dataFiltermonthandyear,
+      [cycle_year]: precycle_year,
+      [cycle_month]: precycle_month,
+      [promotion_id]: '',
+    });
+  };
+
+  // console.log('datastatis', datastatis);
+
+  let content;
+
+  // รายเดือน
+  if (dashpage === 0) {
+    content = (
+      <>
+        <div style={{ padding: '1.125rem  1.875rem' }}>
+          <div className='d-flex mt-2'>
+            <div className='dropdowngroup' style={{ paddingBottom: '50px' }}>
+              <Dropdown
+                className='ms-2 rounded-pill drownyear'
+                value={selectedYears}
+                onChange={handlefilter}
+                options={mapyears}
+                name='cycle_year'
               />
+              <Dropdown
+                // placeholder='Month'
+                className='ms-2 rounded-pill drownyear2'
+                value={selectedMonth}
+                onChange={handlefilter}
+                options={month}
+                style={{ width: 160 }}
+                name='cycle_month'
+              />
+              <div className='p-input-icon-left ms-2'>
+                <CIcon icon={cilSearch}></CIcon>
+                <InputText
+                  className='input-search rounded-pill'
+                  style={
+                    {
+                      // paddingTop: 5,
+                      // paddingBottom: 5,
+                    }
+                  }
+                  placeholder='ค้นหา'
+                  onInput={(e) =>
+                    setFilters({
+                      global: {
+                        value: e.target.value,
+                        matchMode: FilterMatchMode.CONTAINS,
+                      },
+                    })
+                  }
+                />
+              </div>
+            </div>
+            <div style={{ marginLeft: 'auto' }}>
+              <CFormSelect
+                placeholder='ประเภทบุคคลที่ได้รับการยกเว้น'
+                className='selecteperson'
+                value={selecteperson}
+                onChange={handlefilter}
+                name='promotion_id'
+              >
+                <option value={''}>เลือกข้อมูลการส่งเสริม</option>
+                {datapromotionfee.map((item, index) => (
+                  <option key={index} value={item.promotion_id}>
+                    {item.promotion_name}
+                  </option>
+                ))}
+              </CFormSelect>
+              <CCol
+                style={{
+                  marginTop: 13,
+                  marginLeft: 6,
+                  float: 'right',
+                }}
+              >
+                <button
+                  className='wblue-button me-5'
+                  onClick={handleclink}
+                  style={{ fontSize: 12 }}
+                >
+                  Apply
+                </button>
+                <button
+                  className='wblue-button'
+                  onClick={handlereset}
+                  style={{ fontSize: 12, marginLeft: -44 }}
+                >
+                  Reset
+                </button>
+              </CCol>
             </div>
           </div>
-          <div style={{ marginLeft: 'auto' }}>
-            <Dropdown
-              placeholder='ประเภทบุคคลที่ได้รับการยกเว้น'
-              className='ms-2 rounded-pill'
-              style={{ display: 'flex', justifyContent: 'end' }}
-              value={selecteperson}
-              onChange={(e) => setSelecteperson(e.value)}
-              options={typeperson}
-            />
+
+          <div className='minicontainer2'>
+            <h5 style={{ width: '350px' }}>
+              สถิติการใช้น้ำ เดือน {showmonth} ปี {showyear}
+            </h5>
+            <CRow className='TopRow'>
+              <CCol className='set'>
+                <img
+                  src={require('../../assets/images/Ps.svg').default}
+                  width={30}
+                  height={30}
+                  className='setimg1'
+                  alt='Gp Logo'
+                />
+                <div
+                  style={{
+                    display: 'inline-grid',
+                    paddingLeft: '10px',
+                    width: 'max-content',
+                  }}
+                >
+                  <p className='setunit'>{datax.prapaowner}</p>
+                  <p className='setunit2'>จำนวนครัวเรือนผู้ใช้น้ำ</p>
+                </div>
+              </CCol>
+
+              <CCol className='set'>
+                <img
+                  src={require('../../assets/images/Gp.svg').default}
+                  width={30}
+                  height={30}
+                  className='setimg2'
+                  alt='Gp Logo'
+                />
+                <div
+                  style={{
+                    display: 'inline-grid',
+                    paddingLeft: '10px',
+                    width: 'max-content',
+                  }}
+                >
+                  <p className='setunit'>{datax.unituse} หน่วย</p>
+                  <p className='setunit2'>จำนวนการใช้น้ำ</p>
+                </div>
+              </CCol>
+            </CRow>
+          </div>
+
+          <div className=''>
+            <DataTable
+              // filters={filters}
+              value={datastatis}
+              header='รายชื่อผู้ใช้น้ำทั้งหมด'
+              paginator
+              rows={8}
+              paginatorTemplate='CurrentPageReport PageLinks PrevPageLink NextPageLink'
+              currentPageReportTemplate='หน้า {currentPage} จาก {totalPages} '
+            >
+              <Column header='ชื่อ นามสกุล' field='fullname'></Column>
+              <Column
+                header='เลขที่ประจำมาตรวัดน้ำ'
+                field='meternumber'
+                bodyStyle={{ textAlign: 'center' }}
+              ></Column>
+              <Column header='ที่ติดตั้งมาตร' field='baddress'></Column>
+              <Column
+                header='ประเภทบุคคลที่ได้รับการยกเว้น'
+                // field={promotion_name !== null ? promotion_name : 'ไม่มีค่า'}
+                body={(rowData) => (
+                  <span>
+                    {rowData.promotion_name !== null
+                      ? rowData.promotion_name
+                      : 'ไม่ได้รับการยกเว้น'}
+                  </span>
+                )}
+                bodyStyle={{ textAlign: 'center' }}
+              ></Column>
+              <Column
+                header='จำนวนหน่วยที่ใช้'
+                field='unituse'
+                bodyStyle={{ textAlign: 'center' }}
+              ></Column>
+              <Column
+                header='เดือน'
+                field='cycle_month'
+                bodyStyle={{ textAlign: 'center' }}
+              ></Column>
+              <Column
+                header='ปี'
+                field='cycle_year'
+                bodyStyle={{ textAlign: 'center' }}
+              ></Column>
+            </DataTable>
           </div>
         </div>
+      </>
+    );
+  }
 
-        <div className='minicontainer2'>
-          <h5 style={{ width: '350px' }}>
-            สถิติการใช้น้ำ เดือน มกราคม ปี 2566
-          </h5>
-          <CRow className='TopRow'>
-            <CCol className='set'>
-              <img
-                src={require('../../assets/images/Ps.svg').default}
-                width={30}
-                height={30}
-                className='setimg1'
-                alt='Gp Logo'
+  // รายปี
+  if (dashpage === 1) {
+    content = (
+      <>
+        {/* รายปี */}
+        <div style={{ padding: '1.125rem  1.875rem' }}>
+          <div className='d-flex mt-2'>
+            <div className='dropdowngroup' style={{ paddingBottom: '50px' }}>
+              <Dropdown
+                className='ms-2 rounded-pill drownyear'
+                value={selectedYears}
+                onChange={handlefilter}
+                options={mapyears}
+                name='cycle_year'
               />
-              <div
+              {/* <Dropdown
+                // placeholder='Month'
+                className='ms-2 rounded-pill drownyear2'
+                value={selectedMonth}
+                onChange={handlefilter}
+                options={month}
+                style={{ width: 160 }}
+                name='cycle_month'
+              /> */}
+              <div className='p-input-icon-left ms-2'>
+                <CIcon icon={cilSearch}></CIcon>
+                <InputText
+                  className='input-search rounded-pill'
+                  // style={{
+                  //   paddingTop: 5,
+                  //   paddingBottom: 5,
+                  // }}
+                  placeholder='ค้นหา'
+                  onInput={(e) =>
+                    setFilters({
+                      global: {
+                        value: e.target.value,
+                        matchMode: FilterMatchMode.CONTAINS,
+                      },
+                    })
+                  }
+                />
+              </div>
+            </div>
+            <div style={{ marginLeft: 'auto' }}>
+              <CFormSelect
+                placeholder='ประเภทบุคคลที่ได้รับการยกเว้น'
+                className='selecteperson'
+                value={selecteperson}
+                onChange={handlefilter}
+                name='promotion_id'
+              >
+                <option value={''}>เลือกข้อมูลการส่งเสริม</option>
+                {datapromotionfee.map((item, index) => (
+                  <option key={index} value={item.promotion_id}>
+                    {item.promotion_name}
+                  </option>
+                ))}
+              </CFormSelect>
+              <CCol
                 style={{
-                  display: 'inline-grid',
-                  paddingLeft: '10px',
-                  width: 'max-content',
+                  marginTop: 13,
+                  marginLeft: 6,
+                  float: 'right',
                 }}
               >
-                <p className='setunit'>{datax}</p>
-                <p className='setunit2'>จำนวนครัวเรือนผู้ใช้น้ำ</p>
-              </div>
-            </CCol>
+                <button
+                  className='wblue-button me-5'
+                  onClick={handleclink}
+                  style={{ fontSize: 12 }}
+                >
+                  Apply
+                </button>
+                <button
+                  className='wblue-button'
+                  onClick={handlereset}
+                  style={{ fontSize: 12, marginLeft: -44 }}
+                >
+                  Reset
+                </button>
+              </CCol>
+            </div>
+          </div>
 
-            <CCol className='set'>
-              <img
-                src={require('../../assets/images/Gp.svg').default}
-                width={30}
-                height={30}
-                className='setimg2'
-                alt='Gp Logo'
-              />
-              <div
-                style={{
-                  display: 'inline-grid',
-                  paddingLeft: '10px',
-                  width: 'max-content',
-                }}
-              >
-                <p className='setunit'>{datax} หน่วย</p>
-                <p className='setunit2'>จำนวนการใช้น้ำ</p>
-              </div>
-            </CCol>
+          <div className='minicontainer2'>
+            <h5 style={{ width: '350px' }}>สถิติการใช้น้ำ ปี {showyear}</h5>
+            <CRow className='TopRow'>
+              <CCol className='set'>
+                <img
+                  src={require('../../assets/images/Ps.svg').default}
+                  width={30}
+                  height={30}
+                  className='setimg1'
+                  alt='Gp Logo'
+                />
+                <div
+                  style={{
+                    display: 'inline-grid',
+                    paddingLeft: '10px',
+                    width: 'max-content',
+                  }}
+                >
+                  <p className='setunit'>{dataxyear.prapaowner}</p>
+                  <p className='setunit2'>จำนวนครัวเรือนผู้ใช้น้ำ</p>
+                </div>
+              </CCol>
 
-            <CCol className='set'>
-              <img
-                src={require('../../assets/images/Bs.svg').default}
-                width={30}
-                height={30}
-                className='setimg3'
-                alt='Gp Logo'
-              />
-              <div
-                style={{
-                  display: 'inline-grid',
-                  paddingLeft: '10px',
-                  width: 'max-content',
-                }}
-              >
-                <p className='setunit'>{datax} บาท</p>
-                <p className='setunit2'>จำนวนค่าน้ำ</p>
-              </div>
-            </CCol>
-          </CRow>
+              <CCol className='set'>
+                <img
+                  src={require('../../assets/images/Gp.svg').default}
+                  width={30}
+                  height={30}
+                  className='setimg2'
+                  alt='Gp Logo'
+                />
+                <div
+                  style={{
+                    display: 'inline-grid',
+                    paddingLeft: '10px',
+                    width: 'max-content',
+                  }}
+                >
+                  <p className='setunit'>{dataxyear.unituse} หน่วย</p>
+                  <p className='setunit2'>จำนวนการใช้น้ำ</p>
+                </div>
+              </CCol>
+            </CRow>
+          </div>
+
+          <div className=''>
+            <DataTable
+              // filters={filters}
+              value={datastatisyear}
+              header='รายชื่อผู้ใช้น้ำทั้งหมด'
+              paginator
+              rows={8}
+              paginatorTemplate='CurrentPageReport PageLinks PrevPageLink NextPageLink'
+              currentPageReportTemplate='หน้า {currentPage} จาก {totalPages} '
+            >
+              <Column header='ชื่อ นามสกุล' field='fullname'></Column>
+              <Column
+                header='เลขที่ประจำมาตรวัดน้ำ'
+                field='meternumber'
+                bodyStyle={{ textAlign: 'center' }}
+              ></Column>
+              <Column header='ที่ติดตั้งมาตร' field='baddress'></Column>
+              <Column
+                header='ประเภทบุคคลที่ได้รับการยกเว้น'
+                body={(rowData) => (
+                  <span>
+                    {rowData.promotion_name !== null
+                      ? rowData.promotion_name
+                      : 'ไม่ได้รับการยกเว้น'}
+                  </span>
+                )}
+                bodyStyle={{ textAlign: 'center' }}
+              ></Column>
+              <Column
+                header='จำนวนหน่วยที่ใช้'
+                field='sumunituse'
+                bodyStyle={{ textAlign: 'center' }}
+              ></Column>
+              <Column
+                header='ปี'
+                field='cycle_year'
+                bodyStyle={{ textAlign: 'center' }}
+              ></Column>
+            </DataTable>
+          </div>
         </div>
+      </>
+    );
+  }
 
-        <div className=''>
-          <DataTable
-            // filters={filters}
-            value={Mocdata}
-            header='รายชื่อผู้ใช้น้ำทั้งหมด'
-            paginator
-            rows={8}
-            paginatorTemplate='CurrentPageReport PageLinks PrevPageLink NextPageLink'
-            currentPageReportTemplate='หน้า {currentPage} จาก {totalPages} '
+  return (
+    <>
+      <CNav variant='pills' role='tablist'>
+        <CNavItem role='presentation' className='cnav'>
+          <CNavLink
+            active={dashpage == 0}
+            component='button'
+            role='tab'
+            aria-controls='home-tab-pane'
+            aria-selected={dashpage == 0}
+            onClick={setpage2}
           >
-            <Column header='ชื่อ นามสกุล' field='fullname'></Column>
-            <Column
-              header='เลขที่ประจำมาตรวัดน้ำ'
-              field='meter_num'
-              bodyStyle={{ textAlign: 'center' }}
-            ></Column>
-            <Column header='ที่ติดตั้งมาตร' field='address'></Column>
-            <Column
-              header='ประเภทบุคคลที่ได้รับการยกเว้น'
-              field='type'
-              bodyStyle={{ textAlign: 'center' }}
-            ></Column>
-            <Column
-              header='สถานะการใช้น้ำ'
-              field='status'
-              bodyStyle={{ textAlign: 'center' }}
-            ></Column>
-            <Column
-              header='จำนวนหน่วยที่ใช้'
-              field='Useset_unit'
-              bodyStyle={{ textAlign: 'center' }}
-            ></Column>
-          </DataTable>
-        </div>
-      </div>
+            รายเดือน
+          </CNavLink>
+        </CNavItem>
+        <CNavItem role='presentation' className='cnav'>
+          <CNavLink
+            active={dashpage == 1}
+            component='button'
+            role='tab'
+            aria-controls='home-tab-pane'
+            aria-selected={dashpage == 1}
+            onClick={setpage}
+          >
+            รายปี
+          </CNavLink>
+        </CNavItem>
+      </CNav>
+      {content}
     </>
   );
-  return <>{content}</>;
 };
 
 export default WaterDashBoard;

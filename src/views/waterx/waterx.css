@@ -103,6 +103,7 @@
   margin-right: 0.5rem;
   padding-bottom: 0.5rem;
   padding-top: 0.5rem;
+  background-color: #ffffff;
 }
 .wblue-button:hover {
   border-radius: 50rem;
@@ -322,6 +323,8 @@
   /* margin-top: 5%; */
   padding: 1rem 3rem;
   margin-bottom: 40px;
+  margin-left: 2.5%;
+  box-shadow: 0px 2px 20px 0px rgba(76, 78, 100, 0.1);
 }
 
 .cloud {
@@ -698,4 +701,56 @@ h7 {
   margin-top: calc(-1 * var(--cui-gutter-y));
   margin-right: calc(-0.5 * var(--cui-gutter-x));
   margin-left: calc(-0.5 * var(--cui-gutter-x));
+}
+.p-dropdown .p-dropdown-label {
+  padding-left: 23%;
+}
+.btn-group,
+.btn-group-vertical {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+  height: fit-content;
+  /* color: antiquewhite; */
+}
+.appaly {
+  border-radius: 20px 0px 0px 20px;
+  padding: 5px 11px;
+}
+.reset {
+  border-radius: 20px 0px 0px 20px;
+  padding: 5px 11px;
+}
+.dropdowngroup {
+  margin-left: 2.5%;
+}
+.drownyear {
+  padding-top: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  width: 134px;
+}
+.drownyear2 {
+  padding-top: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  /* width: 134px; */
+}
+.selecteperson {
+  border-radius: var(--cui-border-radius-pill) !important;
+}
+.cnav {
+  width: 11%;
+}
+.nav-pills .nav-link {
+  color: var(--cui-form-select-color, var(--cui-body-color));
+}
+.nav-pills .nav-link.active {
+  background-color: #0d6efd;
+}
+.nav-pills {
+  margin-left: 5%;
+  margin-top: 2%;
 }

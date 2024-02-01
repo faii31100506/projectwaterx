@@ -42,7 +42,20 @@ import {
 import { SlideMenu } from 'primereact/slidemenu';
 import Swal from 'sweetalert2';
 // import { DatePickerValue } from './Datepicker';
+import styled from 'styled-components';
+import ErrorIcon from '../../assets/images/warning.png';
+const ErrorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 2%;
+`;
 
+const ErrorText = styled.p`
+  color: red;
+  font-style: italic;
+  margin-left: 5px;
+  font-size: 14px;
+`;
 const WaterMeterData = () => {
   const [meterpage, setMeterpage] = useState(0);
   const [datax, setDatax] = useState([]);
@@ -75,6 +88,22 @@ const WaterMeterData = () => {
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
+
+  const [error, setError] = useState('');
+  const handleInputChange2 = (e) => {
+    const { name, value } = e.target;
+    const namee = name;
+    const inputValue = e.target.value;
+    // ตรวจสอบรูปแบบของข้อมูล
+    if (namee == 'meternumber') {
+      if (inputValue === '' || /^[0-9-]*$/.test(inputValue)) {
+        setmeternumber(inputValue);
+        setError('');
+      } else {
+        setError('กรอกแค่0-9และ "-" เท่านั้น');
+      }
+    }
+  };
 
   // ดึงข้อมูลมิเตอร์ทั้งหมด
   useEffect(() => {
@@ -193,7 +222,7 @@ const WaterMeterData = () => {
     });
   };
 
-  // บันทึกแก้ไขลักษณะครุภัณฑ์ที่ยังไม่ได้ใช้งาน
+  // บันทึกแก้ไขครุภัณฑ์ที่ยังไม่ได้ใช้งาน
   const handleputmeterasset = (event) => {
     if (meternumber !== '') {
       var Activity = dataxnull.filter((res) => res.meternumber == meternumber);
@@ -204,7 +233,7 @@ const WaterMeterData = () => {
 
       if (meternumber !== checkmeternumber && Activity.length !== 0) {
         Swal.fire({
-          text: 'เลขมาตรน้ำซ้ำ',
+          text: 'เลขมาตรวัดน้ำซ้ำ',
           icon: 'error',
           buttonsStyling: false,
           confirmButtonText: 'ตกลง',
@@ -474,6 +503,66 @@ const WaterMeterData = () => {
 
   //บันทึกข้อมูลลักษณะมาตรวัดน้ำ
   const handlepost = (event) => {
+    if (brand == '' || brand == null) {
+      return Swal.fire({
+        text: 'โปรดกรอก Brand',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (model == '' || model == null) {
+      return Swal.fire({
+        text: 'โปรดกรอก Model',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (metertype_id == '' || metertype_id == null) {
+      return Swal.fire({
+        text: 'โปรดเลือกประเภทมาตรน้ำ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (metersize_id == '' || metersize_id == null) {
+      return Swal.fire({
+        text: 'โปรดเลือกขนาดมาตรน้ำ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (metermaterial_id == '' || metermaterial_id == null) {
+      return Swal.fire({
+        text: 'โปรดเลือกประเภทวัสดุมาตรน้ำ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
     var data = {
       metersize_id: metersize_id,
       metermaterial_id: metermaterial_id,
@@ -528,31 +617,146 @@ const WaterMeterData = () => {
 
   //บันทึกข้อมูลครุภัณฑ์มาตรน้ำ
   const handlepostasset = (event) => {
+    if (meternumber !== '') {
+      var Activity = dataxnull.filter((res) => res.meternumber == meternumber);
+
+      if (meternumber == checkmeternumber) {
+        // ผ่าน
+      }
+
+      if (meternumber !== checkmeternumber && Activity.length !== 0) {
+        Swal.fire({
+          text: 'เลขมาตรวัดน้ำซ้ำ',
+          icon: 'error',
+          buttonsStyling: false,
+          confirmButtonText: 'ตกลง',
+          customClass: {
+            confirmButton: 'btn fw-bold btn-primary',
+          },
+        });
+      } else {
+        //ผ่าน
+      }
+      console.log('checkmeternumber', checkmeternumber);
+      console.log('meternumber', meternumber);
+      console.log('Activity', Activity);
+    } else {
+      Swal.fire({
+        text: 'โปรดกรอกเลขมาตรน้ำ',
+        icon: 'error',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง.',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (meter_status == '' || meter_status == null) {
+      return Swal.fire({
+        text: 'โปรดเลือกสถานะมาตรวัดน้ำ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (metermaster_id == '' || metermaster_id == null) {
+      return Swal.fire({
+        text: 'โปรดเลือกรหัสลักษณะมาตรวัดน้ำ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (metermaster_id == '' || metermaster_id == null) {
+      return Swal.fire({
+        text: 'โปรดเลือกรหัสลักษณะมาตรวัดน้ำ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
     var data = {
       metermaster_id: metermaster_id,
       meter_status: meter_status,
       meternumber: meternumber,
     };
-    fetch('http://localhost:4034/api/nahra/modelmeterasset', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/form-data',
-        'Content-Type': 'application/json',
+    Swal.fire({
+      text: 'คุณต้องการบันทึกข้อมูลหรือไม่ ?',
+      icon: 'warning',
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: 'ยืนยัน',
+      cancelButtonText: 'ยกเลิก',
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-light',
       },
-      body: JSON.stringify(data),
-    }).then((res) => {
-      console.log(res);
-      if (res.status == 200) {
-        // alert("succesfull");
-        Swal.fire({
-          icon: 'success',
-          title: 'succesfull',
-          preConfirm: () => {
-            return window.location.reload();
-          },
-        });
+    }).then(async function (result) {
+      if (result.value) {
+        let resultsL = await axios
+          .post('http://localhost:4034/api/nahra/modelmeterasset', data)
+          .then(
+            (res) => {
+              if (res.status === 200) {
+                // alert("succesfull");
+              }
+              console.log(res);
+              Swal.fire({
+                icon: 'success',
+                title: 'succesfull',
+                preConfirm: () => {
+                  return window.location.reload();
+                },
+              });
+            },
+            async (error) => {
+              Swal.fire({
+                text: 'บันทึกข้อมูลไม่สำเร็จ.',
+                icon: 'error',
+                buttonsStyling: false,
+                confirmButtonText: 'ตกลง.',
+                customClass: {
+                  confirmButton: 'btn fw-bold btn-primary',
+                },
+              });
+            }
+          );
       }
     });
+
+    // fetch('http://localhost:4034/api/nahra/modelmeterasset', {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/form-data',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(data),
+    // }).then((res) => {
+    //   console.log(res);
+    //   if (res.status == 200) {
+    //     // alert("succesfull");
+    //     Swal.fire({
+    //       icon: 'success',
+    //       title: 'succesfull',
+    //       preConfirm: () => {
+    //         return window.location.reload();
+    //       },
+    //     });
+    //   }
+    // });
   };
 
   const handleSelect = (e) => {
@@ -717,7 +921,10 @@ const WaterMeterData = () => {
                 <CForm className='w-40'>
                   <CFormInput
                     label='Brand'
+                    name='brand'
+                    value={brand}
                     onChange={(e) => setbrand(e.target.value)}
+                    // onChange={handleInputChange2}
                   />
                 </CForm>
                 {/* model */}
@@ -736,7 +943,7 @@ const WaterMeterData = () => {
                     label='ประเภทมาตรน้ำ'
                     onChange={(e) => setmetertype_id(e.target.value)}
                   >
-                    <option>เลือกประเภทมาตรน้ำ</option>
+                    <option value={''}>เลือกประเภทมาตรน้ำ</option>
                     {datametertype.map((item, index) => (
                       <option key={index} value={item.metertype_id}>
                         {item.metertypename}
@@ -753,7 +960,7 @@ const WaterMeterData = () => {
                     label='ขนาดมาตรน้ำ'
                     onChange={(e) => setmetersize_id(e.target.value)}
                   >
-                    <option>เลือกขนาดมาตรน้ำ</option>
+                    <option value={''}>เลือกขนาดมาตรน้ำ</option>
                     {datametersize.map((item, index) => (
                       <option key={index} value={item.metersize_id}>
                         {item.international_size}
@@ -770,7 +977,7 @@ const WaterMeterData = () => {
                     label='ประเภทวัสดุ'
                     onChange={(e) => setmetermaterial_id(e.target.value)}
                   >
-                    <option>เลือกประเภทวัสดุ</option>
+                    <option value={''}>เลือกประเภทวัสดุ</option>
                     {datametermat.map((item, index) => (
                       <option key={index} value={item.metermaterial_id}>
                         {item.metermaterial}
@@ -1074,15 +1281,42 @@ const WaterMeterData = () => {
                 <CForm className='w-40'>
                   <CFormInput
                     label='เลขประจำมาตรวัดน้ำ'
-                    onChange={(e) => setmeternumber(e.target.value)}
+                    name='meternumber'
+                    value={meternumber}
+                    // onChange={(e) => setmeternumber(e.target.value)}
+                    onChange={handleInputChange2}
                   />
+                  {error && (
+                    <ErrorContainer>
+                      <img
+                        src={ErrorIcon}
+                        alt='Error Icon'
+                        width='16'
+                        height='16'
+                        style={{ marginTop: -21 }}
+                      />
+                      <ErrorText>{error}</ErrorText>
+                    </ErrorContainer>
+                  )}
                 </CForm>
                 {/* สถานะ */}
-                <CForm className='w-15'>
-                  <CFormInput
+                <CForm className='w-25'>
+                  {/* <CFormInput
                     label='สถานะมาตรวัดน้ำ'
                     onChange={(e) => setmeter_status(e.target.value)}
-                  />
+                  /> */}
+                  <CFormSelect
+                    className='mb-3'
+                    aria-label='Small select example'
+                    label='สถานะมาตรวัดน้ำ'
+                    // onChange={(e) => setmetertype_id(e.target.value)}
+                    onChange={(e) => setmeter_status(e.target.value)}
+                  >
+                    <option value={''}>เลือกสถานะมาตรน้ำ</option>
+                    <option value={'ปกติ'}>ปกติ</option>
+                    <option value={'ระงับใช้'}>ระงับใช้</option>
+                    <option value={'ซ่อมแซม'}>ซ่อมแซม</option>
+                  </CFormSelect>
                 </CForm>
 
                 {/* รหัสลักษณะมาตรวัดน้ำ */}
@@ -1094,7 +1328,7 @@ const WaterMeterData = () => {
                     // onChange={(e) => setmetertype_id(e.target.value)}
                     onChange={(e) => handleSelect(e)}
                   >
-                    <option value={''}>เลือกรหัสลักษณะมาตรน้ำ</option>
+                    <option value={''}>เลือกรหัสลักษณะมาตรวัดน้ำ</option>
                     {datalistmeter.map((item, index) => (
                       <option key={index} value={item.id}>
                         {item.metermaster_id}
@@ -1373,16 +1607,37 @@ const WaterMeterData = () => {
                     label='เลขมาตรน้ำ'
                     name='meternumber'
                     value={meternumber}
-                    onChange={(e) => setmeternumber(e.target.value)}
+                    // onChange={(e) => setmeternumber(e.target.value)}
+                    onChange={handleInputChange2}
                   />
+                  {error && (
+                    <ErrorContainer>
+                      <img
+                        src={ErrorIcon}
+                        alt='Error Icon'
+                        width='16'
+                        height='16'
+                        style={{ marginTop: -21 }}
+                      />
+                      <ErrorText>{error}</ErrorText>
+                    </ErrorContainer>
+                  )}{' '}
                 </CForm>
                 <CForm className='w-25'>
-                  <CFormInput
-                    label='สถานะมาตรน้ำ'
+                  <CFormSelect
+                    className='mb-3'
+                    aria-label='Small select example'
+                    label='สถานะมาตรวัดน้ำ'
                     name='meter_status'
                     value={meter_status}
+                    // onChange={(e) => setmetertype_id(e.target.value)}
                     onChange={(e) => setmeter_status(e.target.value)}
-                  />
+                  >
+                    <option value={''}>เลือกสถานะมาตรน้ำ</option>
+                    <option value={'ปกติ'}>ปกติ</option>
+                    <option value={'ระงับใช้'}>ระงับใช้</option>
+                    <option value={'ซ่อมแซม'}>ซ่อมแซม</option>
+                  </CFormSelect>
                 </CForm>
 
                 <CForm className='w-25'>

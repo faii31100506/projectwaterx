@@ -17,6 +17,17 @@ import ReactToPrint from 'react-to-print';
 import Swal from 'sweetalert2';
 import NumberFormat from 'react-number-format';
 import moment from 'moment-timezone';
+import { Calendar } from 'primereact/calendar';
+import { Button } from 'primereact/button';
+
+import {
+  locale,
+  addLocale,
+  updateLocaleOption,
+  updateLocaleOptions,
+  localeOption,
+  localeOptions,
+} from 'primereact/api';
 
 import {
   CFormCheck,
@@ -25,9 +36,30 @@ import {
   CFormSelect,
   CFormTextarea,
   CCol,
+  CButtonGroup,
+  CRow,
 } from '@coreui/react';
 import { Component } from 'react';
 import { useRef } from 'react';
+
+function isNotEmpty(obj) {
+  return obj !== undefined && obj !== null && obj !== '';
+}
+
+function StrFilter2(data, query) {
+  var str = '';
+  Object.keys(data).forEach(function (key) {
+    if (isNotEmpty(data[key])) {
+      // if (query == "") {
+      if (str == '') {
+        str += '?' + [key] + '=' + data[key];
+      } else {
+        str += '&' + [key] + '=' + data[key];
+      }
+    }
+  });
+  return str;
+}
 
 const WaterMeterFt = () => {
   const [filters, setFilters] = useState({
@@ -45,19 +77,18 @@ const WaterMeterFt = () => {
   const [currentnum, setcurrentnum] = useState([]);
   const [sumprices, setsumprices] = useState('0');
   const TRANSACTION_API = process.env.REACT_APP_TRANSACTION_API;
-  // const NHARA_API = process.env.REACT_APP_NHARA_API;
 
   let unituse = currentnum - previousnum;
+  let precycle_year = moment()
+    .tz('Asia/Bangkok')
+    .add(543, 'years')
+    .format('YYYY');
+  let precycle_month = moment().tz('Asia/Bangkok').format('M');
 
-  const Displayunit = (rowData) => {
-    return (
-      <span>
-        {rowData.budget !== null
-          ? Intl.NumberFormat('en-US').format(rowData.budget)
-          : rowData.budget}
-      </span>
-    );
-  };
+  const [dataFiltermonthandyear, setFiltermonthandyear] = useState({
+    cycle_year: precycle_year,
+    cycle_month: precycle_month,
+  });
 
   const componentRef = useRef();
   const handlePrint = () => {
@@ -69,11 +100,18 @@ const WaterMeterFt = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(TRANSACTION_API)
-      .then((res) => setDatax(res.data.data))
-      .catch((err) => console.log(err));
+    trasection();
   }, []);
+
+  const trasection = () => {
+    var strFilter = StrFilter2(dataFiltermonthandyear, '');
+    axios
+      .get('http://localhost:4034/api/nahra/transaction' + strFilter)
+      .then((res) => {
+        setDatax(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
     axios
@@ -101,17 +139,125 @@ const WaterMeterFt = () => {
       .catch((err) => console.log(err));
   }, [meterasset_id]);
 
+  const [selectedMonth, setSelectedMonth] = useState(precycle_month);
+  const month = [
+    // { label: 'มกราคม', value: '1' },
+    // { label: 'กุมภาพันธ์', value: '2' },
+    // { label: 'มีนาคม', value: '3' },
+    // { label: 'เมษายน', value: '4' },
+    // { label: 'พฤษภาคม', value: '5' },
+    // { label: 'มิถุนายน', value: '6' },
+    // { label: 'กรกฎาคม', value: '7' },
+    // { label: 'สิงหาคม', value: '8' },
+    // { label: 'กันยายน', value: '9' },
+    // { label: 'ตุลาคม', value: '10' },
+    // { label: 'พฤศจิกายน', value: '11' },
+    // { label: 'ธันวาคม', value: '12' },
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    '11',
+    '12',
+  ];
+
+  const [selectedYears, setSelectedYears] = useState(precycle_year);
+  const years = [
+    '2556',
+    '2557',
+    '2558',
+    '2559',
+    '2560',
+    '2561',
+    '2562',
+    '2563',
+    '2564',
+    '2565',
+    '2566',
+    '2567',
+  ];
+
+  const mapyears = years.map((year) => ({ label: year, value: year }));
+
+  const handlefilter = (e) => {
+    const { name, value } = e.target;
+    setFiltermonthandyear({
+      ...dataFiltermonthandyear,
+      [name]: value,
+    });
+
+    var namee = name;
+    var valuee = value;
+    if (namee == 'cycle_year') {
+      setSelectedYears(valuee);
+    }
+
+    if (namee == 'cycle_month') {
+      setSelectedMonth(valuee);
+    }
+  };
+  console.log('dataFiltermonthandyear', dataFiltermonthandyear);
+
+  const handleclink = () => {
+    var strFilter = StrFilter2(dataFiltermonthandyear, '');
+    axios
+      .get(process.env.REACT_APP_API + '/transaction' + strFilter)
+      .then((respone) => {
+        console.log(respone.data.data);
+        setDatax(respone.data.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handlereset = () => {
+    setSelectedMonth(precycle_month);
+    setSelectedYears(precycle_year);
+
+    var cycle_year = 'cycle_year';
+    var cycle_month = 'cycle_month';
+
+    setFiltermonthandyear({
+      ...dataFiltermonthandyear,
+      [cycle_year]: precycle_year,
+      [cycle_month]: precycle_month,
+    });
+
+    window.location.reload();
+
+    // trasection();
+  };
+
+  console.log('datax', datax);
+
   // กดบันทึกมาตรน้ำ
   const handleprasection = () => {
     let cycle_year = moment()
       .tz('Asia/Bangkok')
       .add(543, 'years')
       .format('YYYY');
-    let cycle_month = moment().tz('Asia/Bangkok').format('MM');
+    let cycle_month = moment().tz('Asia/Bangkok').format('M');
 
     if (currentnum == '') {
       return Swal.fire({
         text: 'โปรดกรอกข้อมูลก่อนบันทึก',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (currentnum < previousnum) {
+      return Swal.fire({
+        text: 'โปรดกรอกเลขครั้งนี้ใหม่',
         icon: 'warning',
         buttonsStyling: false,
         confirmButtonText: 'ตกลง',
@@ -127,7 +273,7 @@ const WaterMeterFt = () => {
       currentnum: currentnum,
       unituse: unituse,
       meterasset_id: record.meterasset_id,
-      status_trasaction: 'จดแล้ว',
+      status_trasaction: '1',
       cycle_year: cycle_year,
       cycle_month: cycle_month,
     };
@@ -224,7 +370,6 @@ const WaterMeterFt = () => {
 
   // ปุ่มใบเเจ้งหนี้
   const PaydeptButton = (data) => {
-    console.log(data.prapaowner_id);
     const handlePayClick = (data) => {
       setPaymentvisible(true, data);
       setdataid(data);
@@ -266,6 +411,8 @@ const WaterMeterFt = () => {
           handleMeterRecordClick(data);
           setMeterFtpage(3);
           setmeterasset_id(data.meterasset_id);
+
+          console.log(data);
         }}
         style={{ fontSize: 14 }}
       >
@@ -369,7 +516,8 @@ const WaterMeterFt = () => {
       if (e.currentTarget.value && e.currentTarget.value.length) {
         return;
       } else if (characterNumber === 0) {
-        e.preventDefault();
+        // e.preventDefault();
+        return;
       }
     } else if (characterCode === '.') {
       e.preventDefault();
@@ -392,13 +540,51 @@ const WaterMeterFt = () => {
   if (meterFtpage === 0) {
     content = (
       <>
-        <h2 className='mt-4 ms-4'>รายการจดค่าน้ำ</h2>
+        <CCol>
+          <h2 className='mt-4 ms-4'>รายการจดค่าน้ำ</h2>
+        </CCol>
         <div className='d-flex justify-content-between mt-4 ms-4'>
           <div className='d-flex mt-2'>
             <Dropdown
-              placeholder='รอบบิลที่ 360/38'
+              placeholder='Month'
               className='ms-2 rounded-pill'
+              value={selectedMonth}
+              name='cycle_month'
+              onChange={handlefilter}
+              options={month}
+              style={{ width: 101 }}
             />
+            <Dropdown
+              placeholder='Year'
+              className='ms-2 rounded-pill'
+              value={selectedYears}
+              name='cycle_year'
+              onChange={handlefilter}
+              options={mapyears}
+              style={{ width: 129 }}
+            />
+            <CCol
+              style={{
+                marginTop: 13,
+                marginLeft: 6,
+              }}
+            >
+              <button
+                className='wblue-button me-5'
+                onClick={handleclink}
+                style={{ fontSize: 12 }}
+              >
+                Apply
+              </button>
+              <button
+                className='wblue-button me-5'
+                onClick={handlereset}
+                style={{ fontSize: 12, marginLeft: -44 }}
+              >
+                Reset
+              </button>
+            </CCol>
+
             <div className='p-input-icon-left ms-2'>
               <CIcon icon={cilSearch}></CIcon>
               <InputText
@@ -418,9 +604,9 @@ const WaterMeterFt = () => {
           <button
             className='wblue-button me-5'
             onClick={() => setMeterFtpage(1)}
-            style={{ fontSize: 14 }}
+            style={{ fontSize: 14, height: 31 }}
           >
-            + จดมิเตอร์ค่าน้ำ
+            จดมิเตอร์ค่าน้ำ
           </button>
         </div>
         <div className='mt-5'>
@@ -498,8 +684,18 @@ const WaterMeterFt = () => {
         <div className='d-flex justify-content-between mt-4 ms-4'>
           <div className='d-flex'>
             <Dropdown
-              placeholder='รอบบิลที่ 360/38'
+              placeholder='Year'
               className='ms-2 rounded-pill'
+              value={selectedYears}
+              onChange={(e) => setSelectedYears(e.value)}
+              options={mapyears}
+            />
+            <Dropdown
+              placeholder='Month'
+              className='ms-2 rounded-pill'
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.value)}
+              options={month}
             />
             <div className='p-input-icon-left ms-2'>
               <CIcon icon={cilSearch}></CIcon>

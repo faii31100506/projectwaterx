@@ -13,6 +13,8 @@ import PropTypes from 'prop-types';
 import { Steps } from 'primereact/steps';
 import axios from 'axios';
 import { Calendar } from 'primereact/calendar';
+import NumberFormat from 'react-number-format';
+
 import {
   CAvatar,
   CButton,
@@ -44,6 +46,20 @@ import CIcon from '@coreui/icons-react';
 import { cilSearch, cilChevronLeft } from '@coreui/icons';
 import { Row } from 'primereact/row';
 import Swal from 'sweetalert2';
+import styled from 'styled-components';
+import ErrorIcon from '../../assets/images/warning.png';
+
+const ErrorContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const ErrorText = styled.p`
+  color: red;
+  font-style: italic;
+  margin-left: 5px;
+  font-size: 14px;
+`;
 
 const WaterRegister = () => {
   const [filters, setFilters] = useState({
@@ -67,14 +83,14 @@ const WaterRegister = () => {
 
   //ข้อมูลและที่อยู่ของผู้ใช้น้ำ
   const [datazipcode, setdatazipcode] = useState('');
-  const [prefix, setprefix] = useState([]);
-  const [fname, setfname] = useState([]);
-  const [lname, setlname] = useState([]);
-  const [pop_id, setpop_id] = useState([]);
-  const [caddress, setcaddress] = useState([]);
-  const [cmoo, setcmoo] = useState([]);
-  const [csoi, setcsoi] = useState([]);
-  const [croad, setcroad] = useState([]);
+  const [prefix, setprefix] = useState('');
+  const [fname, setfname] = useState('');
+  const [lname, setlname] = useState('');
+  const [pop_id, setpop_id] = useState('');
+  const [caddress, setcaddress] = useState('');
+  const [cmoo, setcmoo] = useState('');
+  const [csoi, setcsoi] = useState('');
+  const [croad, setcroad] = useState('');
   const [cprovince, setcprovice] = useState('');
   const [camphoe, setcamphoe] = useState('');
   const [ctambon, setctambon] = useState('');
@@ -83,15 +99,15 @@ const WaterRegister = () => {
   const NHARA_API = process.env.REACT_APP_CENSUS_API;
 
   // ข้อมูลมาตรและที่ตั้งมาตร
-  const [address, setaddress] = useState([]);
+  const [address, setaddress] = useState('');
   const [soi, setsoi] = useState('');
-  const [tambon_id, settambon_id] = useState('');
-  const [moo, setmoo] = useState([]);
-  const [province_id, setprovince_id] = useState('');
-  const [road, setroad] = useState([]);
-  const [amphoe_id, setamphoe_id] = useState([]);
-  const [zipcode, setzipcode] = useState([]);
-  const [meterasset_id, setmeterasset_id] = useState([]);
+  const [tambon_id, settambon_id] = useState('710403');
+  const [moo, setmoo] = useState('');
+  const [province_id, setprovince_id] = useState('71');
+  const [road, setroad] = useState('');
+  const [amphoe_id, setamphoe_id] = useState('7104');
+  const [zipcode, setzipcode] = useState('71250');
+  const [meterasset_id, setmeterasset_id] = useState('');
   const [showmeter, setshowmeter] = useState([]);
 
   const [showbrand, setshowbrand] = useState('');
@@ -101,6 +117,8 @@ const WaterRegister = () => {
   const [matmiter, setmatmeter] = useState('');
   const [date, setDate] = useState('');
 
+  const [tambon, setchecktambon] = useState('0');
+  const [checkpopid, setcheckpopid] = useState('0');
   const [maxcensusid, setmaxcensusid] = useState([]);
   const [maxbid, setmaxbid] = useState([]);
   const [prapaowner, setprapaownwer] = useState('');
@@ -133,6 +151,114 @@ const WaterRegister = () => {
     typeuse: null,
     usertype: null,
   });
+
+  const [textInput, setTextInput] = useState('');
+  const [error, setError] = useState('');
+  const [error2, setError2] = useState('');
+  const [error3, setError3] = useState('');
+  const [error4, setError4] = useState('');
+  const [error5, setError5] = useState('');
+  const [error6, setError6] = useState('');
+  const [error7, setError7] = useState('');
+  const [error8, setError8] = useState('');
+
+  // เช็คชื่อนามสกุล
+  const handleInputChange2 = (e) => {
+    const { name, value } = e.target;
+    const namee = name;
+    const inputValue = e.target.value;
+    // ตรวจสอบรูปแบบของข้อมูล
+    if (namee == 'fname') {
+      if (
+        inputValue === '' ||
+        (/^[A-Za-z\sก-๙]+$/u.test(inputValue) &&
+          !/[\u0E50-\u0E59]/.test(inputValue))
+      ) {
+        setfname(inputValue);
+        setError('');
+      } else {
+        setError('โปรดกรอกภาษาไทยหรือภาษาอังกฤษเท่านั้น');
+      }
+    }
+
+    if (namee == 'lname') {
+      if (
+        inputValue === '' ||
+        (/^[A-Za-z\sก-๙]+$/u.test(inputValue) &&
+          !/[\u0E50-\u0E59]/.test(inputValue))
+      ) {
+        setlname(inputValue);
+        setError2('');
+      } else {
+        setError2('โปรดกรอกภาษาไทยหรือภาษาอังกฤษเท่านั้น');
+      }
+    }
+
+    if (namee == 'caddress') {
+      if (/^[0-9/]*$/.test(inputValue)) {
+        setcaddress(inputValue);
+        setError3('');
+      } else {
+        setError3('กรอก 0-9 และ / เท่านั้น');
+      }
+    }
+
+    if (namee == 'cmoo') {
+      if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
+        setcmoo(inputValue);
+        setError4('');
+      } else {
+        setError4('กรอกตัวอักษรและตัวเลขเท่านั้น');
+      }
+    }
+
+    if (namee == 'csoi') {
+      if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
+        setcsoi(inputValue);
+        setError5('');
+      } else {
+        setError5('กรอกตัวอักษรและตัวเลขเท่านั้น');
+      }
+    }
+
+    if (namee == 'csoi') {
+      if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
+        setcsoi(inputValue);
+        setError5('');
+      } else {
+        setError5('กรอกตัวอักษรและตัวเลขเท่านั้น');
+      }
+    }
+
+    if (namee == 'address') {
+      if (/^[0-9/]*$/.test(inputValue)) {
+        setaddress(inputValue);
+        setError6('');
+      } else {
+        setError6('กรอก 0-9 และ / เท่านั้น');
+      }
+    }
+
+    if (namee == 'soi') {
+      if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
+        setsoi(inputValue);
+        setError7('');
+      } else {
+        setError7('กรอกตัวอักษรและตัวเลขเท่านั้น');
+      }
+    }
+
+    if (namee == 'moo') {
+      if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
+        setmoo(inputValue);
+        setError8('');
+      } else {
+        setError8('กรอกตัวอักษรและตัวเลขเท่านั้น');
+      }
+    }
+  };
+
+  console.log('lname', lname);
 
   const [formData, setFormData] = useState({
     prapaowner_id: null,
@@ -255,6 +381,138 @@ const WaterRegister = () => {
 
   //เพิ่มผู้ใช้น้ำ
   const handleinsertprapaowner = () => {
+    if (checkpopid < 13) {
+      return Swal.fire({
+        text: 'โปรดกรอกเลขที่บัตรประจำตัวประชาชนให้ครบ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (prefix == '') {
+      return Swal.fire({
+        text: 'โปรดเลือกคำนำหน้า',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (fname == '') {
+      return Swal.fire({
+        text: 'โปรดกรอกชื่อ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (lname == '') {
+      return Swal.fire({
+        text: 'โปรดกรอกนามสกุล',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (pop_id == '') {
+      return Swal.fire({
+        text: 'โปรดกรอกเลขที่บัตรประจำตัวประชาชน',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (caddress == '') {
+      return Swal.fire({
+        text: 'โปรดกรอกบ้านเลขที่',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (cprovince == '') {
+      return Swal.fire({
+        text: 'โปรดเลือกจังหวัด',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (camphoe == '') {
+      return Swal.fire({
+        text: 'โปรดเลือกอำเภอ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (ctambon == '') {
+      return Swal.fire({
+        text: 'โปรดเลือกตำบล',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (meterasset_id == '') {
+      return Swal.fire({
+        text: 'โปรดเลือกมาตรน้ำ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (address == '') {
+      return Swal.fire({
+        text: 'โปรดกรอกบ้านเลขที่ ที่ติดตั้งมาตรน้ำ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
     var id = maxcensusid + 1;
 
     var datacensus = {
@@ -264,9 +522,9 @@ const WaterRegister = () => {
       lname: lname,
       pop_id: pop_id,
       address: caddress,
-      moo: cmoo,
-      soi: csoi,
-      road: croad,
+      moo: cmoo !== '' ? cmoo : null,
+      soi: csoi !== '' ? csoi : null,
+      road: croad !== '' ? croad : null,
       province_id: cprovince,
       amphoe_id: camphoe,
       tambon_id: ctambon,
@@ -301,6 +559,7 @@ const WaterRegister = () => {
                 promotion_id: promotionfee !== '' ? promotionfee : null,
                 meterasset_id: meterasset_id,
                 paraowner_status_id: 1,
+                status_trasaction: 0,
               };
 
               // สร้าง prapaowner
@@ -320,9 +579,9 @@ const WaterRegister = () => {
                   var databuilding = {
                     bid: bid,
                     address: address,
-                    moo: moo,
-                    soi: soi,
-                    road: road,
+                    moo: moo !== '' ? moo : null,
+                    soi: soi !== '' ? soi : null,
+                    road: road !== '' ? road : null,
                     tambon_id: tambon_id,
                     amphoe_id: amphoe_id,
                     province_id: province_id,
@@ -361,7 +620,7 @@ const WaterRegister = () => {
                             icon: 'success',
                             title: 'succesfull',
                             preConfirm: () => {
-                              // return window.location.reload();
+                              return window.location.reload();
                             },
                           });
                         })
@@ -410,7 +669,6 @@ const WaterRegister = () => {
   };
 
   const handlemeterasset = (e) => {
-    console.log('e', e.target.value);
     var value = e.target.value;
     var Activity = dataxnull.filter((res) => res.meterasset_id == value);
     if (Activity.length !== 0) {
@@ -478,27 +736,70 @@ const WaterRegister = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    handlemeterasset(e);
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    const inputValue = e.target.value;
 
-    console.log('name', name);
-    console.log('value', value);
+    console.log('inputValue', inputValue);
+    handlemeterasset(e);
 
     var namee = name;
     var valuee = value;
 
+    if (namee == 'baddress') {
+      if (/^[0-9/]*$/.test(inputValue)) {
+        // setaddress(inputValue);
+        setFormData({
+          ...formData,
+          [name]: inputValue,
+        });
+        setError6('');
+      } else {
+        setError6('กรอก 0-9 และ / เท่านั้น');
+      }
+    }
+
+    if (namee == 'bsoi') {
+      if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
+        setFormData({
+          ...formData,
+          [name]: inputValue,
+        });
+        setError7('');
+      } else {
+        setError7('กรอกตัวอักษรและตัวเลขเท่านั้น');
+      }
+    }
+
     if (namee == 'cprovince_id') {
+      if (valuee == '') {
+        setcamphoe('');
+      }
+      setcamphoe('');
       setcprovice(valuee);
     }
 
     if (namee == 'camphoe_id') {
-      alert('ตกนี่');
+      if (valuee == '') {
+        setchecktambon('');
+      }
+      setchecktambon('');
       setcamphoe(valuee);
     }
+
+    if (namee == 'ctambon_id') {
+      if (valuee == '') {
+        setchecktambon(' ');
+      } else {
+        setchecktambon('0');
+      }
+    }
+
+    // setFormData({
+    //   ...formData,
+    //   [name]: inputValue,
+    // });
   };
+
+  console.log('formData', formData.meterasset_id);
 
   const MapIcon = () => {
     return (
@@ -619,16 +920,180 @@ const WaterRegister = () => {
     });
   };
 
+  //บันทึกข้อมูลที่แก้ไข
   const handleEditData = () => {
     console.log(formData);
-    // var data = {
-    //   address: address,
-    //   soi: soi,
-    //   tambon_id: tambon_id,
-    //   moo: moo,
-    //   province_id: province_id,
-    //   zipcode: zipcode,
-    // };
+
+    if (formData.baddress == '' || formData.baddress == null) {
+      return Swal.fire({
+        text: 'โปรดกรอกบ้านเลขที่ ที่ติดตั้งมาตรน้ำ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (formData.baddress == '' || formData.baddress == null) {
+      return Swal.fire({
+        text: 'โปรดกรอกบ้านเลขที่ ที่ติดตั้งมาตรน้ำ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (
+      formData.paraowner_status_id == '' ||
+      formData.paraowner_status_id == null
+    ) {
+      return Swal.fire({
+        text: 'โปรดเลือกสถานะผู้ใช้น้ำ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (formData.prefix == '' || formData.prefix == null) {
+      return Swal.fire({
+        text: 'โปรดเลือกคำนำหน้า',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (formData.fname == '' || formData.fname == null) {
+      return Swal.fire({
+        text: 'โปรดกรอกชื่อ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (formData.lname == '' || formData.lname == null) {
+      return Swal.fire({
+        text: 'โปรดกรอกนามสกุล',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (formData.pop_id == '' || formData.pop_id == null) {
+      return Swal.fire({
+        text: 'โปรดกรอกเลขที่บัตรประจำตัวประชาชน',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (formData.caddress == '' || formData.caddress == null) {
+      return Swal.fire({
+        text: 'โปรดกรอกบ้านเลขที่',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (formData.cprovince_id == '' || formData.cprovince_id == null) {
+      return Swal.fire({
+        text: 'โปรดเลือกจังหวัด',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (formData.camphoe_id == '' || formData.camphoe_id == null) {
+      return Swal.fire({
+        text: 'โปรดเลือกอำเภอ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (formData.ctambon_id == '' || formData.ctambon_id == null) {
+      return Swal.fire({
+        text: 'โปรดเลือกตำบล',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (camphoe == '' || camphoe == null) {
+      return Swal.fire({
+        text: 'โปรดเลือกอำเภอ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (datatambon != 0 && (tambon == '' || tambon == null)) {
+      return Swal.fire({
+        text: 'โปรดเลือกตำบล',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    // if (meterasset_id == '') {
+    //   return Swal.fire({
+    //     text: 'โปรดเลือกมาตรน้ำ',
+    //     icon: 'warning',
+    //     buttonsStyling: false,
+    //     confirmButtonText: 'ตกลง',
+    //     customClass: {
+    //       confirmButton: 'btn fw-bold btn-primary',
+    //     },
+    //   });
+    // }
 
     Swal.fire({
       text: 'คุณต้องการบันทึกข้อมูลหรือไม่ ?',
@@ -677,10 +1142,6 @@ const WaterRegister = () => {
       }
     });
   };
-
-  // const handleEditData = () => {
-  //   console.log('status', formData.paraowner_status_id);
-  // };
 
   const handleSuspendModalExit = () => {
     setSuspendvisible(false);
@@ -747,6 +1208,41 @@ const WaterRegister = () => {
 
   const debugBro = () => {
     console.log(addNewData);
+  };
+
+  const handlecheck = (e) => {
+    var value = e.target.value.length;
+    setcheckpopid(value);
+    setpop_id(e.target.value);
+  };
+
+  console.log('checkpopid', checkpopid);
+
+  const checkminus = (e) => {
+    const characterCode = e.key;
+
+    if (characterCode === 'Backspace') return;
+    const characterNumber = Number(characterCode);
+    if (characterNumber >= 0 && characterNumber <= 9) {
+      if (e.currentTarget.value && e.currentTarget.value.length) {
+        return;
+      } else if (characterNumber === 0) {
+        // e.preventDefault();
+        return;
+      }
+    } else if (characterCode === '.') {
+      e.preventDefault();
+    } else if ((e.ctrlKey || e.metaKey) && characterCode === 'v') {
+      return;
+    } else if ((e.ctrlKey || e.metaKey) && characterCode === 'c') {
+      return;
+    } else if ((e.ctrlKey || e.metaKey) && characterCode === 'a') {
+      return;
+    } else if ((e.ctrlKey || e.metaKey) && characterCode === 'x') {
+      return;
+    } else {
+      e.preventDefault();
+    }
   };
 
   let content;
@@ -902,7 +1398,7 @@ const WaterRegister = () => {
     );
   }
 
-  // หน้าเพิ่มผู้ใช้น้ำ
+  // หน้าเพิ่ม
   if (registerform === 0) {
     formcontent = (
       <>
@@ -942,6 +1438,7 @@ const WaterRegister = () => {
           <CFormSelect
             placeholder='ช่องข้อมูลเพื่อส่งเสริมหรืออุดหนุน'
             className='w-20'
+            value={promotionfee}
             onChange={(e) => setpromotionfee(e.target.value)}
           >
             <option value={''}>เลือกข้อมูลการส่งเสริม</option>
@@ -977,26 +1474,49 @@ const WaterRegister = () => {
                   label='บ้านเลขที่'
                   name='address'
                   value={address}
-                  onChange={(e) => setaddress(e.target.value)}
+                  // onChange={(e) => setaddress(e.target.value)}
+                  onChange={handleInputChange2}
                 />
+                {error6 && (
+                  <ErrorContainer>
+                    <img
+                      src={ErrorIcon}
+                      alt='Error Icon'
+                      width='16'
+                      height='16'
+                      style={{ marginTop: -21 }}
+                    />
+                    <ErrorText>{error6}</ErrorText>
+                  </ErrorContainer>
+                )}{' '}
                 <CFormInput
                   className='mt-2 mb-2'
                   label='ซอย'
                   name='soi'
                   value={soi}
-                  onChange={(e) => setsoi(e.target.value)}
+                  // onChange={(e) => setsoi(e.target.value)}
+                  onChange={handleInputChange2}
                 />
-
-                <CFormSelect
+                {error7 && (
+                  <ErrorContainer>
+                    <img
+                      src={ErrorIcon}
+                      alt='Error Icon'
+                      width='16'
+                      height='16'
+                      style={{ marginTop: -21 }}
+                    />
+                    <ErrorText>{error7}</ErrorText>
+                  </ErrorContainer>
+                )}{' '}
+                <CFormInput
                   className='mt-2 mb-2'
                   label='ตำบล / แขวง'
-                  name='tambon_id'
-                  value={tambon_id}
-                  onChange={handletambonmeter}
-                >
-                  <option value={''}>เลือกตำบล</option>
-                  <option value='710403'>หนองเป็ด</option>
-                </CFormSelect>
+                  name='soi'
+                  value={'หนองเป็ด'}
+                  // onChange={(e) => setsoi(e.target.value)}
+                  disabled
+                />
               </CForm>
               <CForm className='mx-5 w-33'>
                 <CFormInput
@@ -1004,30 +1524,35 @@ const WaterRegister = () => {
                   label='หมู่'
                   name='moo'
                   value={moo}
-                  onChange={(e) => setmoo(e.target.value)}
+                  // onChange={(e) => setmoo(e.target.value)}
+                  onChange={handleInputChange2}
                 />
-
-                {/* 
-                <CFormSelect className='mt-2 mb-2' label='ชุมชน'>
-                  <option></option>
-                  <option value='1'>To Be Number One</option>
-                </CFormSelect> */}
-
-                <CFormSelect
-                  className='mt-2 mb-2'
+                {error8 && (
+                  <ErrorContainer>
+                    <img
+                      src={ErrorIcon}
+                      alt='Error Icon'
+                      width='16'
+                      height='16'
+                      style={{ marginTop: -21 }}
+                    />
+                    <ErrorText>{error8}</ErrorText>
+                  </ErrorContainer>
+                )}{' '}
+                <CFormInput
+                  className='mb-2'
                   label='จังหวัด'
                   name='province_id'
-                  value={province_id}
-                  onChange={(e) => setprovince_id(e.target.value)}
-                >
-                  <option value={''}>เลือกจังหวัด</option>
-                  <option value='71'>กาญจนบุรี</option>
-                </CFormSelect>
+                  value={'กาญจนบุรี'}
+                  // onChange={(e) => setmoo(e.target.value)}
+                  disabled
+                />
                 <CFormInput
                   className='mt-2 mb-2'
                   label='รหัสไปรษณีย์'
                   name='zipcode'
-                  value={zipcode}
+                  value={'71250'}
+                  disabled
                   // onChange={handleNewInputChange}
                 />
               </CForm>
@@ -1040,16 +1565,14 @@ const WaterRegister = () => {
                   onChange={(e) => setroad(e.target.value)}
                 />
 
-                <CFormSelect
-                  className='mt-2 mb-2'
+                <CFormInput
+                  className='mb-2'
                   label='อำเภอ / เขต'
                   name='amphoe_id'
-                  value={amphoe_id}
-                  onChange={(e) => setamphoe_id(e.target.value)}
-                >
-                  <option value={''}>เลือกอำเภอ</option>
-                  <option value='7104'>ศรีสวัสดิ์</option>{' '}
-                </CFormSelect>
+                  value={'ศรีสวัสดิ์'}
+                  // onChange={(e) => setroad(e.target.value)}
+                  disabled
+                />
               </CForm>
             </div>
           </div>
@@ -1066,6 +1589,7 @@ const WaterRegister = () => {
                   label='เลขที่ประจำมาตรวัดน้ำ'
                   name='meternumber'
                   // value={addNewData.metertype_id}
+                  value={meterasset_id}
                   onChange={handlemeterasset}
                 >
                   <option value={''}>โปรดเลือกมาตรน้ำ</option>
@@ -1126,7 +1650,7 @@ const WaterRegister = () => {
             </div>
           </div>
 
-          <div className='d-flex mt-2 ml-12'>
+          {/* <div className='d-flex mt-2 ml-12'>
             <div className='d-flex w-2'></div>
 
             <div className='d-flex w-75 mb-5'>
@@ -1141,7 +1665,7 @@ const WaterRegister = () => {
               </CForm>
               <div className='mx-5 w-33'></div>
             </div>
-          </div>
+          </div> */}
 
           {/* <button className="wblue-button-unrounded mt-5 mb-5 w-10 text-center" onClick={() => { nextPage(); debugBro(); }}>ถัดไป</button> */}
           <button
@@ -1382,7 +1906,18 @@ const WaterRegister = () => {
                           value={formData.baddress}
                           onChange={handleInputChange}
                         />
-
+                        {error6 && (
+                          <ErrorContainer>
+                            <img
+                              src={ErrorIcon}
+                              alt='Error Icon'
+                              width='16'
+                              height='16'
+                              style={{ marginTop: -21 }}
+                            />
+                            <ErrorText>{error6}</ErrorText>
+                          </ErrorContainer>
+                        )}{' '}
                         <CFormInput
                           className='mt-2 mb-2'
                           label='ซอย'
@@ -1390,7 +1925,18 @@ const WaterRegister = () => {
                           value={formData.bsoi}
                           onChange={handleInputChange}
                         />
-
+                        {error7 && (
+                          <ErrorContainer>
+                            <img
+                              src={ErrorIcon}
+                              alt='Error Icon'
+                              width='16'
+                              height='16'
+                              style={{ marginTop: -21 }}
+                            />
+                            <ErrorText>{error7}</ErrorText>
+                          </ErrorContainer>
+                        )}{' '}
                         <CFormSelect
                           className='mt-2 mb-2'
                           label='ตำบล / แขวง'
@@ -1461,7 +2007,7 @@ const WaterRegister = () => {
                   value={formData.paraowner_status_id}
                   onChange={handleInputChange}
                 >
-                  <option>เลือกสถานะผู้ใช้น้ำ</option>
+                  <option value={''}>เลือกสถานะผู้ใช้น้ำ</option>
                   <option value='1'>ปกติ</option>
                   <option value='2'>ระงับการใช้น้ำ</option>
                 </CFormSelect>
@@ -1583,6 +2129,7 @@ const WaterRegister = () => {
                 onClick={() => {
                   // setRegisterpage(0);
                   handleEditData();
+                  // onSubmit;
                 }}
               >
                 บันทึกข้อมูล
@@ -1605,13 +2152,26 @@ const WaterRegister = () => {
       <h5 className='text-center mt-5'>แก้ไขข้อมูลส่วนตัวของผู้ใช้น้ำ</h5>
       <div className='d-flex mt-5'>
         <CForm className='mx-5 w-33'>
-          <CFormInput
+          {/* <CFormInput
             className='mt-2 mb-2'
             label='คำนำหน้าชื่อ'
             name='prefix'
             value={formData.prefix}
             onChange={handleInputChange}
-          />
+          /> */}
+          <CFormSelect
+            aria-label='Default select example'
+            className='select'
+            label='คำนำหน้าชื่อ'
+            name='prefix'
+            value={formData.prefix}
+            onChange={handleInputChange}
+          >
+            <option value={''}>เลือกคำนำหน้า</option>
+            <option value={'นาย'}>นาย</option>
+            <option value={'นาง'}>นาง</option>
+            <option value={'นางสาว'}>นางสาว</option>
+          </CFormSelect>
         </CForm>
         <CForm className='mx-5 w-33'>
           <CFormInput
@@ -1765,6 +2325,7 @@ const WaterRegister = () => {
             name='zipcode'
             value={formData.zipcode}
             onChange={handleInputChange}
+            disabled
           />
         </CForm>
         <CForm className='mx-5 w-33'></CForm>
@@ -1784,15 +2345,28 @@ const WaterRegister = () => {
     <>
       <h5 className='text-center mt-5'>เพิ่มข้อมูลส่วนตัวของผู้ใช้น้ำ</h5>
       <div className='d-flex mt-5'>
-        <CForm className='mx-5 w-10'>
-          <CFormInput
+        <CForm className='mx-5 w-15'>
+          {/* <CFormInput
             className='mt-2 mb-2'
             label='คำนำหน้าชื่อ'
             name='prefix'
             value={prefix}
             // onChange={handleNewInputChange}
             onChange={(e) => setprefix(e.target.value)}
-          />
+          /> */}
+          <CFormSelect
+            label='คำนำหน้าชื่อ'
+            aria-label='Default select example'
+            className='select'
+            onChange={(e) => setprefix(e.target.value)}
+            value={prefix}
+            name='prefix'
+          >
+            <option value={''}>เลือกคำนำหน้า</option>
+            <option value={'นาย'}>นาย</option>
+            <option value={'นาง'}>นาง</option>
+            <option value={'นางสาว'}>นางสาว</option>
+          </CFormSelect>
         </CForm>
         <CForm className='mx-5 w-33'>
           <CFormInput
@@ -1801,8 +2375,21 @@ const WaterRegister = () => {
             name='fname'
             value={fname}
             // onChange={handleNewInputChange}
-            onChange={(e) => setfname(e.target.value)}
+            // onChange={(e) => setfname(e.target.value)}
+            onChange={handleInputChange2}
           />
+          {error && (
+            <ErrorContainer>
+              <img
+                src={ErrorIcon}
+                alt='Error Icon'
+                width='16'
+                height='16'
+                style={{ marginTop: -21 }}
+              />
+              <ErrorText>{error}</ErrorText>
+            </ErrorContainer>
+          )}{' '}
         </CForm>
         <CForm className='mx-5 w-33'>
           <CFormInput
@@ -1811,18 +2398,34 @@ const WaterRegister = () => {
             name='lname'
             value={lname}
             // onChange={handleNewInputChange}
-            onChange={(e) => setlname(e.target.value)}
+            // onChange={(e) => setlname(e.target.value)}
+            onChange={handleInputChange2}
           />
+          {error2 && (
+            <ErrorContainer>
+              <img
+                src={ErrorIcon}
+                alt='Error Icon'
+                width='16'
+                height='16'
+                style={{ marginTop: -21 }}
+              />
+              <ErrorText>{error2}</ErrorText>
+            </ErrorContainer>
+          )}{' '}
         </CForm>
       </div>
       <div className='d-flex mt-3'>
         <CForm className='mx-5 w-33'>
-          <CFormInput
-            className='mt-2 mb-2'
-            label='เลขที่บัตรประจำตัวประชาชน'
-            name='pop_id'
+          <label>เลขที่บัตรประจำตัวประชาชน</label>
+          <NumberFormat
+            style={{ marginTop: 8 }}
             value={pop_id}
-            onChange={(e) => setpop_id(e.target.value)}
+            onChange={(e) => handlecheck(e)}
+            className='form-control'
+            onKeyDown={checkminus}
+            tabIndex='0'
+            maxLength={13}
           />
         </CForm>
       </div>
@@ -1833,8 +2436,20 @@ const WaterRegister = () => {
             label='บ้านเลขที่'
             name='caddress'
             value={caddress}
-            onChange={(e) => setcaddress(e.target.value)}
+            onChange={handleInputChange2}
           />
+          {error3 && (
+            <ErrorContainer>
+              <img
+                src={ErrorIcon}
+                alt='Error Icon'
+                width='16'
+                height='16'
+                style={{ marginTop: -21 }}
+              />
+              <ErrorText>{error3}</ErrorText>
+            </ErrorContainer>
+          )}{' '}
         </CForm>
         <CForm className='mx-5 w-33'>
           <CFormInput
@@ -1842,8 +2457,20 @@ const WaterRegister = () => {
             label='หมู่'
             name='cmoo'
             value={cmoo}
-            onChange={(e) => setcmoo(e.target.value)}
+            onChange={handleInputChange2}
           />
+          {error4 && (
+            <ErrorContainer>
+              <img
+                src={ErrorIcon}
+                alt='Error Icon'
+                width='16'
+                height='16'
+                style={{ marginTop: -21 }}
+              />
+              <ErrorText>{error4}</ErrorText>
+            </ErrorContainer>
+          )}{' '}
         </CForm>
         <CForm className='mx-5 w-33'>
           <CFormInput
@@ -1851,8 +2478,20 @@ const WaterRegister = () => {
             label='ซอย'
             name='csoi'
             value={csoi}
-            onChange={(e) => setcsoi(e.target.value)}
+            onChange={handleInputChange2}
           />
+          {error5 && (
+            <ErrorContainer>
+              <img
+                src={ErrorIcon}
+                alt='Error Icon'
+                width='16'
+                height='16'
+                style={{ marginTop: -21 }}
+              />
+              <ErrorText>{error5}</ErrorText>
+            </ErrorContainer>
+          )}{' '}
         </CForm>
         <CForm className='mx-5 w-33'>
           <CFormInput
@@ -1947,6 +2586,7 @@ const WaterRegister = () => {
             label='รหัสไปรษณีย์'
             name='zipcode'
             value={datazipcode}
+            disabled
             // onChange={handleNewInputChange}
           />
         </CForm>
