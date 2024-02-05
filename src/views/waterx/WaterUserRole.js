@@ -45,6 +45,20 @@ import { getStyle, hexToRgba } from '@coreui/utils';
 import CIcon from '@coreui/icons-react';
 import { cilSearch, cilChevronLeft } from '@coreui/icons';
 import { Row } from 'primereact/row';
+import styled from 'styled-components';
+import ErrorIcon from '../../assets/images/warning.png';
+const ErrorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+`;
+
+const ErrorText = styled.p`
+  color: red;
+  font-style: italic;
+  margin-left: 5px;
+  font-size: 14px;
+`;
 
 const WaterUserRole = () => {
   const [filters, setFilters] = useState({
@@ -62,6 +76,17 @@ const WaterUserRole = () => {
   const [editData, setEditData] = useState([]);
   const [search, setSearch] = useState([]);
   const OFFICER_API = process.env.REACT_APP_OFFICER_API;
+
+  // เพิ่มข้อมูล
+  const [name, setname] = useState('');
+  const [lastname, setlastname] = useState('');
+  const [pos_name, setposname] = useState('');
+  const [org_name, setorgname] = useState('');
+  const [username, setusername] = useState('');
+  const [pass, setpass] = useState('');
+
+  const [error, setError] = useState('');
+  const [error2, setError2] = useState('');
 
   //ดึงข้อมูล
   useEffect(() => {
@@ -140,7 +165,7 @@ const WaterUserRole = () => {
     }).then(async function (result) {
       if (result.value) {
         let resultsL = await axios
-          .post('http://localhost:4034/api/nahra/modelofficer', data)
+          .post(process.env.REACT_APP_API + '/modelofficer', data)
           .then(
             (res) => {
               if (res.status === 200) {
@@ -198,7 +223,7 @@ const WaterUserRole = () => {
       if (result.value) {
         let resultsL = await axios
           .put(
-            'http://localhost:4034/api/nahra/officer/' + addNewData.officer_id,
+            process.env.REACT_APP_API + '/officer/' + addNewData.officer_id,
             data
           )
           .then(
@@ -256,7 +281,7 @@ const WaterUserRole = () => {
       if (result.value) {
         let resultsL = await axios
           .delete(
-            'http://localhost:4034/api/nahra/officerdel/' + data.officer_id,
+            process.env.REACT_APP_API + '/officerdel/' + data.officer_id,
             {}
           )
           .then(
@@ -362,13 +387,37 @@ const WaterUserRole = () => {
     console.log(addNewData);
   };
 
-  // เพิ่มข้อมูล
-  const [name, setname] = useState('');
-  const [lastname, setlastname] = useState('');
-  const [pos_name, setposname] = useState('');
-  const [org_name, setorgname] = useState('');
-  const [username, setusername] = useState('');
-  const [pass, setpass] = useState('');
+  const handleInputChange2 = (e) => {
+    const { name, value } = e.target;
+    const namee = name;
+    const inputValue = e.target.value;
+    // ตรวจสอบรูปแบบของข้อมูล
+    if (namee == 'name') {
+      if (
+        inputValue === '' ||
+        (/^[A-Za-z\sก-๙]+$/u.test(inputValue) &&
+          !/[\u0E50-\u0E59]/.test(inputValue))
+      ) {
+        setname(inputValue);
+        setError('');
+      } else {
+        setError('โปรดกรอกภาษาไทยหรือภาษาอังกฤษเท่านั้น');
+      }
+    }
+
+    if (namee == 'lastname') {
+      if (
+        inputValue === '' ||
+        (/^[A-Za-z\sก-๙]+$/u.test(inputValue) &&
+          !/[\u0E50-\u0E59]/.test(inputValue))
+      ) {
+        setlastname(inputValue);
+        setError2('');
+      } else {
+        setError2('โปรดกรอกภาษาไทยหรือภาษาอังกฤษเท่านั้น');
+      }
+    }
+  };
 
   let content;
 
@@ -455,8 +504,6 @@ const WaterUserRole = () => {
     console.log(editData);
     console.log(OFFICER_API);
   };
-
-  console.log(addNewData);
 
   // แก้ไข
   if (registerpage === 2) {
@@ -567,15 +614,43 @@ const WaterUserRole = () => {
                 <CFormInput
                   label='ชื่อ'
                   name='name'
-                  onChange={(e) => setname(e.target.value)}
+                  // onChange={(e) => setname(e.target.value)}
+                  value={name}
+                  onChange={handleInputChange2}
                 />
+                {error && (
+                  <ErrorContainer>
+                    <img
+                      src={ErrorIcon}
+                      alt='Error Icon'
+                      width='16'
+                      height='16'
+                      style={{ marginTop: -21 }}
+                    />
+                    <ErrorText>{error}</ErrorText>
+                  </ErrorContainer>
+                )}{' '}
               </CForm>
               <CForm className='w-40'>
                 <CFormInput
                   label='นามสกุล'
                   name='lastname'
-                  onChange={(e) => setlastname(e.target.value)}
+                  // onChange={(e) => setlastname(e.target.value)}
+                  value={lastname}
+                  onChange={handleInputChange2}
                 />
+                {error2 && (
+                  <ErrorContainer>
+                    <img
+                      src={ErrorIcon}
+                      alt='Error Icon'
+                      width='16'
+                      height='16'
+                      style={{ marginTop: -21 }}
+                    />
+                    <ErrorText>{error2}</ErrorText>
+                  </ErrorContainer>
+                )}{' '}
               </CForm>
               <CForm className='w-40'>
                 <CFormSelect

@@ -48,6 +48,7 @@ import { Row } from 'primereact/row';
 import Swal from 'sweetalert2';
 import styled from 'styled-components';
 import ErrorIcon from '../../assets/images/warning.png';
+import OwnerIcon from '../../assets/images/owner.png';
 
 const ErrorContainer = styled.div`
   display: flex;
@@ -168,7 +169,7 @@ const WaterRegister = () => {
     const namee = name;
     const inputValue = e.target.value;
     // ตรวจสอบรูปแบบของข้อมูล
-    if (namee == 'fname') {
+    if (namee === 'fname') {
       if (
         inputValue === '' ||
         (/^[A-Za-z\sก-๙]+$/u.test(inputValue) &&
@@ -181,7 +182,7 @@ const WaterRegister = () => {
       }
     }
 
-    if (namee == 'lname') {
+    if (namee === 'lname') {
       if (
         inputValue === '' ||
         (/^[A-Za-z\sก-๙]+$/u.test(inputValue) &&
@@ -194,7 +195,7 @@ const WaterRegister = () => {
       }
     }
 
-    if (namee == 'caddress') {
+    if (namee === 'caddress') {
       if (/^[0-9/]*$/.test(inputValue)) {
         setcaddress(inputValue);
         setError3('');
@@ -203,7 +204,7 @@ const WaterRegister = () => {
       }
     }
 
-    if (namee == 'cmoo') {
+    if (namee === 'cmoo') {
       if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
         setcmoo(inputValue);
         setError4('');
@@ -212,7 +213,7 @@ const WaterRegister = () => {
       }
     }
 
-    if (namee == 'csoi') {
+    if (namee === 'csoi') {
       if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
         setcsoi(inputValue);
         setError5('');
@@ -221,8 +222,8 @@ const WaterRegister = () => {
       }
     }
 
-    if (namee == 'csoi') {
-      if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
+    if (namee === 'csoi') {
+      if (inputValue === '' || /^[A-Za-z0-9/ก-๙\s]*$/u.test(inputValue)) {
         setcsoi(inputValue);
         setError5('');
       } else {
@@ -230,7 +231,7 @@ const WaterRegister = () => {
       }
     }
 
-    if (namee == 'address') {
+    if (namee === 'address') {
       if (/^[0-9/]*$/.test(inputValue)) {
         setaddress(inputValue);
         setError6('');
@@ -239,7 +240,7 @@ const WaterRegister = () => {
       }
     }
 
-    if (namee == 'soi') {
+    if (namee === 'soi') {
       if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
         setsoi(inputValue);
         setError7('');
@@ -248,7 +249,7 @@ const WaterRegister = () => {
       }
     }
 
-    if (namee == 'moo') {
+    if (namee === 'moo') {
       if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
         setmoo(inputValue);
         setError8('');
@@ -257,8 +258,6 @@ const WaterRegister = () => {
       }
     }
   };
-
-  console.log('lname', lname);
 
   const [formData, setFormData] = useState({
     prapaowner_id: null,
@@ -327,7 +326,7 @@ const WaterRegister = () => {
     province();
     census();
     promotion();
-    meternowner();
+    meternowner([]);
     maxcensus_id();
     maxb_id();
   }, []);
@@ -372,10 +371,33 @@ const WaterRegister = () => {
       .catch((err) => console.log(err));
   };
 
-  const meternowner = () => {
+  const meternowner = (edit_data) => {
     axios
-      .get('http://localhost:4034/api/nahra/nullmeter')
-      .then((res) => setDataxnull(res.data.data))
+      .get(process.env.REACT_APP_API + '/nullmeter')
+      .then((res) => {
+        var data = [];
+        if (edit_data.length != 0) {
+          var editDataid = {
+            meterasset_id: edit_data[0].meterasset_id,
+            meternumber: edit_data[0].meternumber,
+            metermaster_id: edit_data[0].metermaster_id,
+            meter_status: edit_data[0].meter_status,
+            metertypename: edit_data[0].metertypename,
+            metermaterial: edit_data[0].metermaster_id,
+            international_size: edit_data[0].international_size,
+            prapaowner_id: edit_data[0].prapaowner_id,
+            longitude: null,
+            latitude: null,
+            brand: edit_data[0].brand,
+            model: edit_data[0].model,
+            geom_point: null,
+          };
+          data.push(editDataid);
+        }
+        data.push(...res.data.data);
+        // console.log('datnull', res.data.data, data);
+        setDataxnull(data);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -393,7 +415,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (prefix == '') {
+    if (prefix === '') {
       return Swal.fire({
         text: 'โปรดเลือกคำนำหน้า',
         icon: 'warning',
@@ -405,7 +427,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (fname == '') {
+    if (fname === '') {
       return Swal.fire({
         text: 'โปรดกรอกชื่อ',
         icon: 'warning',
@@ -417,7 +439,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (lname == '') {
+    if (lname === '') {
       return Swal.fire({
         text: 'โปรดกรอกนามสกุล',
         icon: 'warning',
@@ -429,7 +451,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (pop_id == '') {
+    if (pop_id === '') {
       return Swal.fire({
         text: 'โปรดกรอกเลขที่บัตรประจำตัวประชาชน',
         icon: 'warning',
@@ -441,7 +463,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (caddress == '') {
+    if (caddress === '') {
       return Swal.fire({
         text: 'โปรดกรอกบ้านเลขที่',
         icon: 'warning',
@@ -453,7 +475,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (cprovince == '') {
+    if (cprovince === '') {
       return Swal.fire({
         text: 'โปรดเลือกจังหวัด',
         icon: 'warning',
@@ -465,7 +487,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (camphoe == '') {
+    if (camphoe === '') {
       return Swal.fire({
         text: 'โปรดเลือกอำเภอ',
         icon: 'warning',
@@ -477,7 +499,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (ctambon == '') {
+    if (ctambon === '') {
       return Swal.fire({
         text: 'โปรดเลือกตำบล',
         icon: 'warning',
@@ -489,7 +511,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (meterasset_id == '') {
+    if (meterasset_id === '') {
       return Swal.fire({
         text: 'โปรดเลือกมาตรน้ำ',
         icon: 'warning',
@@ -501,7 +523,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (address == '') {
+    if (address === '') {
       return Swal.fire({
         text: 'โปรดกรอกบ้านเลขที่ ที่ติดตั้งมาตรน้ำ',
         icon: 'warning',
@@ -546,7 +568,7 @@ const WaterRegister = () => {
       if (result.value) {
         // สร้าง census
         let resultsL = await axios
-          .post('http://localhost:4034/api/nahra/modelcensus', datacensus)
+          .post(process.env.REACT_APP_API + '/modelcensus', datacensus)
           .then(
             async (res) => {
               if (res.status === 200) {
@@ -564,7 +586,7 @@ const WaterRegister = () => {
 
               // สร้าง prapaowner
               await axios
-                .post('http://localhost:4034/api/nahra/modelowner', data)
+                .post(process.env.REACT_APP_API + '/modelowner', data)
                 .then(async (res) => {
                   if (res.status === 200) {
                     console.log('prapaowner', res);
@@ -590,7 +612,7 @@ const WaterRegister = () => {
                   //สร้าง bu ที่ตั้งของมาตรน้ำ
                   await axios
                     .post(
-                      'http://localhost:4034/api/nahra/modelbuilding',
+                      process.env.REACT_APP_API + '/modelbuilding',
                       databuilding
                     )
                     .then(async (res) => {
@@ -609,7 +631,7 @@ const WaterRegister = () => {
                       // updateb_id ใน prapaowner
                       await axios
                         .put(
-                          'http://localhost:4034/api/nahra/bidinprapaowner',
+                          process.env.REACT_APP_API + '/bidinprapaowner',
                           dataupdate
                         )
                         .then((res) => {
@@ -657,7 +679,6 @@ const WaterRegister = () => {
     var valuetambon = e.target.value;
     var Activity = datatambon.filter((res) => res.tambon_id == valuetambon);
     if (Activity.length !== 0) {
-      console.log(Activity[0].zipcode);
       setdatazipcode(Activity[0].zipcode);
     }
   };
@@ -670,7 +691,7 @@ const WaterRegister = () => {
 
   const handlemeterasset = (e) => {
     var value = e.target.value;
-    var Activity = dataxnull.filter((res) => res.meterasset_id == value);
+    var Activity = dataxnull.filter((res) => res.meterasset_id === value);
     if (Activity.length !== 0) {
       setshowbrand(Activity[0].brand);
       setshowmodel(Activity[0].model);
@@ -738,15 +759,13 @@ const WaterRegister = () => {
     const { name, value } = e.target;
     const inputValue = e.target.value;
 
-    console.log('inputValue', inputValue);
     handlemeterasset(e);
 
     var namee = name;
     var valuee = value;
 
-    if (namee == 'baddress') {
+    if (namee === 'baddress') {
       if (/^[0-9/]*$/.test(inputValue)) {
-        // setaddress(inputValue);
         setFormData({
           ...formData,
           [name]: inputValue,
@@ -757,7 +776,7 @@ const WaterRegister = () => {
       }
     }
 
-    if (namee == 'bsoi') {
+    if (namee === 'bsoi') {
       if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
         setFormData({
           ...formData,
@@ -769,37 +788,160 @@ const WaterRegister = () => {
       }
     }
 
-    if (namee == 'cprovince_id') {
-      if (valuee == '') {
+    if (namee === 'cprovince_id') {
+      if (valuee === '') {
         setcamphoe('');
       }
       setcamphoe('');
       setcprovice(valuee);
+
+      setFormData({
+        ...formData,
+        [name]: inputValue,
+      });
     }
 
-    if (namee == 'camphoe_id') {
-      if (valuee == '') {
+    if (namee === 'camphoe_id') {
+      if (valuee === '') {
         setchecktambon('');
       }
       setchecktambon('');
       setcamphoe(valuee);
+
+      setFormData({
+        ...formData,
+        [name]: inputValue,
+      });
     }
 
-    if (namee == 'ctambon_id') {
-      if (valuee == '') {
+    if (namee === 'ctambon_id') {
+      if (valuee === '') {
         setchecktambon(' ');
       } else {
         setchecktambon('0');
       }
+
+      setFormData({
+        ...formData,
+        [name]: inputValue,
+      });
     }
 
-    // setFormData({
-    //   ...formData,
-    //   [name]: inputValue,
-    // });
-  };
+    if (namee === 'meterasset_id') {
+      setFormData({
+        ...formData,
+        [name]: inputValue,
+      });
+    }
 
-  console.log('formData', formData.meterasset_id);
+    if (namee === 'bmoo') {
+      if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
+        setFormData({
+          ...formData,
+          [name]: inputValue,
+        });
+        setError4('');
+      } else {
+        setError4('กรอกตัวอักษรและตัวเลขเท่านั้น');
+      }
+    }
+
+    if (namee === 'broad') {
+      setFormData({
+        ...formData,
+        [name]: inputValue,
+      });
+    }
+
+    if (namee === 'paraowner_status_id') {
+      setFormData({
+        ...formData,
+        [name]: inputValue,
+      });
+    }
+
+    if (namee === 'prefix') {
+      setFormData({
+        ...formData,
+        [name]: inputValue,
+      });
+    }
+
+    if (namee === 'fname') {
+      if (
+        inputValue === '' ||
+        (/^[A-Za-z\sก-๙]+$/u.test(inputValue) &&
+          !/[\u0E50-\u0E59]/.test(inputValue))
+      ) {
+        setFormData({
+          ...formData,
+          [name]: inputValue,
+        });
+        setError('');
+      } else {
+        setError('โปรดกรอกภาษาไทยหรือภาษาอังกฤษเท่านั้น');
+      }
+    }
+
+    if (namee === 'lname') {
+      if (
+        inputValue === '' ||
+        (/^[A-Za-z\sก-๙]+$/u.test(inputValue) &&
+          !/[\u0E50-\u0E59]/.test(inputValue))
+      ) {
+        setFormData({
+          ...formData,
+          [name]: inputValue,
+        });
+        setError2('');
+      } else {
+        setError2('โปรดกรอกภาษาไทยหรือภาษาอังกฤษเท่านั้น');
+      }
+    }
+
+    if (namee === 'caddress') {
+      if (/^[0-9/]*$/.test(inputValue)) {
+        setFormData({
+          ...formData,
+          [name]: inputValue,
+        });
+        setError3('');
+      } else {
+        setError3('กรอก 0-9 และ / เท่านั้น');
+      }
+    }
+
+    if (namee === 'cmoo') {
+      if (inputValue === '' || /^[A-Za-z0-9ก-๙\s]*$/u.test(inputValue)) {
+        setFormData({
+          ...formData,
+          [name]: inputValue,
+        });
+        setError4('');
+      } else {
+        setError4('กรอกตัวอักษรและตัวเลขเท่านั้น');
+      }
+    }
+
+    if (namee === 'soi') {
+      if (inputValue === '' || /^[A-Za-z0-9/ก-๙\s]*$/u.test(inputValue)) {
+        setFormData({
+          ...formData,
+          [name]: inputValue,
+        });
+        setError5('');
+      } else {
+        setError5('กรอกตัวอักษรและตัวเลขเท่านั้น');
+      }
+    }
+
+    if (namee === 'road') {
+      setFormData({
+        ...formData,
+        [name]: inputValue,
+      });
+    }
+  };
 
   const MapIcon = () => {
     return (
@@ -825,7 +967,6 @@ const WaterRegister = () => {
           onClick={() => {
             setRegisterpage(3);
             handleEdit(data);
-            console.log(data);
           }}
         />
       </button>
@@ -887,8 +1028,8 @@ const WaterRegister = () => {
     axios
       .post('http://localhost:4034/api/nahra/modelowner', addNewData)
       .then((response) => {
-        console.log('POST request successful');
-        console.log('Response:', response.data);
+        // console.log('POST request successful');
+        // console.log('Response:', response.data);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -922,9 +1063,19 @@ const WaterRegister = () => {
 
   //บันทึกข้อมูลที่แก้ไข
   const handleEditData = () => {
-    console.log(formData);
+    if (checkpopid < 13) {
+      return Swal.fire({
+        text: 'โปรดกรอกเลขที่บัตรประจำตัวประชาชนให้ครบ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
 
-    if (formData.baddress == '' || formData.baddress == null) {
+    if (formData.baddress === '' || formData.baddress === null) {
       return Swal.fire({
         text: 'โปรดกรอกบ้านเลขที่ ที่ติดตั้งมาตรน้ำ',
         icon: 'warning',
@@ -936,7 +1087,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (formData.baddress == '' || formData.baddress == null) {
+    if (formData.baddress === '' || formData.baddress === null) {
       return Swal.fire({
         text: 'โปรดกรอกบ้านเลขที่ ที่ติดตั้งมาตรน้ำ',
         icon: 'warning',
@@ -949,8 +1100,8 @@ const WaterRegister = () => {
     }
 
     if (
-      formData.paraowner_status_id == '' ||
-      formData.paraowner_status_id == null
+      formData.paraowner_status_id === '' ||
+      formData.paraowner_status_id === null
     ) {
       return Swal.fire({
         text: 'โปรดเลือกสถานะผู้ใช้น้ำ',
@@ -963,7 +1114,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (formData.prefix == '' || formData.prefix == null) {
+    if (formData.prefix === '' || formData.prefix === null) {
       return Swal.fire({
         text: 'โปรดเลือกคำนำหน้า',
         icon: 'warning',
@@ -975,7 +1126,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (formData.fname == '' || formData.fname == null) {
+    if (formData.fname === '' || formData.fname === null) {
       return Swal.fire({
         text: 'โปรดกรอกชื่อ',
         icon: 'warning',
@@ -987,7 +1138,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (formData.lname == '' || formData.lname == null) {
+    if (formData.lname === '' || formData.lname === null) {
       return Swal.fire({
         text: 'โปรดกรอกนามสกุล',
         icon: 'warning',
@@ -999,7 +1150,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (formData.pop_id == '' || formData.pop_id == null) {
+    if (formData.pop_id === '' || formData.pop_id === null) {
       return Swal.fire({
         text: 'โปรดกรอกเลขที่บัตรประจำตัวประชาชน',
         icon: 'warning',
@@ -1011,7 +1162,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (formData.caddress == '' || formData.caddress == null) {
+    if (formData.caddress === '' || formData.caddress === null) {
       return Swal.fire({
         text: 'โปรดกรอกบ้านเลขที่',
         icon: 'warning',
@@ -1023,7 +1174,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (formData.cprovince_id == '' || formData.cprovince_id == null) {
+    if (formData.cprovince_id === '' || formData.cprovince_id === null) {
       return Swal.fire({
         text: 'โปรดเลือกจังหวัด',
         icon: 'warning',
@@ -1035,7 +1186,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (formData.camphoe_id == '' || formData.camphoe_id == null) {
+    if (formData.camphoe_id === '' || formData.camphoe_id === null) {
       return Swal.fire({
         text: 'โปรดเลือกอำเภอ',
         icon: 'warning',
@@ -1047,7 +1198,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (formData.ctambon_id == '' || formData.ctambon_id == null) {
+    if (formData.ctambon_id === '' || formData.ctambon_id === null) {
       return Swal.fire({
         text: 'โปรดเลือกตำบล',
         icon: 'warning',
@@ -1059,7 +1210,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (camphoe == '' || camphoe == null) {
+    if (camphoe === '' || camphoe === null) {
       return Swal.fire({
         text: 'โปรดเลือกอำเภอ',
         icon: 'warning',
@@ -1071,7 +1222,7 @@ const WaterRegister = () => {
       });
     }
 
-    if (datatambon != 0 && (tambon == '' || tambon == null)) {
+    if (datatambon != 0 && (tambon === '' || tambon === null)) {
       return Swal.fire({
         text: 'โปรดเลือกตำบล',
         icon: 'warning',
@@ -1082,18 +1233,6 @@ const WaterRegister = () => {
         },
       });
     }
-
-    // if (meterasset_id == '') {
-    //   return Swal.fire({
-    //     text: 'โปรดเลือกมาตรน้ำ',
-    //     icon: 'warning',
-    //     buttonsStyling: false,
-    //     confirmButtonText: 'ตกลง',
-    //     customClass: {
-    //       confirmButton: 'btn fw-bold btn-primary',
-    //     },
-    //   });
-    // }
 
     Swal.fire({
       text: 'คุณต้องการบันทึกข้อมูลหรือไม่ ?',
@@ -1146,9 +1285,11 @@ const WaterRegister = () => {
   const handleSuspendModalExit = () => {
     setSuspendvisible(false);
   };
+
   const handlePersonalEdit = () => {
     setEditpersonalvisible(true);
   };
+
   const handlePersonalNew = () => {
     setNewpersonalvisible(true);
   };
@@ -1210,14 +1351,18 @@ const WaterRegister = () => {
     console.log(addNewData);
   };
 
-  const handlecheck = (e) => {
-    var value = e.target.value.length;
-    setcheckpopid(value);
-    setpop_id(e.target.value);
+  const handlecheck = async (e) => {
+    const { name, value } = e.target;
+
+    var lengthvalue = e.target.value.length;
+    setcheckpopid(lengthvalue);
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
-  console.log('checkpopid', checkpopid);
-
+  //กรอกเลข
   const checkminus = (e) => {
     const characterCode = e.key;
 
@@ -1252,7 +1397,16 @@ const WaterRegister = () => {
   if (registerpage === 0) {
     content = (
       <>
-        <h2 className='mt-4 ms-4'>ทะเบียนผู้ใช้น้ำ</h2>
+        <div>
+          {' '}
+          {/* <img
+            src={require('../../assets/images/owner.png')}
+            width={60}
+            height={50}
+          /> */}
+          <h2 className='mt-4 ms-4'>ทะเบียนผู้ใช้น้ำ</h2>
+        </div>
+
         <div className='d-flex justify-content-between mt-4 ms-4'>
           <div className='d-flex ms-3'>
             <div className='p-input-icon-left'>
@@ -1277,7 +1431,7 @@ const WaterRegister = () => {
               className='btn btn-outline-success rounded-pill'
               onClick={() => setRegisterpage(2)}
             >
-              + เพิ่มทะเบียนผู้ใช้น้ำ
+              เพิ่มทะเบียนผู้ใช้น้ำ
             </button>
           </div>
         </div>
@@ -1293,7 +1447,7 @@ const WaterRegister = () => {
             currentPageReportTemplate='หน้า {currentPage} จาก {totalPages}'
           >
             <Column
-              header='เจ้าของมาตรวัดน้ำ'
+              header='ชื่อผู้ใช้น้ำ'
               // body={(rowData) => (
               //   <span>
               //     {rowData.prefix} {rowData.fname} {rowData.lname}
@@ -1304,17 +1458,20 @@ const WaterRegister = () => {
             <Column field='meternumber' header='เลขที่ประจำมาตรวัดน้ำ'></Column>
             {/* <Column field="baddress" header="ที่ติดตั้งมาตร"></Column> */}
             <Column
-              header='ที่ติดตั้งมาตร'
+              header='ที่ติดตั้งมาตรวัดน้ำ'
               body={(rowData) => (
                 <span>
-                  {rowData.baddress} หมู่ {rowData.bmoo} ตำบล{' '}
-                  {rowData.tambon_name} อำเภอ {rowData.amphoe_name} จังหวัด{' '}
+                  {rowData.baddress} หมู่ {rowData.bmoo}
+                  ตำบล {rowData.tambon_name} อำเภอ {rowData.amphoe_name} จังหวัด{' '}
                   {rowData.province_name}
                 </span>
               )}
             />
             {/* <Column field='watertype_name' header='ประเภทการใช้น้ำ'></Column> */}
-            <Column field='status_name' header='สถานะการใช้น้ำ'></Column>
+            <Column
+              field='status_name'
+              header='สถานะการใช้น้ำของผู้ใช้น้ำ'
+            ></Column>
             {/* <Column field="localelink" body={MapIcon} header="ตำแหน่ง"></Column> */}
             <Column
               field='editstat'
@@ -1578,15 +1735,15 @@ const WaterRegister = () => {
           </div>
 
           <div className='d-flex mt-5'>
-            <h6>ข้อมูลมาตรวัดน้ำ</h6>
-            <div className='d-flex w-2'></div>
+            <h6>ข้อมูลมาตร</h6>
+            <div className='d-flex w-5'></div>
 
             <div className='d-flex w-75 justify-content-between '>
               <CForm className='mx-5 w-25'>
                 <CFormSelect
                   className=''
                   aria-label='Small select example'
-                  label='เลขที่ประจำมาตรวัดน้ำ'
+                  label='เลขที่ประจำมาตร'
                   name='meternumber'
                   // value={addNewData.metertype_id}
                   value={meterasset_id}
@@ -1620,13 +1777,13 @@ const WaterRegister = () => {
           </div>
 
           <div className='d-flex mt-5'>
-            <div className='d-flex w-14'></div>
+            <div className='d-flex w-13'></div>
 
             <div className='d-flex w-75 justify-content-between '>
               <CForm className='mx-5 w-25'>
                 <CFormInput
                   className=' mb-2'
-                  label='ขนาดมาตรน้ำ'
+                  label='ขนาดมาตร'
                   value={sizemodel !== null ? sizemodel + '' + 'นิ้ว' : ''}
                   disabled
                 />
@@ -1634,7 +1791,7 @@ const WaterRegister = () => {
               <CForm className='mx-5 w-25'>
                 <CFormInput
                   className=' mb-2'
-                  label='ประเภทมาตรน้ำ'
+                  label='ประเภทมาตร'
                   value={typemeter}
                   disabled
                 />
@@ -1642,7 +1799,7 @@ const WaterRegister = () => {
               <CForm className='mx-5 w-25'>
                 <CFormInput
                   className=' mb-2'
-                  label='ประเภทวัสดุมาตรน้ำ'
+                  label='ประเภทวัสดุมาตร'
                   value={matmiter}
                   disabled
                 />
@@ -1831,7 +1988,7 @@ const WaterRegister = () => {
 
   const handleEdit = (data) => {
     setEditData(data);
-    console.log(data);
+    meternowner([data]);
 
     setaddress(data.baddress);
     setsoi(data.soi);
@@ -1851,6 +2008,7 @@ const WaterRegister = () => {
 
     setcprovice(data.cprovince_id);
     setcamphoe(data.camphoe_id);
+    setcheckpopid('13');
   };
 
   //หน้าแก้ไขข้อมูลผู้ใช้น้ำ
@@ -1955,6 +2113,18 @@ const WaterRegister = () => {
                           value={formData.bmoo}
                           onChange={handleInputChange}
                         />
+                        {error4 && (
+                          <ErrorContainer>
+                            <img
+                              src={ErrorIcon}
+                              alt='Error Icon'
+                              width='16'
+                              height='16'
+                              style={{ marginTop: -21 }}
+                            />
+                            <ErrorText>{error4}</ErrorText>
+                          </ErrorContainer>
+                        )}{' '}
                         <CFormSelect
                           className='mt-2 mb-2'
                           label='จังหวัด'
@@ -1998,7 +2168,7 @@ const WaterRegister = () => {
 
               <div className='d-flex mx-5 mt-5 '>
                 <h5 className='w-25'>สถานะผู้ใช้น้ำ</h5>
-                <div className='d-flex w-6'></div>
+                <div className='d-flex w-5'></div>
 
                 <CFormSelect
                   className='mt-2 mb-2 w-25'
@@ -2012,8 +2182,10 @@ const WaterRegister = () => {
                   <option value='2'>ระงับการใช้น้ำ</option>
                 </CFormSelect>
               </div>
-              <div className='d-flex mx-5 mt-5 '>
+              <div className='d-flex mx-5 mt-5  '>
                 <h5 className='w-25'>ข้อมูลผู้ใช้น้ำ</h5>
+                <div className='d-flex w-5'></div>
+
                 <div className='customcontainer3 h-20 w-80 d-flex'>
                   <div className='w-15'>
                     <img
@@ -2038,7 +2210,7 @@ const WaterRegister = () => {
                 </div>
               </div>
               <div className='d-flex mx-5 mt-5 '>
-                <h5 className='w-25'>ข้อมูลเพื่อส่งเสริมหรืออุดหนุน</h5>
+                <h5 className='w-25'>ข้อมูลเพื่อส่งเสริม</h5>
                 <div className='d-flex w-5'></div>
 
                 <CFormSelect
@@ -2059,21 +2231,22 @@ const WaterRegister = () => {
               <div className='d-flex mx-5 mt-5 '>
                 <h5 className='w-25'>ข้อมูลมาตรวัดน้ำ</h5>
                 <div className='d-flex w-75 justify-content-between'>
-                  <CForm className='mx-5 w-33'>
-                    <CFormInput
+                  <CForm className='mx-5 w-80 mb-10' style={{ paddingTop: 7 }}>
+                    {/* <CFormInput
                       className='mt-2 mb-2'
                       label='เลขที่ประจำมาตรวัดน้ำ'
                       name='meternumber'
                       value={formData.meternumber}
                       onChange={handleInputChange}
-                    />
+                    /> */}
                     <CFormSelect
-                      className=''
+                      className='setform'
                       aria-label='Small select example'
                       label='เลขที่ประจำมาตรวัดน้ำ'
                       name='meterasset_id'
                       value={formData.meterasset_id}
                       onChange={handleInputChange}
+                      style={{ marginBottom: 5 }}
                     >
                       {/* <option value={formData.meterasset_id}>
                         {formData.meternumber}
@@ -2092,7 +2265,7 @@ const WaterRegister = () => {
                       disabled
                     />
                   </CForm>
-                  <CForm className='mx-5 w-33'>
+                  <CForm className='mx-5 w-50'>
                     <CFormInput
                       className='mt-2 mb-2'
                       label='Brand'
@@ -2106,7 +2279,7 @@ const WaterRegister = () => {
                       disabled
                     />
                   </CForm>
-                  <CForm className='mx-5 w-33'>
+                  <CForm className='mx-5 w-50'>
                     <CFormInput
                       className='mt-2 mb-2'
                       label='Model'
@@ -2152,13 +2325,6 @@ const WaterRegister = () => {
       <h5 className='text-center mt-5'>แก้ไขข้อมูลส่วนตัวของผู้ใช้น้ำ</h5>
       <div className='d-flex mt-5'>
         <CForm className='mx-5 w-33'>
-          {/* <CFormInput
-            className='mt-2 mb-2'
-            label='คำนำหน้าชื่อ'
-            name='prefix'
-            value={formData.prefix}
-            onChange={handleInputChange}
-          /> */}
           <CFormSelect
             aria-label='Default select example'
             className='select'
@@ -2181,6 +2347,18 @@ const WaterRegister = () => {
             value={formData.fname}
             onChange={handleInputChange}
           />
+          {error && (
+            <ErrorContainer>
+              <img
+                src={ErrorIcon}
+                alt='Error Icon'
+                width='16'
+                height='16'
+                style={{ marginTop: -21 }}
+              />
+              <ErrorText>{error}</ErrorText>
+            </ErrorContainer>
+          )}{' '}
         </CForm>
         <CForm className='mx-5 w-33'>
           <CFormInput
@@ -2190,17 +2368,40 @@ const WaterRegister = () => {
             value={formData.lname}
             onChange={handleInputChange}
           />
+          {error2 && (
+            <ErrorContainer>
+              <img
+                src={ErrorIcon}
+                alt='Error Icon'
+                width='16'
+                height='16'
+                style={{ marginTop: -21 }}
+              />
+              <ErrorText>{error2}</ErrorText>
+            </ErrorContainer>
+          )}{' '}
         </CForm>
       </div>
       <div className='d-flex mt-3'>
-        <CForm className='mx-5 w-33'></CForm>
-        <CForm className='mx-5 w-33'>
-          <CFormInput
+        {/* <CForm className='mx-5 w-33'></CForm> */}
+        <CForm className='mx-5 w-25'>
+          {/* <CFormInput
             className='mt-2 mb-2'
             label='เลขที่บัตรประจำตัวประชาชน'
             name='pop_id'
             value={formData.pop_id}
             onChange={handleInputChange}
+          /> */}
+          <label>เลขที่บัตรประจำตัวประชาชน</label>
+          <NumberFormat
+            name='pop_id'
+            style={{ marginTop: 8 }}
+            value={formData.pop_id}
+            onChange={(e) => handlecheck(e)}
+            className='form-control'
+            onKeyDown={checkminus}
+            tabIndex='0'
+            maxLength={13}
           />
         </CForm>
         <CForm className='mx-5 w-33'></CForm>
@@ -2214,15 +2415,39 @@ const WaterRegister = () => {
             value={formData.caddress}
             onChange={handleInputChange}
           />
+          {error3 && (
+            <ErrorContainer>
+              <img
+                src={ErrorIcon}
+                alt='Error Icon'
+                width='16'
+                height='16'
+                style={{ marginTop: -21 }}
+              />
+              <ErrorText>{error3}</ErrorText>
+            </ErrorContainer>
+          )}{' '}
         </CForm>
         <CForm className='mx-5 w-33'>
           <CFormInput
             className='mt-2 mb-2'
             label='หมู่'
-            name='coo'
+            name='cmoo'
             value={formData.cmoo}
             onChange={handleInputChange}
           />
+          {error4 && (
+            <ErrorContainer>
+              <img
+                src={ErrorIcon}
+                alt='Error Icon'
+                width='16'
+                height='16'
+                style={{ marginTop: -21 }}
+              />
+              <ErrorText>{error4}</ErrorText>
+            </ErrorContainer>
+          )}{' '}
         </CForm>
         <CForm className='mx-5 w-33'>
           <CFormInput
@@ -2232,6 +2457,18 @@ const WaterRegister = () => {
             value={formData.soi}
             onChange={handleInputChange}
           />
+          {error5 && (
+            <ErrorContainer>
+              <img
+                src={ErrorIcon}
+                alt='Error Icon'
+                width='16'
+                height='16'
+                style={{ marginTop: -21 }}
+              />
+              <ErrorText>{error5}</ErrorText>
+            </ErrorContainer>
+          )}{' '}
         </CForm>
       </div>
       <div className='d-flex mt-3 mb-3'>

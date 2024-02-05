@@ -90,17 +90,38 @@ const WaterMeterData = () => {
   });
 
   const [error, setError] = useState('');
+  const [error2, setError2] = useState('');
+  const [error3, setError3] = useState('');
+
   const handleInputChange2 = (e) => {
     const { name, value } = e.target;
     const namee = name;
     const inputValue = e.target.value;
     // ตรวจสอบรูปแบบของข้อมูล
-    if (namee == 'meternumber') {
+    if (namee === 'meternumber') {
       if (inputValue === '' || /^[0-9-]*$/.test(inputValue)) {
         setmeternumber(inputValue);
         setError('');
       } else {
         setError('กรอกแค่0-9และ "-" เท่านั้น');
+      }
+    }
+
+    if (namee === 'editmeternumber') {
+      if (inputValue === '' || /^[0-9-]*$/.test(inputValue)) {
+        setmeternumber(inputValue);
+        setError2('');
+      } else {
+        setError2('กรอกแค่0-9และ "-" เท่านั้น');
+      }
+    }
+
+    if (namee === 'meternumberuse') {
+      if (inputValue === '' || /^[0-9-]*$/.test(inputValue)) {
+        setmeternumber(inputValue);
+        setError3('');
+      } else {
+        setError3('กรอกแค่0-9และ "-" เท่านั้น');
       }
     }
   };
@@ -116,7 +137,7 @@ const WaterMeterData = () => {
   // ดึงข้อมูลมิเตอร์ที่ใช้แล้ว
   useEffect(() => {
     axios
-      .get('http://localhost:4034/api/nahra/listmeteruse')
+      .get(process.env.REACT_APP_API + '/listmeteruse')
       .then((res) => setDataxuse(res.data.data))
       .catch((err) => console.log(err));
   }, []);
@@ -124,7 +145,7 @@ const WaterMeterData = () => {
   // ดึงข้อมูลมิเตอร์ที่ยังไม่ได้ใช้
   useEffect(() => {
     axios
-      .get('http://localhost:4034/api/nahra/nullmeter')
+      .get(process.env.REACT_APP_API + '/nullmeter')
       .then((res) => setDataxnull(res.data.data))
       .catch((err) => console.log(err));
   }, []);
@@ -132,7 +153,7 @@ const WaterMeterData = () => {
   // ดึงข้อมูลประเภทมาตรน้ำ
   useEffect(() => {
     axios
-      .get('http://localhost:4034/api/nahra/metertype')
+      .get(process.env.REACT_APP_API + '/metertype')
       .then((res) => setmetertype(res.data.data))
       .catch((err) => console.log(err));
   }, []);
@@ -140,7 +161,7 @@ const WaterMeterData = () => {
   // ดึงข้อมูลขนาดมาตรน้ำ
   useEffect(() => {
     axios
-      .get('http://localhost:4034/api/nahra/metersize')
+      .get(process.env.REACT_APP_API + '/metersize')
       .then((res) => setmetersize(res.data.data))
       .catch((err) => console.log(err));
   }, []);
@@ -148,7 +169,7 @@ const WaterMeterData = () => {
   // ดึงข้อมูลวัสดุมาตรน้ำ
   useEffect(() => {
     axios
-      .get('http://localhost:4034/api/nahra/metermaterial')
+      .get(process.env.REACT_APP_API + '/metermaterial')
       .then((res) => setmetermat(res.data.data))
       .catch((err) => console.log(err));
   }, []);
@@ -156,7 +177,7 @@ const WaterMeterData = () => {
   // ดึงข้อมูลลักษณะมาตรน้ำ
   useEffect(() => {
     axios
-      .get('http://localhost:4034/api/nahra/listmeter')
+      .get(process.env.REACT_APP_API + '/listmeter')
       .then((res) => {
         setlistmeter(res.data.data);
       })
@@ -166,6 +187,31 @@ const WaterMeterData = () => {
   // บันทึกแก้ไขลักษณะมาตรน้ำ
   const handleput = (event) => {
     event.preventDefault();
+
+    if (addNewData.brand === '' || addNewData.brand === null) {
+      return Swal.fire({
+        text: 'โปรดกรอกชื่อ Brand ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (addNewData.model === '' || addNewData.model === null) {
+      return Swal.fire({
+        text: 'โปรดกรอกชื่อ Model ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
     var data = {
       metermaterial_id: addNewData.metermaterial_id,
       metersize_id: addNewData.metersize_id,
@@ -188,8 +234,7 @@ const WaterMeterData = () => {
       if (result.value) {
         let resultsL = await axios
           .put(
-            'http://localhost:4034/api/nahra/meter/' +
-              addNewData.metermaster_id,
+            process.env.REACT_APP_API + '/meter/' + addNewData.metermaster_id,
             data
           )
           .then(
@@ -223,16 +268,16 @@ const WaterMeterData = () => {
   };
 
   // บันทึกแก้ไขครุภัณฑ์ที่ยังไม่ได้ใช้งาน
-  const handleputmeterasset = (event) => {
+  const handleputmeterasset = async (event) => {
     if (meternumber !== '') {
       var Activity = dataxnull.filter((res) => res.meternumber == meternumber);
 
-      if (meternumber == checkmeternumber) {
+      if (meternumber === checkmeternumber) {
         // ผ่าน
       }
 
       if (meternumber !== checkmeternumber && Activity.length !== 0) {
-        Swal.fire({
+        return Swal.fire({
           text: 'เลขมาตรวัดน้ำซ้ำ',
           icon: 'error',
           buttonsStyling: false,
@@ -241,26 +286,43 @@ const WaterMeterData = () => {
             confirmButton: 'btn fw-bold btn-primary',
           },
         });
-      } else {
-        //ผ่าน
       }
-
-      console.log('checkmeternumber', checkmeternumber);
-      console.log('meternumber', meternumber);
-      console.log('Activity', Activity);
-    } else {
-      Swal.fire({
+    } else if (meternumber === '') {
+      return Swal.fire({
         text: 'โปรดกรอกเลขมาตรน้ำ',
-        icon: 'error',
+        icon: 'warning',
         buttonsStyling: false,
-        confirmButtonText: 'ตกลง.',
+        confirmButtonText: 'ตกลง',
         customClass: {
           confirmButton: 'btn fw-bold btn-primary',
         },
       });
     }
 
-    event.preventDefault();
+    if (meter_status === '' || meter_status === null) {
+      return Swal.fire({
+        text: 'โปรดเลือกสถานะมาตรน้ำ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (metermaster_id === '' || metermaster_id === null) {
+      return Swal.fire({
+        text: 'โปรดเลือกสถานะมาตรน้ำ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
     var data = {
       meternumber: meternumber,
       meter_status: meter_status,
@@ -280,10 +342,7 @@ const WaterMeterData = () => {
     }).then(async function (result) {
       if (result.value) {
         let resultsL = await axios
-          .put(
-            'http://localhost:4034/api/nahra/meterasset/' + meterasset_id,
-            data
-          )
+          .put(process.env.REACT_APP_API + '/meterasset/' + meterasset_id, data)
           .then(
             (res) => {
               if (res.status === 200) {
@@ -299,7 +358,7 @@ const WaterMeterData = () => {
               });
             },
             async (error) => {
-              Swal.fire({
+              return Swal.fire({
                 text: 'บันทึกข้อมูลไม่สำเร็จ.',
                 icon: 'error',
                 buttonsStyling: false,
@@ -334,13 +393,12 @@ const WaterMeterData = () => {
       if (result.value) {
         let resultsL = await axios
           .delete(
-            'http://localhost:4034/api/nahra/meter/' + data.metermaster_id,
+            process.env.REACT_APP_API + '/meter/' + data.metermaster_id,
             {}
           )
           .then(
             (res) => {
               if (res.status === 200) {
-                // alert("succesfull");
               }
               console.log(res);
               Swal.fire({
@@ -502,8 +560,8 @@ const WaterMeterData = () => {
   };
 
   //บันทึกข้อมูลลักษณะมาตรวัดน้ำ
-  const handlepost = (event) => {
-    if (brand == '' || brand == null) {
+  const handlepost = async (event) => {
+    if (brand === '' || brand === null) {
       return Swal.fire({
         text: 'โปรดกรอก Brand',
         icon: 'warning',
@@ -515,7 +573,7 @@ const WaterMeterData = () => {
       });
     }
 
-    if (model == '' || model == null) {
+    if (model === '' || model == null) {
       return Swal.fire({
         text: 'โปรดกรอก Model',
         icon: 'warning',
@@ -527,7 +585,7 @@ const WaterMeterData = () => {
       });
     }
 
-    if (metertype_id == '' || metertype_id == null) {
+    if (metertype_id === '' || metertype_id === null) {
       return Swal.fire({
         text: 'โปรดเลือกประเภทมาตรน้ำ',
         icon: 'warning',
@@ -539,7 +597,7 @@ const WaterMeterData = () => {
       });
     }
 
-    if (metersize_id == '' || metersize_id == null) {
+    if (metersize_id === '' || metersize_id === null) {
       return Swal.fire({
         text: 'โปรดเลือกขนาดมาตรน้ำ',
         icon: 'warning',
@@ -551,7 +609,7 @@ const WaterMeterData = () => {
       });
     }
 
-    if (metermaterial_id == '' || metermaterial_id == null) {
+    if (metermaterial_id === '' || metermaterial_id === null) {
       return Swal.fire({
         text: 'โปรดเลือกประเภทวัสดุมาตรน้ำ',
         icon: 'warning',
@@ -584,11 +642,10 @@ const WaterMeterData = () => {
     }).then(async function (result) {
       if (result.value) {
         let resultsL = await axios
-          .post('http://localhost:4034/api/nahra/modelmeter', data)
+          .post(process.env.REACT_APP_API + '/modelmeter', data)
           .then(
             (res) => {
               if (res.status === 200) {
-                // alert("succesfull");
               }
               console.log(res);
               Swal.fire({
@@ -616,16 +673,16 @@ const WaterMeterData = () => {
   };
 
   //บันทึกข้อมูลครุภัณฑ์มาตรน้ำ
-  const handlepostasset = (event) => {
+  const handlepostasset = async (event) => {
     if (meternumber !== '') {
-      var Activity = dataxnull.filter((res) => res.meternumber == meternumber);
+      var Activity = dataxnull.filter((res) => res.meternumber === meternumber);
 
-      if (meternumber == checkmeternumber) {
+      if (meternumber === checkmeternumber) {
         // ผ่าน
       }
 
       if (meternumber !== checkmeternumber && Activity.length !== 0) {
-        Swal.fire({
+        return Swal.fire({
           text: 'เลขมาตรวัดน้ำซ้ำ',
           icon: 'error',
           buttonsStyling: false,
@@ -637,13 +694,10 @@ const WaterMeterData = () => {
       } else {
         //ผ่าน
       }
-      console.log('checkmeternumber', checkmeternumber);
-      console.log('meternumber', meternumber);
-      console.log('Activity', Activity);
     } else {
-      Swal.fire({
+      return Swal.fire({
         text: 'โปรดกรอกเลขมาตรน้ำ',
-        icon: 'error',
+        icon: 'warning',
         buttonsStyling: false,
         confirmButtonText: 'ตกลง.',
         customClass: {
@@ -652,7 +706,7 @@ const WaterMeterData = () => {
       });
     }
 
-    if (meter_status == '' || meter_status == null) {
+    if (meter_status === '' || meter_status === null) {
       return Swal.fire({
         text: 'โปรดเลือกสถานะมาตรวัดน้ำ',
         icon: 'warning',
@@ -664,7 +718,7 @@ const WaterMeterData = () => {
       });
     }
 
-    if (metermaster_id == '' || metermaster_id == null) {
+    if (metermaster_id === '' || metermaster_id === null) {
       return Swal.fire({
         text: 'โปรดเลือกรหัสลักษณะมาตรวัดน้ำ',
         icon: 'warning',
@@ -676,7 +730,7 @@ const WaterMeterData = () => {
       });
     }
 
-    if (metermaster_id == '' || metermaster_id == null) {
+    if (metermaster_id === '' || metermaster_id === null) {
       return Swal.fire({
         text: 'โปรดเลือกรหัสลักษณะมาตรวัดน้ำ',
         icon: 'warning',
@@ -707,7 +761,7 @@ const WaterMeterData = () => {
     }).then(async function (result) {
       if (result.value) {
         let resultsL = await axios
-          .post('http://localhost:4034/api/nahra/modelmeterasset', data)
+          .post(process.env.REACT_APP_API + '/modelmeterasset', data)
           .then(
             (res) => {
               if (res.status === 200) {
@@ -723,7 +777,7 @@ const WaterMeterData = () => {
               });
             },
             async (error) => {
-              Swal.fire({
+              return Swal.fire({
                 text: 'บันทึกข้อมูลไม่สำเร็จ.',
                 icon: 'error',
                 buttonsStyling: false,
@@ -761,7 +815,7 @@ const WaterMeterData = () => {
 
   const handleSelect = (e) => {
     var value = e.target.value;
-    var Activity = datalistmeter.filter((res) => res.metermaster_id == value);
+    var Activity = datalistmeter.filter((res) => res.metermaster_id === value);
     if (Activity.length !== 0) {
       setshowbrand(Activity[0].brand);
       setshowmodel(Activity[0].model);
@@ -774,7 +828,7 @@ const WaterMeterData = () => {
 
   const handleSelect2 = (value) => {
     setmetermaster_id(value);
-    var Activity = datalistmeter.filter((res) => res.metermaster_id == value);
+    var Activity = datalistmeter.filter((res) => res.metermaster_id === value);
     if (Activity.length !== 0) {
       setshowbrand(Activity[0].brand);
       setshowmodel(Activity[0].model);
@@ -784,7 +838,7 @@ const WaterMeterData = () => {
     }
   };
 
-  // หน้าแสดงข้อมูลหลัก
+  // หน้าแสดงข้อมูลมาตรวัดน้ำหลัก
   let content;
   if (meterpage === 0) {
     content = (
@@ -898,7 +952,7 @@ const WaterMeterData = () => {
     );
   }
 
-  // หน้าเพิ่มข้อมูลลักษณะมาตรน้ำ
+  // หน้าเพิ่มข้อมูลลักษณะมาตรวัดน้ำ
   if (meterpage === 1) {
     content = (
       <>
@@ -909,9 +963,9 @@ const WaterMeterData = () => {
               src={require('../../assets/images/backbutton.png')}
               width={30}
               height={30}
-              onClick={() => setMeterpage(4)}
+              onClick={() => setMeterpage(7)}
             />
-            <h2 className='ms-2'>เพิ่มข้อมูลมิเตอร์</h2>
+            <h2 className='ms-2'>เพิ่มข้อมูลมาตรวัดน้ำ</h2>
           </div>
 
           <div className='customcontainer2 d-flex flex-column'>
@@ -943,7 +997,7 @@ const WaterMeterData = () => {
                     label='ประเภทมาตรน้ำ'
                     onChange={(e) => setmetertype_id(e.target.value)}
                   >
-                    <option value={''}>เลือกประเภทมาตรน้ำ</option>
+                    <option value={''}>เลือกประเภทมาตรวัดน้ำ</option>
                     {datametertype.map((item, index) => (
                       <option key={index} value={item.metertype_id}>
                         {item.metertypename}
@@ -960,7 +1014,7 @@ const WaterMeterData = () => {
                     label='ขนาดมาตรน้ำ'
                     onChange={(e) => setmetersize_id(e.target.value)}
                   >
-                    <option value={''}>เลือกขนาดมาตรน้ำ</option>
+                    <option value={''}>เลือกขนาดมาตรวัดน้ำ</option>
                     {datametersize.map((item, index) => (
                       <option key={index} value={item.metersize_id}>
                         {item.international_size}
@@ -977,7 +1031,7 @@ const WaterMeterData = () => {
                     label='ประเภทวัสดุ'
                     onChange={(e) => setmetermaterial_id(e.target.value)}
                   >
-                    <option value={''}>เลือกประเภทวัสดุ</option>
+                    <option value={''}>เลือกประเภทวัสดุมาตรวัดน้ำ</option>
                     {datametermat.map((item, index) => (
                       <option key={index} value={item.metermaterial_id}>
                         {item.metermaterial}
@@ -1003,11 +1057,11 @@ const WaterMeterData = () => {
     );
   }
 
-  // หน้ารายการมิเตอร์ทั้งหมด
+  // หน้ารายการมาตรวัดน้ำทั้งหมด
   if (meterpage === 2) {
     content = (
       <>
-        <h2 className='mt-4 ms-4'>รายการมิเตอร์ทั้งหมด</h2>
+        <h2 className='mt-4 ms-4'>รายการมาตรวัดน้ำทั้งหมด</h2>
         <div className='d-flex justify-content-left mt-2 ms-4'>
           <img
             className='mt-1'
@@ -1031,15 +1085,15 @@ const WaterMeterData = () => {
             body={(rowData) => <span>{rowData.meternumber}</span>}
           ></Column>
           <Column
-            header='ประเภทมิเตอร์'
+            header='ประเภทมาตรวัดน้ำ'
             body={(rowData) => <span>{rowData.metertypename}</span>}
           ></Column>
           <Column
-            header='ขนาดมิเตอร์'
+            header='ขนาดมาตรวัดน้ำ'
             body={(rowData) => <span>{rowData.international_size}</span>}
           ></Column>
           <Column
-            header='วัสดุมิเตอร์'
+            header='วัสดุมาตรวัดน้ำ'
             body={(rowData) => <span>{rowData.metermaterial}</span>}
           ></Column>
 
@@ -1057,12 +1111,12 @@ const WaterMeterData = () => {
     );
   }
 
-  // หน้ารายการมิเตอร์ที่ถูกใช้แล้ว
+  // หน้ารายการมาตรวัดน้ำที่ถูกใช้แล้ว
   if (meterpage === 3) {
     console.log(dataxuse);
     content = (
       <>
-        <h2 className='mt-4 ms-4'>รายการมิเตอร์ที่ถูกใช้</h2>
+        <h2 className='mt-4 ms-4'>รายการมาตรวัดน้ำที่ถูกใช้</h2>
         <div className='d-flex justify-content-left mt-2 ms-4'>
           <img
             className='mt-1'
@@ -1082,23 +1136,23 @@ const WaterMeterData = () => {
           currentPageReportTemplate='หน้า {currentPage} จาก {totalPages}'
         >
           <Column
-            header='เลขประจำมาตรน้ำ'
+            header='เลขประจำมาตรวัดน้ำ'
             body={(rowData) => <span>{rowData.meternumber}</span>}
           ></Column>
           <Column
-            header='ประเภทมาตรน้ำ'
+            header='ประเภทมาตรวัดน้ำ'
             body={(rowData) => <span>{rowData.metermaterial}</span>}
           ></Column>
           <Column
-            header='ขนาดมาตรน้ำ'
+            header='ขนาดมาตรวัดน้ำ'
             body={(rowData) => <span>{rowData.international_size} นิ้ว</span>}
           ></Column>
           <Column
-            header='วัสดุมาตรน้ำ'
+            header='วัสดุมาตรวัดน้ำ'
             body={(rowData) => <span>{rowData.metermaterial} </span>}
           ></Column>
           <Column
-            header='สถานะมาตรน้ำ'
+            header='สถานะมาตรวัดน้ำ'
             body={(rowData) => <span>{rowData.meter_status} </span>}
           ></Column>
           <Column
@@ -1119,7 +1173,7 @@ const WaterMeterData = () => {
   if (meterpage === 4) {
     content = (
       <>
-        <h2 className='mt-4 ms-4'>รายการมาตรน้ำที่ยังไม่ถูกใช้</h2>
+        <h2 className='mt-4 ms-4'>รายการมาตรวัดน้ำที่ยังไม่ถูกใช้</h2>
         <div className='d-flex justify-content-left mt-2 ms-4'>
           <img
             className='mt-1'
@@ -1140,7 +1194,7 @@ const WaterMeterData = () => {
             }}
           >
             {' '}
-            เพิ่มมาตรน้ำ
+            เพิ่มมาตรวัดน้ำ
           </button>
         </div>
         <DataTable
@@ -1153,23 +1207,23 @@ const WaterMeterData = () => {
           currentPageReportTemplate='หน้า {currentPage} จาก {totalPages}'
         >
           <Column
-            header='เลขมาตรน้ำ'
+            header='เลขประจำมาตรวัดน้ำ'
             body={(rowData) => <span>{rowData.meternumber}</span>}
           ></Column>
           <Column
-            header='ประเภทมาตรน้ำ'
+            header='ประเภทมาตรวัดน้ำ'
             body={(rowData) => <span>{rowData.metertypename}</span>}
           ></Column>
           <Column
-            header='ขนาดมาตรน้ำ'
+            header='ขนาดมาตรวัดน้ำ'
             body={(rowData) => <span>{rowData.international_size} นิ้ว</span>}
           ></Column>
           <Column
-            header='วัสดุมาตรน้ำ'
+            header='วัสดุมาตรวัดน้ำ'
             body={(rowData) => <span>{rowData.metermaterial} </span>}
           ></Column>
           <Column
-            header='สถานะมาตรน้ำ'
+            header='สถานะมาตรวัดน้ำ'
             body={(rowData) => <span>{rowData.meter_status} </span>}
           ></Column>
           <Column body={(rowData) => EditIcon(rowData)}></Column>
@@ -1187,7 +1241,7 @@ const WaterMeterData = () => {
     content = (
       <>
         <div className='d-flex flex-column'>
-          <h2 className='mx-3'>แก้ไขข้อมูลมาตรน้ำ</h2>
+          <h2 className='mx-3'>แก้ไขข้อมูลมาตรวัดน้ำ</h2>
           <div className='d-flex mt-4'>
             <img
               className='mt-1'
@@ -1386,7 +1440,7 @@ const WaterMeterData = () => {
     console.log(datalistmeter);
     content = (
       <>
-        <h2 className='mt-4 ms-4'>รายการลักษณะมาตรน้ำ</h2>
+        <h2 className='mt-4 ms-4'>รายการลักษณะมาตรวัดน้ำ</h2>
         <div className='d-flex justify-content-left mt-2 ms-4'>
           <img
             className='mt-1'
@@ -1407,7 +1461,7 @@ const WaterMeterData = () => {
             }}
           >
             {' '}
-            เพิ่มข้อมูลลักษณะมาตรน้ำ
+            เพิ่มข้อมูลลักษณะมาตรวัดน้ำ
           </button>
         </div>
 
@@ -1458,12 +1512,10 @@ const WaterMeterData = () => {
   const handleEditMS = (data) => {
     setEditData(data);
   };
-
   if (meterpage === 5) {
     content = (
       <>
         <div className='d-flex flex-column'>
-          <h2 className='mx-3'>แก้ไขข้อมูลลักษณะมาตรน้ำ</h2>
           <div className='d-flex mt-4'>
             <img
               className='mt-1'
@@ -1473,91 +1525,97 @@ const WaterMeterData = () => {
               onClick={() => setMeterpage(0)}
             />
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <CForm className='row g-3'>
-              <CForm className='w-25'>
-                <CFormInput
-                  label='รหัสลักษณะมาตรวัดน้ำ'
-                  name='metermaster_id'
-                  value={addNewData.metermaster_id}
-                  onChange={handleNewInputChange}
-                  disabled
-                />
-              </CForm>
-              <CForm className='w-40'>
-                <CFormSelect
-                  className='mb-3'
-                  aria-label='Small select example'
-                  label='ประเภทมาตรน้ำ'
-                  name='metertype_id'
-                  value={addNewData.metertype_id}
-                  onChange={handleNewInputChange}
-                >
-                  {datametertype.map((item, index) => (
-                    <option key={index} value={item.metertype_id}>
-                      {item.metertypename}
-                    </option>
-                  ))}
-                </CFormSelect>
-              </CForm>
-              <CForm className='w-30'>
-                <CFormSelect
-                  className='mb-3'
-                  aria-label='Small select example'
-                  label='ขนาดมาตรน้ำ'
-                  name='metersize_id'
-                  value={addNewData.metersize_id}
-                  onChange={handleNewInputChange}
-                >
-                  <option value='1'>1/2</option>
-                  <option value='2'>3/4</option>
-                  <option value='3'>1</option>
-                  <option value='4'>2</option>
-                  <option value='5'>3</option>
-                </CFormSelect>
-              </CForm>
-              <CForm className='w-30'>
-                <CFormSelect
-                  className='mb-3'
-                  aria-label='Small select example'
-                  label='วัสดุมาตรน้ำ'
-                  name='metermaterial_id'
-                  value={addNewData.metermaterial_id}
-                  onChange={handleNewInputChange}
-                >
-                  <option value='1'>ทองเหลือง</option>
-                  <option value='2'>เหล็ก</option>
-                </CFormSelect>
-              </CForm>
-
-              <CForm className='w-30'>
-                <CFormInput
-                  label='Brand'
-                  name='brand'
-                  value={addNewData.brand}
-                  onChange={handleNewInputChange}
-                />
-              </CForm>
-              <CForm className='w-30'>
-                <CFormInput
-                  label='Model'
-                  name='model'
-                  value={addNewData.model}
-                  onChange={handleNewInputChange}
-                />
-              </CForm>
-            </CForm>
+            <h2 className='mx-3'>แก้ไขข้อมูลลักษณะมาตรน้ำ</h2>
           </div>
-          <div className='d-flex mt-4'>
-            <CCol className='align-items-center'>
-              <button
-                type='button'
-                class='btn btn-primary '
-                onClick={handleput}
-                style={{ float: 'left', marginLeft: 55 }}
-              >
-                บันทึก
-              </button>
-            </CCol>
+          <div className='customcontainer2 d-flex flex-column'>
+            <div className='d-flex mt-4'>
+              <CForm className='row g-3'>
+                <CForm className='w-25'>
+                  <CFormInput
+                    label='รหัสลักษณะมาตรวัดน้ำ'
+                    name='metermaster_id'
+                    value={addNewData.metermaster_id}
+                    onChange={handleNewInputChange}
+                    disabled
+                  />
+                </CForm>
+                <CForm className='w-40'>
+                  <CFormSelect
+                    className='mb-3'
+                    aria-label='Small select example'
+                    label='ประเภทมาตรน้ำ'
+                    name='metertype_id'
+                    value={addNewData.metertype_id}
+                    onChange={handleNewInputChange}
+                  >
+                    {datametertype.map((item, index) => (
+                      <option key={index} value={item.metertype_id}>
+                        {item.metertypename}
+                      </option>
+                    ))}
+                  </CFormSelect>
+                </CForm>
+                <CForm className='w-30'>
+                  <CFormSelect
+                    className='mb-3'
+                    aria-label='Small select example'
+                    label='ขนาดมาตรน้ำ'
+                    name='metersize_id'
+                    value={addNewData.metersize_id}
+                    onChange={handleNewInputChange}
+                  >
+                    <option value='1'>1/2</option>
+                    <option value='2'>3/4</option>
+                    <option value='3'>1</option>
+                    <option value='4'>2</option>
+                    <option value='5'>3</option>
+                  </CFormSelect>
+                </CForm>
+                <CForm className='w-30'>
+                  <CFormSelect
+                    className='mb-3'
+                    aria-label='Small select example'
+                    label='วัสดุมาตรน้ำ'
+                    name='metermaterial_id'
+                    value={addNewData.metermaterial_id}
+                    onChange={handleNewInputChange}
+                  >
+                    <option value='1'>ทองเหลือง</option>
+                    <option value='2'>เหล็ก</option>
+                  </CFormSelect>
+                </CForm>
+
+                <CForm className='w-30'>
+                  <CFormInput
+                    label='Brand'
+                    name='brand'
+                    value={addNewData.brand}
+                    onChange={handleNewInputChange}
+                  />
+                </CForm>
+                <CForm className='w-30'>
+                  <CFormInput
+                    label='Model'
+                    name='model'
+                    value={addNewData.model}
+                    onChange={handleNewInputChange}
+                  />
+                </CForm>
+              </CForm>
+            </div>
+
+            <div className='d-flex mt-4'>
+              <CCol className='align-items-center'>
+                <button
+                  type='button'
+                  class='btn btn-primary '
+                  onClick={handleput}
+                  style={{ float: 'left' }}
+                >
+                  บันทึก
+                </button>
+              </CCol>
+            </div>
           </div>
         </div>
       </>
@@ -1597,7 +1655,7 @@ const WaterMeterData = () => {
               height={30}
               onClick={() => setMeterpage(4)}
             />
-            <h2 className='mx-3'>แก้ไขข้อมูลครุภัณฑ์มาตรน้ำ</h2>
+            <h2 className='mx-3'>แก้ไขข้อมูลครุภัณฑ์มาตรน้ำที่ยังไม่ถูกใช้</h2>
           </div>
           <div className='customcontainer2 d-flex flex-column'>
             <div className='d-flex mt-4'>
@@ -1605,12 +1663,12 @@ const WaterMeterData = () => {
                 <CForm className='w-25'>
                   <CFormInput
                     label='เลขมาตรน้ำ'
-                    name='meternumber'
+                    name='editmeternumber'
                     value={meternumber}
                     // onChange={(e) => setmeternumber(e.target.value)}
                     onChange={handleInputChange2}
                   />
-                  {error && (
+                  {error2 && (
                     <ErrorContainer>
                       <img
                         src={ErrorIcon}
@@ -1619,7 +1677,7 @@ const WaterMeterData = () => {
                         height='16'
                         style={{ marginTop: -21 }}
                       />
-                      <ErrorText>{error}</ErrorText>
+                      <ErrorText>{error2}</ErrorText>
                     </ErrorContainer>
                   )}{' '}
                 </CForm>
@@ -1723,10 +1781,23 @@ const WaterMeterData = () => {
                 <CForm className='w-25'>
                   <CFormInput
                     label='เลขมาตรน้ำ'
-                    name='meternumber'
+                    name='meternumberuse'
                     value={meternumber}
-                    onChange={(e) => setmeternumber(e.target.value)}
+                    // onChange={(e) => setmeternumber(e.target.value)}
+                    onChange={handleInputChange2}
                   />
+                  {error3 && (
+                    <ErrorContainer>
+                      <img
+                        src={ErrorIcon}
+                        alt='Error Icon'
+                        width='16'
+                        height='16'
+                        style={{ marginTop: -21 }}
+                      />
+                      <ErrorText>{error3}</ErrorText>
+                    </ErrorContainer>
+                  )}{' '}
                 </CForm>
                 <CForm className='w-25'>
                   <CFormInput

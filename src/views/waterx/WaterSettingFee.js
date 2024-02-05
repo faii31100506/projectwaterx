@@ -45,6 +45,20 @@ import CIcon from '@coreui/icons-react';
 import { cilSearch, cilChevronLeft } from '@coreui/icons';
 import { Row } from 'primereact/row';
 import { getAllByDisplayValue } from '@testing-library/react';
+import styled from 'styled-components';
+import ErrorIcon from '../../assets/images/warning.png';
+const ErrorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+`;
+
+const ErrorText = styled.p`
+  color: red;
+  font-style: italic;
+  margin-left: 5px;
+  font-size: 14px;
+`;
 
 const WaterSettingFee = () => {
   const [settingPage, setSettingPage] = useState('13');
@@ -106,7 +120,7 @@ const WaterSettingFee = () => {
     }).then(async function (result) {
       if (result.value) {
         let resultsL = await axios
-          .post('http://localhost:4034/api/nahra/modelpro', data)
+          .post(process.env.REACT_APP_API + '/modelpro', data)
           .then(
             (res) => {
               if (res.status === 200) {
@@ -140,6 +154,36 @@ const WaterSettingFee = () => {
 
   // แก้ไข
   const handleput = (event) => {
+    if (
+      addNewData.promotion_percent === '' ||
+      addNewData.promotion_percent === null
+    ) {
+      return Swal.fire({
+        text: 'โปรดกรอกข้อมูลก่อนบันทึก',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (
+      addNewData.promotion_name === '' ||
+      addNewData.promotion_name === null
+    ) {
+      return Swal.fire({
+        text: 'โปรดกรอกสิทธิ์ที่ได้รับ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
     event.preventDefault();
     var data = {
       promotion_percent: addNewData.promotion_percent,
@@ -162,8 +206,7 @@ const WaterSettingFee = () => {
       if (result.value) {
         let resultsL = await axios
           .put(
-            'http://localhost:4034/api/nahra/promotion/' +
-              addNewData.promotion_id,
+            process.env.REACT_APP_API + '/promotion/' + addNewData.promotion_id,
             data
           )
           .then(
@@ -207,7 +250,6 @@ const WaterSettingFee = () => {
     var data = {
       promotion_id: promotion_id,
     };
-    console.log(promotion_id);
 
     Swal.fire({
       text: 'คุณต้องการลบข้อมูลหรือไม่ ?',
@@ -224,7 +266,7 @@ const WaterSettingFee = () => {
       if (result.value) {
         let resultsL = await axios
           .delete(
-            'http://localhost:4034/api/nahra/prodel/' + data.promotion_id,
+            process.env.REACT_APP_API + '/prodel/' + data.promotion_id,
             {}
           )
           .then(

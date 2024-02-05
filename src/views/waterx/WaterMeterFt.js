@@ -28,25 +28,9 @@ import {
   localeOption,
   localeOptions,
 } from 'primereact/api';
-// import React from 'react';
-// import { DataTable } from 'primereact/datatable';
-// import { Column } from 'primereact/column';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
-// import { useState, useEffect } from 'react';
-// import { FilterMatchMode } from 'primereact/api';
-// import { InputText } from 'primereact/inputtext';
 import './waterx.css';
-// import { Dropdown } from 'primereact/dropdown';
-// import { Dialog } from 'primereact/dialog';
-// import PropTypes from 'prop-types';
-// import CIcon from '@coreui/icons-react';
-// import { cilSearch } from '@coreui/icons';
-// import axios from 'axios';
-// import ReactToPrint from 'react-to-print';
-// import Swal from 'sweetalert2';
-// import NumberFormat from 'react-number-format';
-// import moment from 'moment-timezone';
 
 import {
   CFormCheck,
@@ -110,6 +94,7 @@ const WaterMeterFt = () => {
     cycle_year: precycle_year,
     cycle_month: precycle_month,
   });
+
   const Displayunit = (rowData) => {
     return (
       <span>
@@ -136,7 +121,7 @@ const WaterMeterFt = () => {
   const trasection = () => {
     var strFilter = StrFilter2(dataFiltermonthandyear, '');
     axios
-      .get('http://localhost:4034/api/nahra/transaction' + strFilter)
+      .get(process.env.REACT_APP_API + '/transaction' + strFilter)
       .then((res) => {
         setDatax(res.data.data);
       })
@@ -146,33 +131,26 @@ const WaterMeterFt = () => {
 
   useEffect(() => {
     axios
-
-      .get('http://localhost:4034/api/nahra/rate')
+      .get(process.env.REACT_APP_API + '/rate')
       .then((res) => {
         const data = res.data.data;
-        // const truedata = data.map((item) => item.min_m3);
-
         setrate(data);
-
-        // console.log(data[2].min_m3);
-        // console.log(data);
       })
       .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
     axios
-      .get('http://localhost:4034/api/nahra/listusernitprasection')
+      .get(process.env.REACT_APP_API + '/listusernitprasection')
       .then((res) => {
         setDataxcensus(res.data.data);
-        // setmeterasset_id(res.data.data.meterasset_id);
       })
       .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
     axios
-      .get('http://localhost:4034/api/nahra/previousnum?id=' + meterasset_id)
+      .get(process.env.REACT_APP_API + '/previousnum?id=' + meterasset_id)
       .then((res) => {
         if (
           res.data.data[0].previousnum == null ||
@@ -241,15 +219,14 @@ const WaterMeterFt = () => {
 
     var namee = name;
     var valuee = value;
-    if (namee == 'cycle_year') {
+    if (namee === 'cycle_year') {
       setSelectedYears(valuee);
     }
 
-    if (namee == 'cycle_month') {
+    if (namee === 'cycle_month') {
       setSelectedMonth(valuee);
     }
   };
-  console.log('dataFiltermonthandyear', dataFiltermonthandyear);
 
   const handleclink = () => {
     var strFilter = StrFilter2(dataFiltermonthandyear, '');
@@ -280,8 +257,6 @@ const WaterMeterFt = () => {
     // trasection();
   };
 
-  console.log('datax', datax);
-
   // กดบันทึกมาตรน้ำ
   const handleprasection = () => {
     let cycle_year = moment()
@@ -290,7 +265,7 @@ const WaterMeterFt = () => {
       .format('YYYY');
     let cycle_month = moment().tz('Asia/Bangkok').format('MM');
 
-    if (currentnum == '') {
+    if (currentnum === '') {
       return Swal.fire({
         text: 'โปรดกรอกข้อมูลก่อนบันทึก',
         icon: 'warning',
@@ -326,7 +301,7 @@ const WaterMeterFt = () => {
     };
 
     // เช็คจาก previousnum ว่าเป็นคนที่เคยมีใน prasection มั้ย
-    if (previousnum == '0') {
+    if (previousnum === '0') {
       Swal.fire({
         text: 'คุณต้องการบันทึกข้อมูลหรือไม่ ?',
         icon: 'warning',
@@ -548,7 +523,6 @@ const WaterMeterFt = () => {
 
       setcurrentnum('');
     } else {
-      // const withoutCommas = value.replaceAll(',', '');
       setcurrentnum(value);
     }
 
@@ -565,7 +539,6 @@ const WaterMeterFt = () => {
 
       setcurrentnum('');
     } else {
-      // const withoutCommas = value.replaceAll(',', '');
       setcurrentnum(value);
     }
   };
@@ -604,7 +577,7 @@ const WaterMeterFt = () => {
     content = (
       <>
         <CCol>
-          <h2 className='mt-4 ms-4'>รายการจดค่าน้ำ</h2>
+          <h2 className='mt-4 ms-4'>รายชื่อคนที่จดค่าน้ำแล้ว</h2>
         </CCol>
         <div className='d-flex justify-content-between mt-4 ms-4'>
           <div className='d-flex mt-2'>
@@ -669,7 +642,7 @@ const WaterMeterFt = () => {
             onClick={() => setMeterFtpage(1)}
             style={{ fontSize: 14, height: 31 }}
           >
-            จดมิเตอร์ค่าน้ำ
+            จดค่าน้ำ
           </button>
         </div>
         <div className='mt-5'>
@@ -698,11 +671,11 @@ const WaterMeterFt = () => {
               header='เลขที่ประจำมาตรวัดน้ำ'
               style={{ fontSize: 14 }}
             ></Column>
-            <Column
+            {/* <Column
               field='address'
               header='ที่ติดตั้งมาตร'
               style={{ fontSize: 14 }}
-            ></Column>
+            ></Column> */}
 
             <Column
               field='previousnum'
@@ -742,11 +715,11 @@ const WaterMeterFt = () => {
             height={30}
             onClick={() => setMeterFtpage(0)}
           />
-          <h2 className='ms-2'>จดมิเตอร์ค่าน้ำ</h2>
+          <h2 className='ms-2'>จดค่าน้ำ</h2>
         </div>
         <div className='d-flex justify-content-between mt-4 ms-4'>
           <div className='d-flex'>
-            <Dropdown
+            {/* <Dropdown
               placeholder='Year'
               className='ms-2 rounded-pill'
               value={selectedYears}
@@ -759,7 +732,7 @@ const WaterMeterFt = () => {
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.value)}
               options={month}
-            />
+            /> */}
             <div className='p-input-icon-left ms-2'>
               <CIcon icon={cilSearch}></CIcon>
               <InputText
@@ -779,7 +752,7 @@ const WaterMeterFt = () => {
         </div>
         <div className='mt-5'>
           <DataTable
-            header='ตารางรายการจดมิเตอร์ค่าน้ำ'
+            header='ตารางรายการจดค่าน้ำ'
             filters={filters}
             paginator
             value={dataxcensus}
@@ -814,7 +787,7 @@ const WaterMeterFt = () => {
               field='status_name'
             ></Column>
             <Column
-              field='จดมิเตอร์ค่าน้ำ'
+              field='จดค่าน้ำ'
               body={(rowData) => MeterRecord(rowData)}
               header=''
             ></Column>
@@ -1056,14 +1029,14 @@ const WaterMeterFt = () => {
           พิมพ์ใบเสร็จ
         </button>
       </div>
-      <div className='mt-auto text-center'>
+      {/* <div className='mt-auto text-center'>
         <button
           className='wblue-button-unrounded mt-2 w-100'
           onClick={handlePrint2}
         >
           พิมพ์ใบเสร็จ
         </button>
-      </div>
+      </div> */}
       {/* <ReactToPrint
         trigger={(dataid) => (
           <div className="mt-auto text-center">
