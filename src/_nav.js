@@ -13,6 +13,11 @@ import {
 } from '@coreui/icons';
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react';
 import '../src/views/waterx/waterx.css';
+import Swal from 'sweetalert2';
+import { handleBreakpoints } from '@mui/system';
+const handlelogout = () => {
+  alert('อกก');
+};
 
 const _nav = [
   // {
@@ -154,6 +159,7 @@ const _nav = [
     component: CNavItem,
     name: 'ออกระบบ',
     to: '/login',
+    // to: (onclick = { handlelogout }),
     icon: <CIcon icon={cilAccountLogout} customClassName='nav-icon' />,
   },
 ];

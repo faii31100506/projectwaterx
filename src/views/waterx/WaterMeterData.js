@@ -815,7 +815,7 @@ const WaterMeterData = () => {
 
   const handleSelect = (e) => {
     var value = e.target.value;
-    var Activity = datalistmeter.filter((res) => res.metermaster_id === value);
+    var Activity = datalistmeter.filter((res) => res.metermaster_id == value);
     if (Activity.length !== 0) {
       setshowbrand(Activity[0].brand);
       setshowmodel(Activity[0].model);
@@ -828,7 +828,7 @@ const WaterMeterData = () => {
 
   const handleSelect2 = (value) => {
     setmetermaster_id(value);
-    var Activity = datalistmeter.filter((res) => res.metermaster_id === value);
+    var Activity = datalistmeter.filter((res) => res.metermaster_id == value);
     if (Activity.length !== 0) {
       setshowbrand(Activity[0].brand);
       setshowmodel(Activity[0].model);

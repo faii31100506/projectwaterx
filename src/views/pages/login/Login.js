@@ -86,6 +86,13 @@ const Login = () => {
       }
     } else {
       // Username not found
+      return Swal.fire({
+        icon: 'error',
+        title: 'succesfull',
+        preConfirm: () => {
+          // return (window.location.href = '/water-register');
+        },
+      });
       setErrorMessages({ name: 'uname', message: errors.uname });
     }
   };

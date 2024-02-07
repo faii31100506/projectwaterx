@@ -263,7 +263,7 @@ const WaterMeterFt = () => {
       .tz('Asia/Bangkok')
       .add(543, 'years')
       .format('YYYY');
-    let cycle_month = moment().tz('Asia/Bangkok').format('MM');
+    let cycle_month = moment().tz('Asia/Bangkok').format('M');
 
     if (currentnum === '') {
       return Swal.fire({

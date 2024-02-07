@@ -691,7 +691,8 @@ const WaterRegister = () => {
 
   const handlemeterasset = (e) => {
     var value = e.target.value;
-    var Activity = dataxnull.filter((res) => res.meterasset_id === value);
+    var Activity = dataxnull.filter((res) => res.meterasset_id == value);
+    console.log(Activity.length);
     if (Activity.length !== 0) {
       setshowbrand(Activity[0].brand);
       setshowmodel(Activity[0].model);
@@ -702,6 +703,8 @@ const WaterRegister = () => {
     setmeterasset_id(e.target.value);
   };
 
+  console.log(meterasset_id);
+  console.log(dataxnull);
   const nextPage = () => {
     setRegisterform(registerform + 1);
     setActiveIndex(activeIndex + 1);
@@ -1354,8 +1357,11 @@ const WaterRegister = () => {
   const handlecheck = async (e) => {
     const { name, value } = e.target;
 
+    console.log();
+
     var lengthvalue = e.target.value.length;
     setcheckpopid(lengthvalue);
+    setpop_id(value);
     setFormData({
       ...formData,
       [name]: value,
