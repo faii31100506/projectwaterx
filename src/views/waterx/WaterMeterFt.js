@@ -19,6 +19,7 @@ import NumberFormat from 'react-number-format';
 import moment from 'moment-timezone';
 import { Calendar } from 'primereact/calendar';
 import { Button } from 'primereact/button';
+import { useParams, useLocation } from 'react-router-dom';
 
 import {
   locale,
@@ -82,6 +83,10 @@ const WaterMeterFt = () => {
   const [Maintenance, setMaintenance] = useState(5);
   const [MeterUnit, setMeterUnit] = useState(5);
   const TRANSACTION_API = process.env.REACT_APP_TRANSACTION_API;
+  const location = useLocation();
+  const user2 = JSON.parse(localStorage.getItem('myObject111'));
+  const [officer, setofficer] = useState('');
+  const [recordby, setrecordby] = useState('');
 
   let unituse = currentnum - previousnum;
   let precycle_year = moment()
@@ -116,6 +121,7 @@ const WaterMeterFt = () => {
 
   useEffect(() => {
     trasection();
+    offi();
   }, []);
 
   const trasection = () => {
@@ -128,6 +134,13 @@ const WaterMeterFt = () => {
       .catch((err) => console.log(err));
   };
   const [rate, setrate] = useState([]);
+
+  const offi = () => {
+    axios
+      .get(process.env.REACT_APP_API + '/officer')
+      .then((res) => setofficer(res.data.data))
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
     axios
@@ -257,6 +270,8 @@ const WaterMeterFt = () => {
     // trasection();
   };
 
+  console.log(officer);
+
   // กดบันทึกมาตรน้ำ
   const handleprasection = () => {
     let cycle_year = moment()
@@ -298,6 +313,7 @@ const WaterMeterFt = () => {
       status_trasaction: '1',
       cycle_year: cycle_year,
       cycle_month: cycle_month,
+      record_by: recordby,
     };
 
     // เช็คจาก previousnum ว่าเป็นคนที่เคยมีใน prasection มั้ย
@@ -570,6 +586,15 @@ const WaterMeterFt = () => {
     }
   };
 
+  const checkuser2 = async () => {
+    if (user2 !== '') {
+      var Activity = officer.filter((res) => res.fullname == user2);
+      console.log(Activity);
+      setrecordby(Activity[0].officer_id);
+    }
+    setMeterFtpage(1);
+  };
+
   let content;
 
   // หน้ารายชื่อคนที่จดแล้ว
@@ -639,7 +664,7 @@ const WaterMeterFt = () => {
           </div>
           <button
             className='wblue-button me-5'
-            onClick={() => setMeterFtpage(1)}
+            onClick={checkuser2}
             style={{ fontSize: 14, height: 31 }}
           >
             จดค่าน้ำ

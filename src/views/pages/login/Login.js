@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate, Route, Routes, Link } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { Navigate, Route, Routes, Link, BrowserRouter } from 'react-router-dom';
 import {
   CButton,
   CCard,
@@ -16,14 +16,23 @@ import Swal from 'sweetalert2';
 // import "src/views/pages/login/Login.css";
 import '../../../views/pages/login/Login.css';
 import axios from 'axios';
-
+import WaterRegister from '../../../views/waterx/WaterRegister';
+import { useNavigate } from 'react-router-dom';
+// import { useUser } from './UserContext';
+import { setData } from './UserContext';
 const Login = () => {
+  // const { setUserId } = useContext(useUser);
   const [Username, setUsername] = useState('');
   const [Password, setPassword] = useState('');
   const [database, setdatabase] = useState('');
+  const [OpenEdit, setOpenEdit] = useState(false);
+  const [data, setData] = useState('');
 
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate();
+
+  // const [setUserId] = useUser('');
 
   useEffect(() => {
     axios
@@ -40,26 +49,32 @@ const Login = () => {
     pass: 'invalid password',
   };
 
-  const handleLogin = (event) => {
-    // alert("Pass");
-    // if (Username == '123456' && Password == '123456') {
-    //   // Swal.fire('Login Success!', 'Welcome to Water X Project', 'success');
-    //   Swal.fire({
-    //     icon: 'success',
-    //     title: 'succesfull',
-    //     preConfirm: () => {
-    //       return (window.location.href = '/water-register');
-    //     },
-    //   });
-    //   setUsername('');
-    //   setPassword('');
-    // } else {
-    //   Swal.fire('Sorry!', "Can't login, please try again", 'error');
-    //   setUsername('');
-    //   setPassword('');
-    // }
+  console.log(database);
 
-    console.log(event);
+  const handleLogin = (event) => {
+    if (Username == '') {
+      return Swal.fire({
+        text: 'กรุณากรอก Username',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (Password == '') {
+      return Swal.fire({
+        text: 'กรุณากรอก Password',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
 
     //Prevent page reload
     event.preventDefault();
@@ -74,27 +89,49 @@ const Login = () => {
       if (userData.pass !== Password) {
         // Invalid password
         setErrorMessages({ name: 'pass', message: errors.pass });
-      } else {
-        setIsSubmitted(true);
         return Swal.fire({
-          icon: 'success',
-          title: 'succesfull',
-          preConfirm: () => {
-            return (window.location.href = '/water-register');
+          text: 'เข้าสู่ระบบไม่สำเร็จ',
+          icon: 'error',
+          buttonsStyling: false,
+          confirmButtonText: 'ตกลง',
+          customClass: {
+            confirmButton: 'btn fw-bold btn-primary',
           },
         });
+      } else {
+        setIsSubmitted(true);
+
+        const userId = userData.nameuser;
+        const myObject = { id: userData.officer_id, name: userData.nameuser };
+
+        localStorage.setItem('myObject111', JSON.stringify(userId));
+
+        navigate(`/water-register`);
+
+        console.log(localStorage);
+        console.log(localStorage.myObject111);
       }
     } else {
       // Username not found
       return Swal.fire({
         icon: 'error',
-        title: 'succesfull',
+        title: 'เข้าสู่ระบบไม่สำเร็จ',
         preConfirm: () => {
           // return (window.location.href = '/water-register');
         },
       });
-      setErrorMessages({ name: 'uname', message: errors.uname });
     }
+  };
+
+  const handleLogin2 = () => {
+    // ตรวจสอบข้อมูลผู้ใช้งาน
+    // if (Username === '123' && Password === '123') {
+    //   onLogin(true);
+    // } else {
+    //   alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+    // }
+
+    setUserId('123');
   };
 
   console.log('isSubmitted', isSubmitted);

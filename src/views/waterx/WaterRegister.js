@@ -14,6 +14,7 @@ import { Steps } from 'primereact/steps';
 import axios from 'axios';
 import { Calendar } from 'primereact/calendar';
 import NumberFormat from 'react-number-format';
+import { useParams, useLocation } from 'react-router-dom';
 
 import {
   CAvatar,
@@ -162,6 +163,20 @@ const WaterRegister = () => {
   const [error6, setError6] = useState('');
   const [error7, setError7] = useState('');
   const [error8, setError8] = useState('');
+  const [officer, setofficer] = useState('');
+  const location = useLocation();
+  const message = location.state ? location.state.message : '';
+
+  const user2 = JSON.parse(localStorage.getItem('myObject111'));
+  // const ids = user2.map(({ id }) => id);
+  // const ids = user2.map((item) => item.id);
+
+  console.log('user2', user2);
+
+  console.log(message);
+  const [user, setuser] = useState('');
+
+  // console.log('ids', ids);
 
   // เช็คชื่อนามสกุล
   const handleInputChange2 = (e) => {
@@ -329,6 +344,7 @@ const WaterRegister = () => {
     meternowner([]);
     maxcensus_id();
     maxb_id();
+    offi();
   }, []);
 
   const census = () => {
@@ -368,6 +384,13 @@ const WaterRegister = () => {
     axios
       .get(process.env.REACT_APP_API + '/province')
       .then((res) => setdataprovice(res.data.data))
+      .catch((err) => console.log(err));
+  };
+
+  const offi = () => {
+    axios
+      .get(process.env.REACT_APP_API + '/officer')
+      .then((res) => setofficer(res.data.data))
       .catch((err) => console.log(err));
   };
 
@@ -640,7 +663,7 @@ const WaterRegister = () => {
                           }
                           Swal.fire({
                             icon: 'success',
-                            title: 'succesfull',
+                            title: 'บันทึกข้อมูลสำเร็จ',
                             preConfirm: () => {
                               return window.location.reload();
                             },
@@ -654,10 +677,10 @@ const WaterRegister = () => {
             },
             async (error) => {
               Swal.fire({
-                text: 'บันทึกข้อมูลไม่สำเร็จ.',
+                text: 'บันทึกข้อมูลไม่สำเร็จ',
                 icon: 'error',
                 buttonsStyling: false,
-                confirmButtonText: 'ตกลง.',
+                confirmButtonText: 'ตกลง',
                 customClass: {
                   confirmButton: 'btn fw-bold btn-primary',
                 },
@@ -1263,7 +1286,7 @@ const WaterRegister = () => {
               console.log(res);
               Swal.fire({
                 icon: 'success',
-                title: 'succesfull',
+                title: 'บันทึกข้อมูลสำเร็จ',
                 preConfirm: () => {
                   return window.location.reload();
                 },

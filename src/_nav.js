@@ -15,9 +15,16 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react';
 import '../src/views/waterx/waterx.css';
 import Swal from 'sweetalert2';
 import { handleBreakpoints } from '@mui/system';
+import { useUser } from './views/pages/login/UserContext';
+import axios from 'axios';
+// import { useState, useEffect } from 'react';
+
 const handlelogout = () => {
   alert('อกก');
 };
+const user2 = JSON.parse(localStorage.getItem('myObject111'));
+
+// const { userId } = useUser();
 
 const _nav = [
   // {
@@ -161,6 +168,13 @@ const _nav = [
     to: '/login',
     // to: (onclick = { handlelogout }),
     icon: <CIcon icon={cilAccountLogout} customClassName='nav-icon' />,
+  },
+  {
+    component: CNavItem,
+    name: user2,
+    to: '/water-register',
+    // to: (onclick = { handlelogout }),
+    // icon: <CIcon icon={cilAccountLogout} customClassName='nav-icon' />,
   },
 ];
 

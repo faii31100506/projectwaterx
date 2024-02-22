@@ -51,6 +51,7 @@ function isNotEmpty(obj) {
   return obj !== undefined && obj !== null && obj !== '';
 }
 
+//filter
 function StrFilter2(data, query) {
   var str = '';
   Object.keys(data).forEach(function (key) {
@@ -65,6 +66,7 @@ function StrFilter2(data, query) {
   });
   return str;
 }
+
 const WaterDashBoard = () => {
   let precycle_year = moment()
     .tz('Asia/Bangkok')
@@ -98,140 +100,6 @@ const WaterDashBoard = () => {
     dashyear();
     dashstatis();
     dashstatisyear();
-  }, []);
-
-  useEffect(() => {
-    setMocdata([
-      {
-        fullname: 'Tom Heaton',
-        meter_num: '0-112734-56',
-        address: '56/1   หมู่ 3   ต.จรเข้เผือก',
-        type: 'xxxxxxxxxxxxxxxxxxx',
-        status: 'ปกติ',
-        Useset_unit: '10',
-      },
-      {
-        fullname: 'André Onana',
-        meter_num: '0-112734-56',
-        address: '32   หมู่ 3   ต.จรเข้เผือก',
-        type: 'xxxxxxxxxxxxxxxxxxx',
-        status: 'ระงับใช้น้ำชั่วคราว',
-        Useset_unit: '5',
-      },
-      {
-        fullname: 'Altay Bayindir',
-        meter_num: '0-112734-56',
-        address: '56/2   หมู่ 4   ต.จรเข้เผือก',
-        type: 'xxxxxxxxxxxxxxxxxxx',
-        status: 'ปกติ',
-        Useset_unit: '25',
-      },
-      {
-        fullname: 'Victor Lindelöf',
-        meter_num: '0-112734-56',
-        address: '11/1   หมู่ 4   ต.จรเข้เผือก',
-        type: 'xxxxxxxxxxxxxxxxxxx',
-        status: 'ค้างชำระ',
-        Useset_unit: '9',
-      },
-      {
-        fullname: 'Harry Maguire',
-        meter_num: '0-112734-56',
-        address: '39/2   หมู่ 4   ต.จรเข้เผือก',
-        type: 'xxxxxxxxxxxxxxxxxxx',
-        status: 'ปกติ',
-        Useset_unit: '15',
-      },
-      {
-        fullname: 'Lisandro Martínez',
-        meter_num: '0-112734-56',
-        address: '88   หมู่ 4   ต.จรเข้เผือก',
-        type: 'xxxxxxxxxxxxxxxxxxx',
-        status: 'ปกติ',
-        Useset_unit: '16',
-      },
-      {
-        fullname: 'Tyrell Malacia',
-        meter_num: '0-112734-56',
-        address: '88 หมู่ 4 ต.จรเข้เผือก',
-        type: 'xxxxxxxxxxxxxxxxxxx',
-        status: 'ระงับใช้น้ำชั่วคราว',
-        Useset_unit: '10',
-      },
-      {
-        fullname: "Raphaël Varane",
-        meter_num: "0-112734-56",
-        address: "72 หมู่ 3 ต.จรเข้เผือก",
-        type: "xxxxxxxxxxxxxxxxxxx",
-        status: "ระงับใช้น้ำชั่วคราว",
-        Useset_unit: "5",
-      },
-      {
-        fullname: "Diogo Dalot",
-        meter_num: "0-112734-56",
-        address: "95 หมู่ 6 ต.จรเข้เผือก",
-        type: "xxxxxxxxxxxxxxxxxxx",
-        status: "ค้างชำระ",
-        Useset_unit: "7",
-      },
-      {
-        fullname: "Luke Shaw",
-        meter_num: "0-112734-56",
-        address: "61 หมู่ 7 ต.จรเข้เผือก",
-        type: "xxxxxxxxxxxxxxxxxxx",
-        status: "ปกติ",
-        Useset_unit: "15",
-      },
-      {
-        fullname: "Aaron Wan-Bissaka",
-        meter_num: "0-112734-56",
-        address: "83 หมู่ 1 ต.จรเข้เผือก",
-        type: "xxxxxxxxxxxxxxxxxxx",
-        status: "ปกติ",
-        Useset_unit: "10",
-      },
-      {
-        fullname: "Jonny Evans",
-        meter_num: "0-112734-56",
-        address: "47 หมู่ 9 ต.จรเข้เผือก",
-        type: "xxxxxxxxxxxxxxxxxxx",
-        status: "ปกติ",
-        Useset_unit: "9",
-      },
-      {
-        fullname: "Bruno Fernandes",
-        meter_num: "0-112734-56",
-        address: "59 หมู่ 5 ต.จรเข้เผือก",
-        type: "xxxxxxxxxxxxxxxxxxx",
-        status: "ปกติ",
-        Useset_unit: "8",
-      },
-      {
-        fullname: "Christian Eriksen",
-        meter_num: "0-112734-56",
-        address: "34 หมู่ 2 ต.จรเข้เผือก",
-        type: "xxxxxxxxxxxxxxxxxxx",
-        status: "ปกติ",
-        Useset_unit: "13",
-      },
-      {
-        fullname: 'Casemiro',
-        meter_num: '0-112734-56',
-        address: '76 หมู่ 8 ต.จรเข้เผือก',
-        type: 'xxxxxxxxxxxxxxxxxxx',
-        status: 'ปกติ',
-        Useset_unit: '40',
-      },
-      {
-        fullname: "Facundo Pellistri",
-        meter_num: "0-112734-56",
-        address: "21 หมู่ 10 ต.จรเข้เผือก",
-        type: "xxxxxxxxxxxxxxxxxxx",
-        status: "ค้างชำระ",
-        Useset_unit: "20",
-      },
-    ]);
-    console.log(Mocdata);
   }, []);
 
   //ดึงข้อมูลโปรโมชั่น
@@ -271,6 +139,7 @@ const WaterDashBoard = () => {
       .get(process.env.REACT_APP_API + '/dashstatis' + strFilter)
       .then((res) => {
         setdatastatis(res.data.data);
+        console.log(res.data.data);
       })
       .catch((err) => console.log(err));
   };
@@ -350,7 +219,6 @@ const WaterDashBoard = () => {
       setSelecteperson(valuee);
     }
   };
-  console.log('dataFiltermonthandyear', dataFiltermonthandyear);
 
   const handleclink = () => {
     setshowyear(selectedYears);
@@ -440,8 +308,6 @@ const WaterDashBoard = () => {
       [promotion_id]: '',
     });
   };
-
-  // console.log('datastatis', datastatis);
 
   let content;
 

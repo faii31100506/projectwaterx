@@ -47,6 +47,7 @@ import { cilSearch, cilChevronLeft } from '@coreui/icons';
 import { Row } from 'primereact/row';
 import styled from 'styled-components';
 import ErrorIcon from '../../assets/images/warning.png';
+
 const ErrorContainer = styled.div`
   display: flex;
   align-items: center;
@@ -84,6 +85,9 @@ const WaterUserRole = () => {
   const [org_name, setorgname] = useState('');
   const [username, setusername] = useState('');
   const [pass, setpass] = useState('');
+  const [checkname, setcheckname] = useState('');
+  const [checklastname, setchecklastname] = useState('');
+  const [checkusername, setcheckusername] = useState('');
 
   const [error, setError] = useState('');
   const [error2, setError2] = useState('');
@@ -96,9 +100,31 @@ const WaterUserRole = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  console.log(datax);
+
   // บันทึกข้อมูล
-  const handlepost = (event) => {
-    if (name == '' || name == null) {
+  const handlepost = async (event) => {
+    if (
+      (name !== '' || name !== null) &&
+      (lastname !== '' || lastname !== null)
+    ) {
+      var Activity = datax.filter((res) => res.name == name);
+      var Activity2 = datax.filter((res) => res.lastname == lastname);
+
+      if (Activity.length !== 0 && Activity2.length !== 0) {
+        return Swal.fire({
+          text: 'ชื่อและนามสกุลมีอยู่แล้วในระบบ',
+          icon: 'error',
+          buttonsStyling: false,
+          confirmButtonText: 'ตกลง',
+          customClass: {
+            confirmButton: 'btn fw-bold btn-primary',
+          },
+        });
+      }
+    }
+
+    if (name === '' || name === null) {
       return Swal.fire({
         text: 'โปรดกรอกชื่อ',
         icon: 'warning',
@@ -109,6 +135,7 @@ const WaterUserRole = () => {
         },
       });
     }
+
     if (lastname == '' || lastname == null) {
       return Swal.fire({
         text: 'โปรดกรอกนานสกุล',
@@ -120,6 +147,7 @@ const WaterUserRole = () => {
         },
       });
     }
+
     if (pos_name == '' || pos_name == null) {
       return Swal.fire({
         text: 'โปรดเลือกตำแหน่ง',
@@ -131,6 +159,7 @@ const WaterUserRole = () => {
         },
       });
     }
+
     if (org_name == '' || org_name == null) {
       return Swal.fire({
         text: 'โปรดเลือกองค์กร',
@@ -142,6 +171,45 @@ const WaterUserRole = () => {
         },
       });
     }
+
+    if (username !== '' || username !== null) {
+      var Activity = datax.filter((res) => res.username == username);
+
+      if (Activity.length !== 0) {
+        return Swal.fire({
+          text: 'Username ซ้ำ',
+          icon: 'error',
+          buttonsStyling: false,
+          confirmButtonText: 'ตกลง',
+          customClass: {
+            confirmButton: 'btn fw-bold btn-primary',
+          },
+        });
+      }
+    } else if (username === '') {
+      return Swal.fire({
+        text: 'โปรดกรอก Username',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (pass == '' || pass == null) {
+      return Swal.fire({
+        text: 'โปรดกรอก Password',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
     var data = {
       name: name,
       lastname: lastname,
@@ -197,8 +265,119 @@ const WaterUserRole = () => {
   };
 
   // แก้ไข
-  const handleput = (event) => {
-    event.preventDefault();
+  const handleput = async (event) => {
+    if (
+      (addNewData.name !== '' || addNewData.name !== null) &&
+      (addNewData.lastname !== '' || addNewData.lastname !== null)
+    ) {
+      var Activity = datax.filter((res) => res.name == addNewData.name);
+      var Activity2 = datax.filter(
+        (res) => res.lastname == addNewData.lastname
+      );
+
+      if (
+        addNewData.name !== checkname &&
+        addNewData.lastname !== checklastname &&
+        Activity.length !== 0 &&
+        Activity2 !== 0
+      ) {
+        return Swal.fire({
+          text: 'ชื่อและนามสกุลมีอยู่แล้วในระบบ',
+          icon: 'error',
+          buttonsStyling: false,
+          confirmButtonText: 'ตกลง',
+          customClass: {
+            confirmButton: 'btn fw-bold btn-primary',
+          },
+        });
+      }
+    }
+
+    if (addNewData.name === '' || addNewData.name === null) {
+      return Swal.fire({
+        text: 'โปรดกรอกชื่อ',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (addNewData.lastname == '' || addNewData.lastname == null) {
+      return Swal.fire({
+        text: 'โปรดกรอกนานสกุล',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (addNewData.pos_name == '' || addNewData.pos_name == null) {
+      return Swal.fire({
+        text: 'โปรดเลือกตำแหน่ง',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (addNewData.org_name == '' || addNewData.org_name == null) {
+      return Swal.fire({
+        text: 'โปรดเลือกองค์กร',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (addNewData.username !== '' || addNewData.username !== null) {
+      var Activity = datax.filter((res) => res.username == addNewData.username);
+
+      if (addNewData.username !== checkusername && Activity.length !== 0) {
+        return Swal.fire({
+          text: 'Username ซ้ำ',
+          icon: 'error',
+          buttonsStyling: false,
+          confirmButtonText: 'ตกลง',
+          customClass: {
+            confirmButton: 'btn fw-bold btn-primary',
+          },
+        });
+      }
+    } else if (addNewData.username === '') {
+      return Swal.fire({
+        text: 'โปรดกรอก Username',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
+
+    if (addNewData.pass == '' || addNewData.pass == null) {
+      return Swal.fire({
+        text: 'โปรดกรอก Password',
+        icon: 'warning',
+        buttonsStyling: false,
+        confirmButtonText: 'ตกลง',
+        customClass: {
+          confirmButton: 'btn fw-bold btn-primary',
+        },
+      });
+    }
     var data = {
       name: addNewData.name,
       lastname: addNewData.lastname,
@@ -501,9 +680,14 @@ const WaterUserRole = () => {
   // แก้ไขข้อมูล
   const handleEdit = (data) => {
     setEditData(data);
+    setcheckname(data.name);
+    setchecklastname(data.lastname);
+    setcheckusername(data.username);
     console.log(editData);
     console.log(OFFICER_API);
   };
+
+  console.log(editData);
 
   // แก้ไข
   if (registerpage === 2) {
