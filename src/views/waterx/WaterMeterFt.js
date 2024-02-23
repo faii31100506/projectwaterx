@@ -20,6 +20,7 @@ import moment from 'moment-timezone';
 import { Calendar } from 'primereact/calendar';
 import { Button } from 'primereact/button';
 import { useParams, useLocation } from 'react-router-dom';
+import { BlockUILoading1 } from './BlockUILoading';
 
 import {
   locale,
@@ -42,6 +43,7 @@ import {
   CCol,
   CButtonGroup,
   CRow,
+  CButton,
 } from '@coreui/react';
 import { Component } from 'react';
 import { useRef } from 'react';
@@ -87,6 +89,8 @@ const WaterMeterFt = () => {
   const user2 = JSON.parse(localStorage.getItem('myObject111'));
   const [officer, setofficer] = useState('');
   const [recordby, setrecordby] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [checkmonth, setcheckmonth] = useState('');
 
   let unituse = currentnum - previousnum;
   let precycle_year = moment()
@@ -115,13 +119,10 @@ const WaterMeterFt = () => {
     window.print();
   };
 
-  const handlePrint2 = () => {
-    <ReactToPrint content={() => componentRef.current} />;
-  };
-
   useEffect(() => {
     trasection();
     offi();
+    checkmonth2();
   }, []);
 
   const trasection = () => {
@@ -139,6 +140,16 @@ const WaterMeterFt = () => {
     axios
       .get(process.env.REACT_APP_API + '/officer')
       .then((res) => setofficer(res.data.data))
+      .catch((err) => console.log(err));
+  };
+
+  const checkmonth2 = () => {
+    axios
+      .get(process.env.REACT_APP_API + '/checkmonth')
+      .then((res) => {
+        setcheckmonth(res.data.data[0].month);
+        console.log(res.data.data[0].month);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -269,8 +280,6 @@ const WaterMeterFt = () => {
 
     // trasection();
   };
-
-  console.log(officer);
 
   // กดบันทึกมาตรน้ำ
   const handleprasection = () => {
@@ -592,7 +601,123 @@ const WaterMeterFt = () => {
       console.log(Activity);
       setrecordby(Activity[0].officer_id);
     }
+
+    if (checkmonth !== precycle_month) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+
     setMeterFtpage(1);
+  };
+
+  console.log('checkmonth', checkmonth);
+
+  const BlockUILoading = () => {
+    const styles = {
+      margin: '0',
+      position: 'fixed',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: document.documentElement.scrollHeight + 'px',
+      opacity: '.5',
+      backgroundColor: '#000',
+      zIndex: '10000',
+      overflow: 'auto',
+    };
+
+    const styles2 = {
+      borderRadius: '0.475rem',
+      boxShadow: '0 0 50px 0 rgb(82 63 105 / 15%)',
+      backgroundColor: '#fff',
+      color: 'rgb(24 28 50 / 72%)',
+      fontWeight: '500',
+      margin: '0',
+      width: 'auto',
+      padding: '1rem 2rem',
+      top: 'calc(308% - 2rem)',
+      left: 'calc(50% - 4rem)',
+      zIndex: '10001',
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      justifyitems: 'center',
+    };
+
+    const styles3 = {
+      width: '30%',
+      // left: '61%',
+      // position: 'sticky',
+      // // transform: 'translate(-50%, -50%)',
+      // justifycontent: 'center',
+    };
+
+    const updatestatuspransection = async () => {
+      var data = {
+        month: precycle_month,
+      };
+
+      axios.post(process.env.REACT_APP_API + '/updateprapwner', data).then(
+        (res) => {
+          if (res.status === 200) {
+            setcheckmonth(precycle_month);
+            setLoading(false);
+
+            Swal.fire({
+              icon: 'success',
+              title: 'อัพเดทสถานะสำเร็จ',
+              preConfirm: () => {
+                return window.location.reload();
+              },
+            });
+          }
+        },
+        async (error) => {
+          Swal.fire({
+            text: 'อัพเดทสถานะไม่สำเร็จ',
+            icon: 'error',
+            buttonsStyling: false,
+            confirmButtonText: 'ตกลง',
+            customClass: {
+              confirmButton: 'btn fw-bold btn-primary',
+            },
+          });
+        }
+      );
+
+      // let precycle_month = moment().tz('Asia/Bangkok').format('M');
+    };
+
+    return (
+      <>
+        <div
+          style={{ ...styles, position: 'fixed', textAlign: 'center' }}
+        ></div>
+        <div
+          className='d-grid gap-2 col-6 mx-auto divpopup'
+          style={{
+            ...styles2,
+            position: 'absolute',
+            textAlign: 'top',
+            justifyitems: 'center',
+          }}
+        >
+          <p>
+            กรุณากดเพื่อเปลี่ยนสถานะการจดของผู้ใช้น้ำ
+            เพื่อทำการจดค่าน้ำของเดือนใหม่
+          </p>
+          <CButton
+            color='primary'
+            style={{ ...styles3 }}
+            onClick={updatestatuspransection}
+          >
+            ตกลง
+          </CButton>
+        </div>
+      </>
+    );
   };
 
   let content;
@@ -732,6 +857,7 @@ const WaterMeterFt = () => {
   if (meterFtpage === 1) {
     content = (
       <>
+        {loading && <BlockUILoading />}
         <div className='d-flex mt-4'>
           <img
             className='mt-1'

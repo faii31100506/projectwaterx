@@ -770,3 +770,6 @@ h7 {
   width: auto;
   background-color: #101828;
 }
+.divpopup {
+  justify-items: center;
+}
