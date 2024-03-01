@@ -84,7 +84,7 @@ const WaterSettingFee = () => {
   // ดึงข้อมูล
   useEffect(() => {
     axios
-      .get(PROMOTION_API)
+    .get(process.env.REACT_APP_API + '/promotion')
       .then((res) => setDatax(res.data.data))
       .catch((err) => console.log(err));
   }, []);

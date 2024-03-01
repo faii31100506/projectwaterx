@@ -95,7 +95,7 @@ const WaterUserRole = () => {
   //ดึงข้อมูล
   useEffect(() => {
     axios
-      .get(OFFICER_API)
+      .get(process.env.REACT_APP_API + '/officer')
       .then((res) => setDatax(res.data.data))
       .catch((err) => console.log(err));
   }, []);

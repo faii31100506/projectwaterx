@@ -124,6 +124,7 @@ const WaterRegister = () => {
   const [maxcensusid, setmaxcensusid] = useState([]);
   const [maxbid, setmaxbid] = useState([]);
   const [prapaowner, setprapaownwer] = useState('');
+  const [czipcode, setczipcode] = useState('');
 
   const [statusname, setstatusname] = useState([]);
 
@@ -168,15 +169,6 @@ const WaterRegister = () => {
   const message = location.state ? location.state.message : '';
 
   const user2 = JSON.parse(localStorage.getItem('myObject111'));
-  // const ids = user2.map(({ id }) => id);
-  // const ids = user2.map((item) => item.id);
-
-  console.log('user2', user2);
-
-  console.log(message);
-  const [user, setuser] = useState('');
-
-  // console.log('ids', ids);
 
   // เช็คชื่อนามสกุล
   const handleInputChange2 = (e) => {
@@ -313,6 +305,7 @@ const WaterRegister = () => {
     camphoe_id: null,
     ctambon_id: null,
     cprovince_id: null,
+    czipcode: null,
   });
 
   useEffect(() => {
@@ -332,10 +325,13 @@ const WaterRegister = () => {
         .get(process.env.REACT_APP_API + `/tambon?id=` + camphoe)
         .then((respone) => {
           setdatatambon(respone.data.data);
+          console.log(respone.data.data);
         });
     };
     fetchData().catch((err) => console.log(err));
   }, [camphoe]);
+
+  console.log(camphoe);
 
   useEffect(() => {
     province();
@@ -418,7 +414,6 @@ const WaterRegister = () => {
           data.push(editDataid);
         }
         data.push(...res.data.data);
-        // console.log('datnull', res.data.data, data);
         setDataxnull(data);
       })
       .catch((err) => console.log(err));
@@ -706,6 +701,20 @@ const WaterRegister = () => {
     }
   };
 
+  const handletambon2 = () => {
+    var name = 'czipcode';
+    var Activity = datatambon.filter(
+      (res) => res.tambon_id === formData.ctambon_id
+    );
+
+    if (Activity.length !== 0) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: Activity[0].zipcode,
+      }));
+    }
+  };
+
   //ตำบลที่อยู่มาตรน้ำ
   const handletambonmeter = (e) => {
     settambon_id(e.target.value);
@@ -715,7 +724,7 @@ const WaterRegister = () => {
   const handlemeterasset = (e) => {
     var value = e.target.value;
     var Activity = dataxnull.filter((res) => res.meterasset_id == value);
-    console.log(Activity.length);
+
     if (Activity.length !== 0) {
       setshowbrand(Activity[0].brand);
       setshowmodel(Activity[0].model);
@@ -726,8 +735,6 @@ const WaterRegister = () => {
     setmeterasset_id(e.target.value);
   };
 
-  console.log(meterasset_id);
-  console.log(dataxnull);
   const nextPage = () => {
     setRegisterform(registerform + 1);
     setActiveIndex(activeIndex + 1);
@@ -778,10 +785,11 @@ const WaterRegister = () => {
       camphoe_id: editData.camphoe_id || null,
       ctambon_id: editData.ctambon_id || null,
       cprovince_id: editData.cprovince_id || null,
+      czipcode: editData.czipcode || null,
     });
   }, [editData]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     const { name, value } = e.target;
     const inputValue = e.target.value;
 
@@ -845,6 +853,11 @@ const WaterRegister = () => {
         setchecktambon(' ');
       } else {
         setchecktambon('0');
+      }
+
+      var Activity = datatambon.filter((res) => res.tambon_id === valuee);
+      if (Activity.length !== 0) {
+        setczipcode(Activity[0].zipcode);
       }
 
       setFormData({
@@ -967,6 +980,13 @@ const WaterRegister = () => {
         [name]: inputValue,
       });
     }
+
+    if (namee === 'promotion_id') {
+      setFormData({
+        ...formData,
+        [name]: inputValue,
+      });
+    }
   };
 
   const MapIcon = () => {
@@ -1050,13 +1070,9 @@ const WaterRegister = () => {
   };
 
   const handleAddNewData = () => {
-    console.log(addNewData);
     axios
       .post('http://localhost:4034/api/nahra/modelowner', addNewData)
-      .then((response) => {
-        // console.log('POST request successful');
-        // console.log('Response:', response.data);
-      })
+      .then((response) => {})
       .catch((error) => {
         console.error('Error:', error);
       });
@@ -1087,8 +1103,18 @@ const WaterRegister = () => {
     });
   };
 
+  const handleEditData2 = async () => {
+    var name = 'czipcode';
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: czipcode,
+    }));
+
+    // await handleEditData2();
+  };
+
   //บันทึกข้อมูลที่แก้ไข
-  const handleEditData = () => {
+  const handleEditData = async () => {
     if (checkpopid < 13) {
       return Swal.fire({
         text: 'โปรดกรอกเลขที่บัตรประจำตัวประชาชนให้ครบ',
@@ -1260,6 +1286,10 @@ const WaterRegister = () => {
       });
     }
 
+    var data = {
+      czipcode: czipcode,
+    };
+
     Swal.fire({
       text: 'คุณต้องการบันทึกข้อมูลหรือไม่ ?',
       icon: 'warning',
@@ -1275,7 +1305,7 @@ const WaterRegister = () => {
       if (result.value) {
         let resultsL = await axios
           .put(
-            'http://localhost:4034/api/nahra/owner/' + formData.prapaowner_id,
+            process.env.REACT_APP_API + '/owner/' + formData.prapaowner_id,
             formData
           )
           .then(
@@ -1283,7 +1313,6 @@ const WaterRegister = () => {
               if (res.status === 200) {
                 // alert("succesfull");
               }
-              console.log(res);
               Swal.fire({
                 icon: 'success',
                 title: 'บันทึกข้อมูลสำเร็จ',
@@ -1373,14 +1402,8 @@ const WaterRegister = () => {
     },
   ];
 
-  const debugBro = () => {
-    console.log(addNewData);
-  };
-
   const handlecheck = async (e) => {
     const { name, value } = e.target;
-
-    console.log();
 
     var lengthvalue = e.target.value.length;
     setcheckpopid(lengthvalue);
@@ -1475,15 +1498,7 @@ const WaterRegister = () => {
             paginatorTemplate='CurrentPageReport PageLinks PrevPageLink NextPageLink'
             currentPageReportTemplate='หน้า {currentPage} จาก {totalPages}'
           >
-            <Column
-              header='ชื่อผู้ใช้น้ำ'
-              // body={(rowData) => (
-              //   <span>
-              //     {rowData.prefix} {rowData.fname} {rowData.lname}
-              //   </span>
-              // )}
-              field='fullname'
-            />
+            <Column header='ชื่อผู้ใช้น้ำ' field='fullname' />
             <Column field='meternumber' header='เลขที่ประจำมาตรวัดน้ำ'></Column>
             {/* <Column field="baddress" header="ที่ติดตั้งมาตร"></Column> */}
             <Column
@@ -1733,14 +1748,14 @@ const WaterRegister = () => {
                   // onChange={(e) => setmoo(e.target.value)}
                   disabled
                 />
-                <CFormInput
+                {/* <CFormInput
                   className='mt-2 mb-2'
                   label='รหัสไปรษณีย์'
                   name='zipcode'
                   value={'71250'}
                   disabled
-                  // onChange={handleNewInputChange}
-                />
+                  onChange={handleNewInputChange}
+                /> */}
               </CForm>
               <CForm className='mx-5 w-33'>
                 <CFormInput
@@ -2023,7 +2038,7 @@ const WaterRegister = () => {
     setsoi(data.soi);
     setmoo(data.bmoo);
     setroad(data.road);
-    setzipcode(data.zipcode);
+    setzipcode('71250');
     setstatusname(data.status_name);
     setprovince_id('71');
     settambon_id('710403');
@@ -2034,6 +2049,7 @@ const WaterRegister = () => {
     setsizemodel(data.international_size);
     settypemeter(data.metertypename);
     setmatmeter(data.metermaterial);
+    setczipcode(data.czipcode);
 
     setcprovice(data.cprovince_id);
     setcamphoe(data.camphoe_id);
@@ -2163,13 +2179,13 @@ const WaterRegister = () => {
                         >
                           <option value='71'>กาญจนบุรี</option>
                         </CFormSelect>
-                        <CFormInput
+                        {/* <CFormInput
                           className='mt-2 mb-2'
                           label='รหัสไปรษณีย์'
                           name='zipcode'
                           value={zipcode}
                           disabled
-                        />
+                        /> */}
                       </CForm>
                       <CForm className='mx-5 '>
                         <CFormInput
@@ -2585,14 +2601,14 @@ const WaterRegister = () => {
           </CFormSelect>
         </CForm>
         <CForm className='mx-5 w-33'>
-          <CFormInput
+          {/* <CFormInput
             className='mt-2 mb-2'
             label='รหัสไปรษณีย์'
-            name='zipcode'
-            value={formData.zipcode}
-            onChange={handleInputChange}
+            name='czipcode'
+            value={czipcode}
+            // onChange={handleInputChange}
             disabled
-          />
+          /> */}
         </CForm>
         <CForm className='mx-5 w-33'></CForm>
       </div>
@@ -2847,14 +2863,14 @@ const WaterRegister = () => {
       </div>
       <div className='d-flex mt-3 mb-3'>
         <CForm className='mx-5 w-33'>
-          <CFormInput
+          {/* <CFormInput
             className='mt-2 mb-2'
             label='รหัสไปรษณีย์'
             name='zipcode'
             value={datazipcode}
             disabled
             // onChange={handleNewInputChange}
-          />
+          /> */}
         </CForm>
       </div>
 

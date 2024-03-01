@@ -445,7 +445,7 @@ const WaterDashBoard = () => {
 
           <div className=''>
             <DataTable
-              // filters={filters}
+              filters={filters}
               value={datastatis}
               header='รายชื่อผู้ใช้น้ำทั้งหมด'
               paginator
@@ -625,7 +625,7 @@ const WaterDashBoard = () => {
 
           <div className=''>
             <DataTable
-              // filters={filters}
+              filters={filters}
               value={datastatisyear}
               header='รายชื่อผู้ใช้น้ำทั้งหมด'
               paginator

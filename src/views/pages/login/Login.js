@@ -49,8 +49,6 @@ const Login = () => {
     pass: 'invalid password',
   };
 
-  console.log(database);
-
   const handleLogin = (event) => {
     if (Username == '') {
       return Swal.fire({
@@ -82,11 +80,14 @@ const Login = () => {
     var { uname, pass } = document.forms[0];
 
     // Find user login info
-    const userData = database.find((user) => user.username === Username);
+    const userData = database.filter((user) => user.username === Username);
+    console.log(userData);
+    console.log('userData', userData[0].pass);
+    console.log('password', Password);
 
     // Compare user info
     if (userData) {
-      if (userData.pass !== Password) {
+      if (userData[0].pass !== Password) {
         // Invalid password
         setErrorMessages({ name: 'pass', message: errors.pass });
         return Swal.fire({
@@ -101,7 +102,7 @@ const Login = () => {
       } else {
         setIsSubmitted(true);
 
-        const userId = userData.nameuser;
+        const userId = userData[0].nameuser;
         const myObject = { id: userData.officer_id, name: userData.nameuser };
 
         localStorage.setItem('myObject111', JSON.stringify(userId));
@@ -117,25 +118,11 @@ const Login = () => {
         icon: 'error',
         title: 'เข้าสู่ระบบไม่สำเร็จ',
         preConfirm: () => {
-          // return (window.location.href = '/water-register');
+          navigate(`/`);
         },
       });
     }
   };
-
-  const handleLogin2 = () => {
-    // ตรวจสอบข้อมูลผู้ใช้งาน
-    // if (Username === '123' && Password === '123') {
-    //   onLogin(true);
-    // } else {
-    //   alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-    // }
-
-    setUserId('123');
-  };
-
-  console.log('isSubmitted', isSubmitted);
-  console.log('errorMessages', errorMessages);
 
   return (
     <div className='background'>

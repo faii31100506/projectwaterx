@@ -256,7 +256,7 @@ const WaterMeterData = () => {
                 text: 'บันทึกข้อมูลไม่สำเร็จ.',
                 icon: 'error',
                 buttonsStyling: false,
-                confirmButtonText: 'ตกลง.',
+                confirmButtonText: 'ตกลง',
                 customClass: {
                   confirmButton: 'btn fw-bold btn-primary',
                 },
@@ -271,12 +271,19 @@ const WaterMeterData = () => {
   const handleputmeterasset = async (event) => {
     if (meternumber !== '') {
       var Activity = dataxnull.filter((res) => res.meternumber == meternumber);
+      var Activity2 = dataxuse.filter((res) => res.meternumber === meternumber);
+
+      console.log(Activity2.length);
+      console.log(Activity.length);
 
       if (meternumber === checkmeternumber) {
         // ผ่าน
       }
 
-      if (meternumber !== checkmeternumber && Activity.length !== 0) {
+      if (
+        meternumber !== checkmeternumber &&
+        (Activity.length !== 0 || Activity2.length !== 0)
+      ) {
         return Swal.fire({
           text: 'เลขมาตรวัดน้ำซ้ำ',
           icon: 'error',
@@ -362,7 +369,7 @@ const WaterMeterData = () => {
                 text: 'บันทึกข้อมูลไม่สำเร็จ.',
                 icon: 'error',
                 buttonsStyling: false,
-                confirmButtonText: 'ตกลง.',
+                confirmButtonText: 'ตกลง',
                 customClass: {
                   confirmButton: 'btn fw-bold btn-primary',
                 },
@@ -405,7 +412,7 @@ const WaterMeterData = () => {
                 text: 'ลบสำเร็จ.',
                 icon: 'success',
                 buttonsStyling: false,
-                confirmButtonText: 'ตกลง.',
+                confirmButtonText: 'ตกลง',
                 customClass: {
                   confirmButton: 'btn fw-bold btn-primary',
                 },
@@ -420,7 +427,7 @@ const WaterMeterData = () => {
                 text: 'ลบข้อมูลไม่สำเร็จ.',
                 icon: 'error',
                 buttonsStyling: false,
-                confirmButtonText: 'ตกลง.',
+                confirmButtonText: 'ตกลง',
                 customClass: {
                   confirmButton: 'btn fw-bold btn-primary',
                 },
@@ -661,7 +668,7 @@ const WaterMeterData = () => {
                 text: 'บันทึกข้อมูลไม่สำเร็จ.',
                 icon: 'error',
                 buttonsStyling: false,
-                confirmButtonText: 'ตกลง.',
+                confirmButtonText: 'ตกลง',
                 customClass: {
                   confirmButton: 'btn fw-bold btn-primary',
                 },
@@ -676,12 +683,16 @@ const WaterMeterData = () => {
   const handlepostasset = async (event) => {
     if (meternumber !== '') {
       var Activity = dataxnull.filter((res) => res.meternumber === meternumber);
+      var Activity2 = dataxuse.filter((res) => res.meternumber === meternumber);
 
       if (meternumber === checkmeternumber) {
         // ผ่าน
       }
 
-      if (meternumber !== checkmeternumber && Activity.length !== 0) {
+      if (
+        meternumber !== checkmeternumber &&
+        (Activity.length !== 0 || Activity2.length !== 0)
+      ) {
         return Swal.fire({
           text: 'เลขมาตรวัดน้ำซ้ำ',
           icon: 'error',
@@ -699,7 +710,7 @@ const WaterMeterData = () => {
         text: 'โปรดกรอกเลขมาตรน้ำ',
         icon: 'warning',
         buttonsStyling: false,
-        confirmButtonText: 'ตกลง.',
+        confirmButtonText: 'ตกลง',
         customClass: {
           confirmButton: 'btn fw-bold btn-primary',
         },
@@ -781,7 +792,7 @@ const WaterMeterData = () => {
                 text: 'บันทึกข้อมูลไม่สำเร็จ.',
                 icon: 'error',
                 buttonsStyling: false,
-                confirmButtonText: 'ตกลง.',
+                confirmButtonText: 'ตกลง',
                 customClass: {
                   confirmButton: 'btn fw-bold btn-primary',
                 },
